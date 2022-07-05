@@ -1,0 +1,1 @@
+[{"id":0,"idle":"role1_idle_png","run":["role1_run0_png","role1_run1_png"],"jump":"role1_jump_png","width":32,"height":32,"hp":1},{"id":1,"idle":"role2_idle_png","run":["role1_run0_png","role1_run1_png"],"jump":"role2_jump_png","width":32,"height":32,"hp":2}]
