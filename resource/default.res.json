@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,egret_icon_png,description_json,roles_json",
+			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,egret_icon_png,description_json,roles_json,bg_1_png,bg_2_png,bg_3_png,bg_4_png,bg_5_png,bg_6_png,bg_7_png,bg_8_png,bg_9_png,bg_10_png,bg_11_png,bg_12_png,bg_13_png,bg_14_png,bg_15_png,bg_16_png,bg_17_png,bg_18_png",
 			"name": "preload"
 		}
 	],
@@ -140,6 +140,96 @@
 			"name": "roles_json",
 			"type": "json",
 			"url": "config/roles.json"
+		},
+		{
+			"name": "bg_1_png",
+			"type": "image",
+			"url": "assets/themes/bg_1.png"
+		},
+		{
+			"name": "bg_2_png",
+			"type": "image",
+			"url": "assets/themes/bg_2.png"
+		},
+		{
+			"name": "bg_3_png",
+			"type": "image",
+			"url": "assets/themes/bg_3.png"
+		},
+		{
+			"name": "bg_4_png",
+			"type": "image",
+			"url": "assets/themes/bg_4.png"
+		},
+		{
+			"name": "bg_5_png",
+			"type": "image",
+			"url": "assets/themes/bg_5.png"
+		},
+		{
+			"name": "bg_6_png",
+			"type": "image",
+			"url": "assets/themes/bg_6.png"
+		},
+		{
+			"name": "bg_7_png",
+			"type": "image",
+			"url": "assets/themes/bg_7.png"
+		},
+		{
+			"name": "bg_8_png",
+			"type": "image",
+			"url": "assets/themes/bg_8.png"
+		},
+		{
+			"name": "bg_9_png",
+			"type": "image",
+			"url": "assets/themes/bg_9.png"
+		},
+		{
+			"name": "bg_10_png",
+			"type": "image",
+			"url": "assets/themes/bg_10.png"
+		},
+		{
+			"name": "bg_11_png",
+			"type": "image",
+			"url": "assets/themes/bg_11.png"
+		},
+		{
+			"name": "bg_12_png",
+			"type": "image",
+			"url": "assets/themes/bg_12.png"
+		},
+		{
+			"name": "bg_13_png",
+			"type": "image",
+			"url": "assets/themes/bg_13.png"
+		},
+		{
+			"name": "bg_14_png",
+			"type": "image",
+			"url": "assets/themes/bg_14.png"
+		},
+		{
+			"name": "bg_15_png",
+			"type": "image",
+			"url": "assets/themes/bg_15.png"
+		},
+		{
+			"name": "bg_16_png",
+			"type": "image",
+			"url": "assets/themes/bg_16.png"
+		},
+		{
+			"name": "bg_17_png",
+			"type": "image",
+			"url": "assets/themes/bg_17.png"
+		},
+		{
+			"name": "bg_18_png",
+			"type": "image",
+			"url": "assets/themes/bg_18.png"
 		}
 	]
 }

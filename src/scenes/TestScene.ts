@@ -57,7 +57,7 @@ class TestScene extends Scene {
         egret.log(evt.target.selected);
     }
     public Update() {
-        this.textfield.text = "Running Game";
+        this.textfield.text = "myFirstFont";
     }
     private f: boolean = false;
     private OnTouchBegin(): void {

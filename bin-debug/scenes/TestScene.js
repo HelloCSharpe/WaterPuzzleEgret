@@ -64,7 +64,7 @@ var TestScene = (function (_super) {
         egret.log(evt.target.selected);
     };
     TestScene.prototype.Update = function () {
-        this.textfield.text = "Running Game";
+        this.textfield.text = "myFirstFont";
     };
     TestScene.prototype.OnTouchBegin = function () {
         //切换场景
