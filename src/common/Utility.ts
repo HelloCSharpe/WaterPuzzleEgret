@@ -111,11 +111,11 @@ class Utility {
 
     public static ButtonEnable(obj:egret.Bitmap):void{
         obj.touchEnabled = true;
-        let func = (obj)=>{
+        let func = ()=>{
             let tw = egret.Tween.get(obj);
             tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 200).to({ "scaleX": 1, "scaleY": 1 }, 200);
         };
-        func.bind(null,obj);
+        func.bind(obj);
         Utility.btnScaleFuns.set(obj,func);
         obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN,func, obj);
     }
