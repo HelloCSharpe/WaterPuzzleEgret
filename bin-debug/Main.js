@@ -93,19 +93,28 @@ var Main = (function (_super) {
     };
     Main.prototype.runGame = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var userInfo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loadResource()
-                        // this.createGameScene();
-                        // this.Init();
-                        // const result = await RES.getResAsync("description_json")
-                        // this.startAnimation(result);
-                        // await platform.login();
-                        // const userInfo = await platform.getUserInfo();
-                        // console.log(userInfo);
-                    ];
+                    case 0:
+                        SceneManager.ScreenWidth = this.stage.stageWidth;
+                        SceneManager.ScreenHeight = this.stage.stageHeight;
+                        return [4 /*yield*/, this.loadResource()];
                     case 1:
                         _a.sent();
+                        // this.createGameScene();
+                        this.Init();
+                        // const result = await RES.getResAsync("description_json")
+                        // this.startAnimation(result);
+                        return [4 /*yield*/, platform.login()];
+                    case 2:
+                        // const result = await RES.getResAsync("description_json")
+                        // this.startAnimation(result);
+                        _a.sent();
+                        return [4 /*yield*/, platform.getUserInfo()];
+                    case 3:
+                        userInfo = _a.sent();
+                        console.log(userInfo);
                         return [2 /*return*/];
                 }
             });
@@ -117,7 +126,7 @@ var Main = (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 4, , 5]);
+                        _a.trys.push([0, 6, , 7]);
                         return [4 /*yield*/, RES.loadConfig("resource/default.res.json", "resource/")];
                     case 1:
                         _a.sent();
@@ -126,28 +135,36 @@ var Main = (function (_super) {
                         _a.sent();
                         loadingView = new LoadingUI();
                         this.stage.addChild(loadingView);
-                        return [4 /*yield*/, RES.loadGroup("preload", 0, loadingView)];
+                        // console.log("load preload")
+                        // await RES.loadGroup("preload", 0, loadingView);
+                        return [4 /*yield*/, RES.loadGroup("theme", 0, loadingView)];
                     case 3:
+                        // console.log("load preload")
+                        // await RES.loadGroup("preload", 0, loadingView);
+                        _a.sent();
+                        return [4 /*yield*/, RES.loadGroup("tube", 0, loadingView)];
+                    case 4:
+                        _a.sent();
+                        return [4 /*yield*/, RES.loadGroup("ui", 0, loadingView)];
+                    case 5:
                         _a.sent();
                         this.stage.removeChild(loadingView);
-                        return [3 /*break*/, 5];
-                    case 4:
+                        return [3 /*break*/, 7];
+                    case 6:
                         e_1 = _a.sent();
                         console.error(e_1);
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
+                        return [3 /*break*/, 7];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     Main.prototype.Init = function () {
-        SceneManager.ScreenWidth = this.stage.stageWidth;
-        SceneManager.ScreenHeight = this.stage.stageHeight;
         SceneManager.Instance.rootLayer = this;
         this.addEventListener(egret.Event.ENTER_FRAME, this.Update, this);
         SceneManager.Instance.RegisterScene("StartScene", new StartScene());
         SceneManager.Instance.RegisterScene("GameScene", new GameScene());
-        SceneManager.Instance.changeScene("TestScene");
+        SceneManager.Instance.changeScene("StartScene");
     };
     Main.prototype.Test = function () {
         var aa = SHA1.getInstance().hex_sha1("test");

@@ -106,7 +106,23 @@ var Utility = (function () {
         tw.wait(1000);
         tw.to({ "alpha": 0, "y": start_y }, 500);
     };
+    Utility.ButtonEnable = function (obj) {
+        obj.touchEnabled = true;
+        var func = function (obj) {
+            var tw = egret.Tween.get(obj);
+            tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 200).to({ "scaleX": 1, "scaleY": 1 }, 200);
+        };
+        func.bind(null, obj);
+        Utility.btnScaleFuns.set(obj, func);
+        obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN, func, obj);
+    };
+    Utility.ButtonDisable = function (obj) {
+        obj.touchEnabled = false;
+        var func = Utility.btnScaleFuns.get(obj);
+        obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, func, obj);
+    };
     Utility._notibox = null;
+    Utility.btnScaleFuns = new Dictionary();
     return Utility;
 }());
 __reflect(Utility.prototype, "Utility");

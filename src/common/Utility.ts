@@ -107,6 +107,26 @@ class Utility {
         tw.to({ "alpha": 0, "y": start_y }, 500);
     }
 
+    private static btnScaleFuns:Dictionary = new Dictionary();
+
+    public static ButtonEnable(obj:egret.Bitmap):void{
+        obj.touchEnabled = true;
+        let func = (obj)=>{
+            let tw = egret.Tween.get(obj);
+            tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 200).to({ "scaleX": 1, "scaleY": 1 }, 200);
+        };
+        func.bind(null,obj);
+        Utility.btnScaleFuns.set(obj,func);
+        obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN,func, obj);
+    }
+
+    public static ButtonDisable(obj:egret.Bitmap):void{
+        obj.touchEnabled = false;
+        let func = Utility.btnScaleFuns.get(obj);
+        obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,func,obj);
+    }
+
+
 
 
 }

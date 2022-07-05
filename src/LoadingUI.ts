@@ -39,26 +39,20 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
     private icon: egret.Bitmap;
 
     private createView(): void {
-        this.bg = Utility.createBitmapByName("loading_bg_png");
+        this.bg = Utility.createBitmapByName("loading_bg_jpg");
         this.bg.fillMode = egret.BitmapFillMode.SCALE;
         this.bg.width = SceneManager.ScreenWidth;
         this.bg.height = SceneManager.ScreenHeight;
         this.addChild(this.bg);
-        this.icon = Utility.createBitmapByName("loading_icon_png");
-        this.icon.fillMode = egret.BitmapFillMode.SCALE;
-        this.icon.x = 200;
-        this.icon.y = 200;
-        this.icon.width = 400;
-        this.icon.height = 400;
-        this.addChild(this.icon);
-
 
         this.textField = new egret.TextField();
-        this.addChild(this.textField);
-        this.textField.y = 300;
+        this.textField.x = 100;
+        this.textField.y = SceneManager.ScreenHeight*0.75;
         this.textField.width = 480;
         this.textField.height = 100;
+        this.textField.fontFamily = "myFirstFont";
         this.textField.textAlign = "center";
+        this.addChild(this.textField);
     }
 
     public onProgress(current: number, total: number,resItem: RES.ResourceInfo): void {

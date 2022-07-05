@@ -21,6 +21,17 @@ class DebugPlatform implements Platform {
     }
 }
 
+class WXPlatform implements Platform{
+    private userInfo : Object;
+
+    async getUserInfo() {
+        return this.userInfo;
+    }
+    async login() {
+        this.userInfo = { nickName: "username" };
+    }
+}
+
 
 if (!window.platform) {
     window.platform = new DebugPlatform();

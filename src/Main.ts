@@ -50,14 +50,16 @@ class Main extends eui.UILayer {
     }
 
     private async runGame() {
-        await this.loadResource()
+        SceneManager.ScreenWidth = this.stage.stageWidth;
+        SceneManager.ScreenHeight = this.stage.stageHeight;
+        await this.loadResource();
         // this.createGameScene();
-        // this.Init();
+        this.Init();
         // const result = await RES.getResAsync("description_json")
         // this.startAnimation(result);
-        // await platform.login();
-        // const userInfo = await platform.getUserInfo();
-        // console.log(userInfo);
+        await platform.login();
+        const userInfo = await platform.getUserInfo();
+        console.log(userInfo);
 
 
     }
@@ -68,7 +70,11 @@ class Main extends eui.UILayer {
             await RES.loadGroup("loading", 1);
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
-            await RES.loadGroup("preload", 0, loadingView);
+            // console.log("load preload")
+            // await RES.loadGroup("preload", 0, loadingView);
+            await RES.loadGroup("theme", 0, loadingView);
+            await RES.loadGroup("tube", 0, loadingView);
+            await RES.loadGroup("ui", 0, loadingView);
             this.stage.removeChild(loadingView);
         }
         catch (e) {
@@ -79,13 +85,11 @@ class Main extends eui.UILayer {
 
 
     private Init(): void {
-        SceneManager.ScreenWidth = this.stage.stageWidth;
-        SceneManager.ScreenHeight = this.stage.stageHeight;
         SceneManager.Instance.rootLayer = this;
         this.addEventListener(egret.Event.ENTER_FRAME, this.Update, this);
         SceneManager.Instance.RegisterScene("StartScene", new StartScene());
         SceneManager.Instance.RegisterScene("GameScene", new GameScene());
-        SceneManager.Instance.changeScene("TestScene");
+        SceneManager.Instance.changeScene("StartScene");
     }
 
     private Test(): void {
