@@ -97,11 +97,15 @@ var Main = (function (_super) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.loadResource()
                         // this.createGameScene();
+                        // this.Init();
+                        // const result = await RES.getResAsync("description_json")
+                        // this.startAnimation(result);
+                        // await platform.login();
+                        // const userInfo = await platform.getUserInfo();
+                        // console.log(userInfo);
                     ];
                     case 1:
                         _a.sent();
-                        // this.createGameScene();
-                        this.Init();
                         return [2 /*return*/];
                 }
             });
@@ -113,22 +117,25 @@ var Main = (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        loadingView = new LoadingUI();
-                        this.stage.addChild(loadingView);
+                        _a.trys.push([0, 4, , 5]);
                         return [4 /*yield*/, RES.loadConfig("resource/default.res.json", "resource/")];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, RES.loadGroup("preload", 0, loadingView)];
+                        return [4 /*yield*/, RES.loadGroup("loading", 1)];
                     case 2:
                         _a.sent();
-                        this.stage.removeChild(loadingView);
-                        return [3 /*break*/, 4];
+                        loadingView = new LoadingUI();
+                        this.stage.addChild(loadingView);
+                        return [4 /*yield*/, RES.loadGroup("preload", 0, loadingView)];
                     case 3:
+                        _a.sent();
+                        this.stage.removeChild(loadingView);
+                        return [3 /*break*/, 5];
+                    case 4:
                         e_1 = _a.sent();
                         console.error(e_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -137,10 +144,9 @@ var Main = (function (_super) {
         SceneManager.ScreenWidth = this.stage.stageWidth;
         SceneManager.ScreenHeight = this.stage.stageHeight;
         SceneManager.Instance.rootLayer = this;
-        this.Test();
         this.addEventListener(egret.Event.ENTER_FRAME, this.Update, this);
-        SceneManager.Instance.RegisterScene("TestScene", new TestScene());
-        SceneManager.Instance.RegisterScene("TestScene2", new TestScene2());
+        SceneManager.Instance.RegisterScene("StartScene", new StartScene());
+        SceneManager.Instance.RegisterScene("GameScene", new GameScene());
         SceneManager.Instance.changeScene("TestScene");
     };
     Main.prototype.Test = function () {

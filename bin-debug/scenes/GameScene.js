@@ -8,17 +8,17 @@ var __extends = this && this.__extends || function __extends(t, e) {
 for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
 r.prototype = e.prototype, t.prototype = new r();
 };
-var TestScene2 = (function (_super) {
-    __extends(TestScene2, _super);
-    function TestScene2() {
+var GameScene = (function (_super) {
+    __extends(GameScene, _super);
+    function GameScene() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.rightLineCount = 4;
         return _this;
     }
-    TestScene2.prototype.CalculateGoldenNum = function () {
+    GameScene.prototype.CalculateGoldenNum = function () {
         this.GoldenNum = SceneManager.ScreenWidth / 3 / 7;
     };
-    TestScene2.prototype.onComplete = function () {
+    GameScene.prototype.onComplete = function () {
         this.CalculateGoldenNum();
         var bg = this.createBitmapByName("uibg1c_png");
         bg.width = SceneManager.ScreenWidth;
@@ -78,14 +78,14 @@ var TestScene2 = (function (_super) {
         this.addChild(this.okBtnTxt);
         this.SetRoleInfo();
     };
-    TestScene2.prototype.SetRoleInfo = function () {
+    GameScene.prototype.SetRoleInfo = function () {
         var role = DataConfig.Instance.GetDataByIndex("roles", this.selectId);
         this.roleShowImg.texture = RES.getRes(role.run[0]);
     };
-    TestScene2.prototype.OnGridClick = function (id) {
+    GameScene.prototype.OnGridClick = function (id) {
         this.selectId = id;
     };
-    TestScene2.prototype.InitData = function () {
+    GameScene.prototype.InitData = function () {
         this.roleDatas = new Array();
         var cfgs = DataConfig.Instance.GetConfig("roles");
         var roles = [0, 1, 2, 3];
@@ -96,18 +96,18 @@ var TestScene2 = (function (_super) {
             this.roleDatas[i] = new RoleData(cfgs[i], b, s);
         }
     };
-    TestScene2.prototype.SetContent = function () {
+    GameScene.prototype.SetContent = function () {
         this.sv.SetContent(this.sv_spacing, this.sv_spacing, this.roleDatas, this.gridCreater, this.sv_spacing, this.sv_spacing);
     };
-    TestScene2.prototype.Update = function () {
+    GameScene.prototype.Update = function () {
     };
-    TestScene2.prototype.addListener = function () {
+    GameScene.prototype.addListener = function () {
     };
-    TestScene2.prototype.removeListener = function () {
+    GameScene.prototype.removeListener = function () {
     };
-    return TestScene2;
+    return GameScene;
 }(Scene));
-__reflect(TestScene2.prototype, "TestScene2");
+__reflect(GameScene.prototype, "GameScene");
 var RoleGrid = (function () {
     function RoleGrid(w, h, s) {
         this._width = w;
@@ -158,4 +158,4 @@ var RoleData = (function () {
     return RoleData;
 }());
 __reflect(RoleData.prototype, "RoleData");
-//# sourceMappingURL=TestScene2.js.map
+//# sourceMappingURL=GameScene.js.map

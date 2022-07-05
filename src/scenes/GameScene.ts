@@ -1,4 +1,4 @@
-class TestScene2 extends Scene {
+class GameScene extends Scene {
 
     private GoldenNum: number;
     CalculateGoldenNum() {
@@ -117,9 +117,9 @@ class TestScene2 extends Scene {
 class RoleGrid implements IScrollViewGrid<RoleData>{
     _width: number;
     _height: number;
-    _s: TestScene2;
+    _s: GameScene;
     _data: RoleData;
-    public constructor(w: number, h: number, s: TestScene2) {
+    public constructor(w: number, h: number, s: GameScene) {
         this._width = w;
         this._height = h;
         this._s = s;

@@ -35,8 +35,24 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
     }
 
     private textField: egret.TextField;
+    private bg: egret.Bitmap;
+    private icon: egret.Bitmap;
 
     private createView(): void {
+        this.bg = Utility.createBitmapByName("loading_bg_png");
+        this.bg.fillMode = egret.BitmapFillMode.SCALE;
+        this.bg.width = SceneManager.ScreenWidth;
+        this.bg.height = SceneManager.ScreenHeight;
+        this.addChild(this.bg);
+        this.icon = Utility.createBitmapByName("loading_icon_png");
+        this.icon.fillMode = egret.BitmapFillMode.SCALE;
+        this.icon.x = 200;
+        this.icon.y = 200;
+        this.icon.width = 400;
+        this.icon.height = 400;
+        this.addChild(this.icon);
+
+
         this.textField = new egret.TextField();
         this.addChild(this.textField);
         this.textField.y = 300;
@@ -45,7 +61,7 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
         this.textField.textAlign = "center";
     }
 
-    public onProgress(current: number, total: number): void {
-        this.textField.text = `Loading...${current}/${total}`;
+    public onProgress(current: number, total: number,resItem: RES.ResourceInfo): void {
+        this.textField.text = `Loading...${current}/${total}/${resItem.name}`;
     }
 }

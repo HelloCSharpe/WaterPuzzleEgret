@@ -52,7 +52,7 @@ class Main extends eui.UILayer {
     private async runGame() {
         await this.loadResource()
         // this.createGameScene();
-        this.Init();
+        // this.Init();
         // const result = await RES.getResAsync("description_json")
         // this.startAnimation(result);
         // await platform.login();
@@ -64,9 +64,10 @@ class Main extends eui.UILayer {
 
     private async loadResource() {
         try {
+            await RES.loadConfig("resource/default.res.json", "resource/");
+            await RES.loadGroup("loading", 1);
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
-            await RES.loadConfig("resource/default.res.json", "resource/");
             await RES.loadGroup("preload", 0, loadingView);
             this.stage.removeChild(loadingView);
         }
@@ -81,10 +82,9 @@ class Main extends eui.UILayer {
         SceneManager.ScreenWidth = this.stage.stageWidth;
         SceneManager.ScreenHeight = this.stage.stageHeight;
         SceneManager.Instance.rootLayer = this;
-        this.Test();
         this.addEventListener(egret.Event.ENTER_FRAME, this.Update, this);
-        SceneManager.Instance.RegisterScene("TestScene", new TestScene());
-        SceneManager.Instance.RegisterScene("TestScene2", new TestScene2());
+        SceneManager.Instance.RegisterScene("StartScene", new StartScene());
+        SceneManager.Instance.RegisterScene("GameScene", new GameScene());
         SceneManager.Instance.changeScene("TestScene");
     }
 
