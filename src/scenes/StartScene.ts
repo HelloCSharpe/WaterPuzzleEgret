@@ -105,7 +105,7 @@ class StartScene extends Scene {
         btn.anchorOffsetX = btn.width / 2;
         btn.anchorOffsetY = btn.height / 2;
         btn.x = SceneManager.ScreenWidth / (length + 1) * (index + 1);
-        btn.y = SceneManager.ScreenHeight - 400;
+        btn.y = SceneManager.ScreenHeight / 2 + 360;
         this.addChild(btn);
         this.bottomBtn[index] = btn;
     }
@@ -122,7 +122,7 @@ class StartScene extends Scene {
         txtField.anchorOffsetX = txtField.width / 2;
         txtField.anchorOffsetY = txtField.height / 2;
         txtField.x = SceneManager.ScreenWidth / (length + 1) * (index + 1);
-        txtField.y = SceneManager.ScreenHeight - 350;
+        txtField.y = SceneManager.ScreenHeight / 2 + 390;
         txtField.size = 30;
         this.addChild(txtField);
         this.bottomTxt[index] = txtField;
