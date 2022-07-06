@@ -13,7 +13,7 @@
 			"name": "tube"
 		},
 		{
-			"keys": "icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,start_btn_png,menu_png,rank_png,share_png,shop_png",
+			"keys": "icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,menu_png,rank_png,share_png,shop_png,start_btn_png,white_jpg,white_gif,water_flow_json,water_flow_png,hide1_jpg",
 			"name": "ui"
 		},
 		{
@@ -243,11 +243,6 @@
 			"name": "bg_18_png"
 		},
 		{
-			"url": "assets/UI/icon.png",
-			"type": "image",
-			"name": "icon_png"
-		},
-		{
 			"url": "assets/tubes/pz_di_bt_9_3.png",
 			"type": "image",
 			"name": "pz_di_bt_9_3_png"
@@ -388,11 +383,6 @@
 			"name": "loading_bg_jpg"
 		},
 		{
-			"url": "assets/loading/loading_icon.png",
-			"type": "image",
-			"name": "loading_icon_png"
-		},
-		{
 			"url": "assets/UI/icon1.png",
 			"type": "image",
 			"name": "icon1_png"
@@ -461,6 +451,246 @@
 			"url": "assets/UI/menu.png",
 			"type": "image",
 			"name": "menu_png"
+		},
+		{
+			"url": "assets/UI/icon1.png",
+			"type": "image",
+			"name": "icon12_png"
+		},
+		{
+			"url": "assets/UI/icon2.png",
+			"type": "image",
+			"name": "icon22_png"
+		},
+		{
+			"url": "assets/UI/icon3.png",
+			"type": "image",
+			"name": "icon32_png"
+		},
+		{
+			"url": "assets/UI/icon4.png",
+			"type": "image",
+			"name": "icon42_png"
+		},
+		{
+			"url": "assets/UI/icon5.png",
+			"type": "image",
+			"name": "icon52_png"
+		},
+		{
+			"url": "assets/UI/icon6.png",
+			"type": "image",
+			"name": "icon62_png"
+		},
+		{
+			"url": "assets/UI/icon7.png",
+			"type": "image",
+			"name": "icon72_png"
+		},
+		{
+			"url": "assets/UI/icon8.png",
+			"type": "image",
+			"name": "icon82_png"
+		},
+		{
+			"url": "assets/UI/icon9.png",
+			"type": "image",
+			"name": "icon92_png"
+		},
+		{
+			"url": "assets/UI/menu.png",
+			"type": "image",
+			"name": "menu2_png"
+		},
+		{
+			"url": "assets/UI/rank.png",
+			"type": "image",
+			"name": "rank2_png"
+		},
+		{
+			"url": "assets/UI/share.png",
+			"type": "image",
+			"name": "share2_png"
+		},
+		{
+			"url": "assets/UI/shop.png",
+			"type": "image",
+			"name": "shop2_png"
+		},
+		{
+			"url": "assets/UI/start_btn.png",
+			"type": "image",
+			"name": "start_btn2_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_1_1.png",
+			"type": "image",
+			"name": "pz_di_bt_1_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_1_2.png",
+			"type": "image",
+			"name": "pz_di_bt_1_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_1_3.png",
+			"type": "image",
+			"name": "pz_di_bt_1_32_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_2_1.png",
+			"type": "image",
+			"name": "pz_di_bt_2_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_2_2.png",
+			"type": "image",
+			"name": "pz_di_bt_2_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_2_3.png",
+			"type": "image",
+			"name": "pz_di_bt_2_32_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_3_1.png",
+			"type": "image",
+			"name": "pz_di_bt_3_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_3_2.png",
+			"type": "image",
+			"name": "pz_di_bt_3_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_3_3.png",
+			"type": "image",
+			"name": "pz_di_bt_3_32_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_4_1.png",
+			"type": "image",
+			"name": "pz_di_bt_4_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_4_2.png",
+			"type": "image",
+			"name": "pz_di_bt_4_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_4_3.png",
+			"type": "image",
+			"name": "pz_di_bt_4_32_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_5_1.png",
+			"type": "image",
+			"name": "pz_di_bt_5_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_5_2.png",
+			"type": "image",
+			"name": "pz_di_bt_5_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_5_3.png",
+			"type": "image",
+			"name": "pz_di_bt_5_32_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_6_1.png",
+			"type": "image",
+			"name": "pz_di_bt_6_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_6_2.png",
+			"type": "image",
+			"name": "pz_di_bt_6_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_6_3.png",
+			"type": "image",
+			"name": "pz_di_bt_6_32_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_7_1.png",
+			"type": "image",
+			"name": "pz_di_bt_7_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_7_2.png",
+			"type": "image",
+			"name": "pz_di_bt_7_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_7_3.png",
+			"type": "image",
+			"name": "pz_di_bt_7_32_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_8_1.png",
+			"type": "image",
+			"name": "pz_di_bt_8_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_8_2.png",
+			"type": "image",
+			"name": "pz_di_bt_8_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_8_3.png",
+			"type": "image",
+			"name": "pz_di_bt_8_32_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_9_1.png",
+			"type": "image",
+			"name": "pz_di_bt_9_12_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_9_2.png",
+			"type": "image",
+			"name": "pz_di_bt_9_22_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_9_3.png",
+			"type": "image",
+			"name": "pz_di_bt_9_32_png"
+		},
+		{
+			"url": "assets/UI/icon.png",
+			"type": "image",
+			"name": "icon_png"
+		},
+		{
+			"url": "assets/loading/loading_icon.png",
+			"type": "image",
+			"name": "loading_icon_png"
+		},
+		{
+			"url": "assets/UI/white.jpg",
+			"type": "image",
+			"name": "white_jpg"
+		},
+		{
+			"url": "assets/UI/white.gif",
+			"type": "image",
+			"name": "white_gif"
+		},
+		{
+			"url": "assets/UI/water_flow.json",
+			"type": "json",
+			"name": "water_flow_json"
+		},
+		{
+			"url": "assets/UI/water_flow.png",
+			"type": "image",
+			"name": "water_flow_png"
+		},
+		{
+			"url": "assets/UI/hide1.jpg",
+			"type": "image",
+			"name": "hide1_jpg"
 		}
 	]
 }

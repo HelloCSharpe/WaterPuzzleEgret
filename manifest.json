@@ -22,6 +22,7 @@
 		"bin-debug/Main.js",
 		"bin-debug/common/SHA1.js",
 		"bin-debug/common/Utility.js",
+		"bin-debug/game/TubeScript.js",
 		"bin-debug/scenes/GameScene.js",
 		"bin-debug/scenes/StartScene.js",
 		"bin-debug/scenes/TestScene.js"

@@ -27,6 +27,9 @@ var Scene = (function (_super) {
     Scene.prototype.createBitmapByName = function (res_name) {
         return Utility.createBitmapByName(res_name);
     };
+    Scene.prototype.createGif = function (jsonRes, pngRes) {
+        return Utility.createGif(jsonRes, pngRes);
+    };
     Scene.prototype.getRandomNum = function (Min, Max) {
         return Utility.getRandomNum(Min, Max);
     };

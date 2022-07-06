@@ -165,14 +165,19 @@ var Main = (function (_super) {
         SceneManager.Instance.RegisterScene("StartScene", new StartScene());
         SceneManager.Instance.RegisterScene("GameScene", new GameScene());
         SceneManager.Instance.changeScene("StartScene");
+        this.Test();
     };
     Main.prototype.Test = function () {
-        var aa = SHA1.getInstance().hex_sha1("test");
-        var bb = SHA1.getInstance().hex_sha1(1);
-        var cc = SHA1.getInstance().hex_sha1("1");
-        console.log(aa);
-        console.log(bb);
-        console.log(cc);
+        // let str = new String("#FEAD48");
+        // let a = str.charAt(0);
+        // let aa = Utility.ColorHTMLToInt("#FEAD48");//16690504
+        // console.log(a,a=="#",aa);
+        // const aa = SHA1.getInstance().hex_sha1("test");
+        // const bb = SHA1.getInstance().hex_sha1(1);
+        //  const cc = SHA1.getInstance().hex_sha1("1");
+        // console.log(aa);
+        // console.log(bb);
+        // console.log(cc);
     };
     Main.prototype.onPostComplete = function (event) {
         var request = event.currentTarget;

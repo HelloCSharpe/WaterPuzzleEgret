@@ -21,6 +21,10 @@ abstract class Scene extends eui.Component {
         return Utility.createBitmapByName(res_name);
     }
 
+    public createGif(jsonRes:string,pngRes:string):egret.MovieClip {
+        return Utility.createGif(jsonRes,pngRes);
+    }
+
     public getRandomNum(Min, Max): number {
         return Utility.getRandomNum(Min, Max);
     }

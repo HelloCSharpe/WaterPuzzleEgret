@@ -122,7 +122,7 @@ class StartScene extends Scene {
         txtField.anchorOffsetX = txtField.width / 2;
         txtField.anchorOffsetY = txtField.height / 2;
         txtField.x = SceneManager.ScreenWidth / (length + 1) * (index + 1);
-        txtField.y = SceneManager.ScreenHeight / 2 + 390;
+        txtField.y = SceneManager.ScreenHeight / 2 + 400;
         txtField.size = 30;
         this.addChild(txtField);
         this.bottomTxt[index] = txtField;
@@ -152,7 +152,7 @@ class StartScene extends Scene {
         for(let i=0;i<len;i++){
             let func = this.onClickBottom.bind(this,i);
             this.bottomFunc[i] = func;
-            Utility.ButtonEnable(this.bottomBtn[i]);
+            Utility.ButtonEnable(this.bottomBtn[i],this.bottomTxt[i]);
             this.bottomBtn[i].addEventListener(egret.TouchEvent.TOUCH_TAP,func, this);
         }
     }

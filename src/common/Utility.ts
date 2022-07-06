@@ -109,13 +109,17 @@ class Utility {
 
     private static btnScaleFuns:Dictionary = new Dictionary();
 
-    public static ButtonEnable(obj:egret.Bitmap):void{
+    public static ButtonEnable(obj:egret.Bitmap,bindObj?:egret.TextField):void{
         obj.touchEnabled = true;
         let func = ()=>{
             let tw = egret.Tween.get(obj);
-            tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 200).to({ "scaleX": 1, "scaleY": 1 }, 200);
+            tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
+            if(bindObj!=null){
+                let tw2 = egret.Tween.get(bindObj);
+                tw2.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
+            }
         };
-        func.bind(obj);
+        func.bind(obj,bindObj);
         Utility.btnScaleFuns.set(obj,func);
         obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN,func, obj);
     }
@@ -125,8 +129,119 @@ class Utility {
         let func = Utility.btnScaleFuns.get(obj);
         obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,func,obj);
     }
+    
+    private static Str2Int(char:string):number{
+        if(char=="0"){return 0;}
+        if(char=="1"){return 1;}
+        if(char=="2"){return 2;}
+        if(char=="3"){return 3;}
+        if(char=="4"){return 4;}
+        if(char=="5"){return 5;}
+        if(char=="6"){return 6;}
+        if(char=="7"){return 7;}
+        if(char=="8"){return 8;}
+        if(char=="9"){return 9;}
+        if(char=="A"){return 10;}
+        if(char=="B"){return 11;}
+        if(char=="C"){return 12;}
+        if(char=="D"){return 13;}
+        if(char=="E"){return 14;}
+        if(char=="F"){return 15;}
+        return 0;
+    }
+    //将HTML的"#FEAD48"字符串转换成egret能够识别的number
+    public static ColorHTMLToInt(colorHTML:string):number{
+        let a,b,c,d,e,f;
+        let str = new String(colorHTML);
+        if(str.charAt(0)=="#"){
+            a=Utility.Str2Int(str.charAt(1));
+            b=Utility.Str2Int(str.charAt(2));
+            c=Utility.Str2Int(str.charAt(3));
+            d=Utility.Str2Int(str.charAt(4));
+            e=Utility.Str2Int(str.charAt(5));
+            f=Utility.Str2Int(str.charAt(6));
+        }else{
+            a=Utility.Str2Int(str.charAt(0));
+            b=Utility.Str2Int(str.charAt(1));
+            c=Utility.Str2Int(str.charAt(2));
+            d=Utility.Str2Int(str.charAt(3));
+            e=Utility.Str2Int(str.charAt(4));
+            f=Utility.Str2Int(str.charAt(5));
+        }
+        let _a = a*16+b;
+        let _b = c*16+d;
+        let _c = e*16+f;
+        return _a*256*256+_b*256+_c;
+    }
 
+    public static setImageColor(image: egret.Bitmap, color: number) {
+        // 将16进制颜色分割成rgb值
+        let spliceColor = (color) => {
+            let result = {r: -1, g: -1, b: -1};
+            result.b = color % 256;
+            result.g = Math.floor((color / 256)) % 256;
+            result.r = Math.floor((color / 256) / 256);
+            return result;
+        }
+        let result = spliceColor(color);
+        let colorMatrix = [
+            1, 0, 0, 0, 0,
+            0, 1, 0, 0, 0,
+            0, 0, 1, 0, 0,
+            0, 0, 0, 1, 0
+        ];
+        colorMatrix[0] = result.r / 255;
+        colorMatrix[6] = result.g / 255;
+        colorMatrix[12] = result.b / 255;
+        let colorFilter = new egret.ColorMatrixFilter(colorMatrix);
 
+        image.filters = [colorFilter];
+    }
 
+    public static createGif(jsonRes:string,pngRes:string):egret.MovieClip{
+        var json = RES.getRes(jsonRes);
+        var png = RES.getRes(pngRes);
+        var mcFactory = new egret.MovieClipDataFactory(json,png);
+        var gif = new egret.MovieClip(mcFactory.generateMovieClipData());
+        return gif;
+    }
+
+    public static setGifColor(gif: egret.MovieClip, color: number) {
+        // 将16进制颜色分割成rgb值
+        let spliceColor = (color) => {
+            let result = {r: -1, g: -1, b: -1};
+            result.b = color % 256;
+            result.g = Math.floor((color / 256)) % 256;
+            result.r = Math.floor((color / 256) / 256);
+            return result;
+        }
+        let result = spliceColor(color);
+        let colorMatrix = [
+            1, 0, 0, 0, 0,
+            0, 1, 0, 0, 0,
+            0, 0, 1, 0, 0,
+            0, 0, 0, 1, 0
+        ];
+        colorMatrix[0] = result.r / 255;
+        colorMatrix[6] = result.g / 255;
+        colorMatrix[12] = result.b / 255;
+        let colorFilter = new egret.ColorMatrixFilter(colorMatrix);
+        gif.filters = [colorFilter];
+    }
+
+    public static getRandomColor():number{
+        return ( Math.floor( Math.random() * 0xff ) << 16 )
+            + ( Math.floor( Math.random() * 0xff ) << 8 )
+            + Math.floor( Math.random() * 0xff ) ;
+    }
+
+    public static Lerp(a:number,b:number,v:number):number{
+        let ret = a+(b-a)*v;
+        return ret;
+    }
+
+    public static Deg2Rad():number{
+        return Math.PI/180;
+    }
 
 }
