@@ -56,26 +56,57 @@ class GameScene extends Scene {
 
     private Test():void{
 
-        let flow = this.createBitmapByName("white_jpg");
-        flow.width = 80;
-        flow.height = 80;
-        // flow.anchorOffsetX = flow.width/2;
-        // flow.anchorOffsetY = flow.height;
-        flow.x = SceneManager.ScreenWidth/2;
-        flow.y = SceneManager.ScreenHeight/2;
-        this.flow = flow;
-        // let change = () => {
-        //     let tw = egret.Tween.get(this.flow);
-        //     tw.wait(500);
-        //     tw.to({ "height": 480 }, 20000);
-        //     tw.wait(500);
-        //     tw.to({ "height": 240 }, 1000);
+        let tube = new egret.DisplayObjectContainer();
+        tube.width = 80;
+        tube.height = 302;
+        tube.x = SceneManager.ScreenWidth/2;
+        tube.y = SceneManager.ScreenHeight/2;
+        this.addChild(tube);
 
-        //     // tw.to({ "rotation": 360 }, 1000).to({ "rotation": 0 }, 1000);
-        //     tw.call(change, this);
-        // };
-        // change();
-        this.addChild(this.flow);
+        let _mask = this.createBitmapByName("pz_di_bt_1_2_png");
+        _mask.fillMode = egret.BitmapFillMode.SCALE;
+        _mask.width = 80;
+        _mask.height = 302;
+        tube.addChild(_mask);
+
+        let container = new egret.DisplayObjectContainer();
+        container.width = 80;
+        container.height = 302;
+        tube.addChild(container);
+        let water1 = this.createBitmapByName("white_jpg");
+        Utility.setImageColor(water1,Utility.ColorHTMLToInt("#FF0000"))
+        water1.width = 80;
+        water1.height = 66;
+        water1.x=0;
+        water1.y=302-66;
+        container.addChild(water1);
+        let water2 = this.createBitmapByName("white_jpg");
+        Utility.setImageColor(water2,Utility.ColorHTMLToInt("#00FF00"))
+        water2.width = 80;
+        water2.height = 66;
+        water2.x=0;
+        water2.y=302-66-66;
+        container.addChild(water2);
+
+        let waterGif:egret.MovieClip = this.createGif("water_flow_json","water_flow_png");
+        waterGif.width = 80;
+        waterGif.height = 66;
+        waterGif.x=0;
+        waterGif.y=302-66-66-66;
+        Utility.setGifColor(waterGif,Utility.ColorHTMLToInt("#FFFF00"));
+        container.addChild(waterGif);
+        waterGif.gotoAndPlay(0,-1);
+
+        container.mask=_mask;
+
+        let fg = this.createBitmapByName("pz_di_bt_1_1_png");
+        fg.fillMode = egret.BitmapFillMode.SCALE;
+        fg.width = 80;
+        fg.height = 302;
+        tube.addChild(fg);
+        
+
+
 
         let btn = this.createBitmapByName("shop_png");
         btn.fillMode = egret.BitmapFillMode.SCALE;
@@ -86,67 +117,35 @@ class GameScene extends Scene {
         btn.x = 100;
         btn.y = 100;
         btn.touchEnabled = true;
+        let aaa=true;
         btn.addEventListener(egret.TouchEvent.TOUCH_TAP, ()=>{
-
+            if(aaa){
+                fg.texture = RES.getRes("pz_di_bt_1_3_png");
+                aaa=false;
+            }else{
+                fg.texture = RES.getRes("pz_di_bt_1_1_png");
+                aaa=true;
+            }
             // this.flow.anchorOffsetX +=10;
             // this.flow.x+=10;
-            function foo(...args:any[]){
-                console.log("args",this.flow.x,this.flow.y,this.flow.rotation);
-            }
-            let tw = egret.Tween.get(this.flow,{loop:false,onChange:foo,onChangeObj:this});
-            tw.to({"x":100,"y":300,"rotation":75},0.2*1000).call(()=>{
-                Utility.setImageColor(this.flow,Utility.getRandomColor())
-            },this).call(()=>{
-                function foo2(...args:any[]){
-                    console.log("args22",this.flow.x,this.flow.y,this.flow.rotation);
-                }
-                let tw2 = egret.Tween.get(this.flow,{loop:false,onChange:foo2,onChangeObj:this});
-                tw2.to({"x":300,"y":600,"rotation":0},0.2*1000).call(()=>{
-                    Utility.setImageColor(this.flow,Utility.getRandomColor())
-                },this);
-            },this);
+            // function foo(...args:any[]){
+            //     console.log("args",this.flow.x,this.flow.y,this.flow.rotation);
+            // }
+            // let tw = egret.Tween.get(this.flow,{loop:false,onChange:foo,onChangeObj:this});
+            // tw.to({"x":100,"y":300,"rotation":75},0.2*1000).call(()=>{
+            //     Utility.setImageColor(this.flow,Utility.getRandomColor())
+            // },this).call(()=>{
+            //     function foo2(...args:any[]){
+            //         console.log("args22",this.flow.x,this.flow.y,this.flow.rotation);
+            //     }
+            //     let tw2 = egret.Tween.get(this.flow,{loop:false,onChange:foo2,onChangeObj:this});
+            //     tw2.to({"x":300,"y":600,"rotation":0},0.2*1000).call(()=>{
+            //         Utility.setImageColor(this.flow,Utility.getRandomColor())
+            //     },this);
+            // },this);
             
         }, this);
         this.addChild(btn);
-
-        //GIF
-        let container = new egret.DisplayObjectContainer();
-        container.width = 80;
-        container.height = 80;
-        container.anchorOffsetX = container.width/2;
-        container.anchorOffsetY = container.height;
-        container.x=this.flow.x;
-        container.y=this.flow.y;
-        this.addChild(container);
-        let qwer = this.createBitmapByName("white_jpg");
-        qwer.width = 80;
-        qwer.height = 80;
-        qwer.x=0;
-        qwer.y=0;
-        container.addChild(qwer);
-
-        let waterGif:egret.MovieClip = this.createGif("water_flow_json","water_flow_png");
-        waterGif.width = 80;
-        waterGif.height = 80;
-        // waterGif.anchorOffsetX = waterGif.width/2;
-        // waterGif.anchorOffsetY = waterGif.height;
-        waterGif.x=0;
-        waterGif.y=0;
-        Utility.setGifColor(waterGif,Utility.getRandomColor());
-        container.addChild(waterGif);
-        // waterGif.x = SceneManager.ScreenWidth/2+260;
-        // waterGif.y = SceneManager.ScreenHeight/2;
-        waterGif.gotoAndPlay(0,-1);
-        this.waterGif = waterGif;
-
-        let aa = this.createBitmapByName("icon1_png");
-        aa.width = 80;
-        aa.height = 80;
-        // aa.anchorOffsetX = aa.width/2;
-        // aa.anchorOffsetY = aa.height/2;
-        aa.x=0;
-        aa.y=0;
-        container.addChild(aa);
 
 
         let btn2 = this.createBitmapByName("rank_png");
@@ -159,8 +158,11 @@ class GameScene extends Scene {
         btn2.y = 100;
         btn2.touchEnabled = true;
         btn2.addEventListener(egret.TouchEvent.TOUCH_TAP, ()=>{
+            tube.rotation+=5;
+            water1.rotation-=5;
+            water2.rotation-=5;
+            waterGif.rotation-=5;
             // container.rotation+=5;
-            aa.x+=5;
             // this.removeChild(this.flow);
             // delete this.flow;
         }, this);
