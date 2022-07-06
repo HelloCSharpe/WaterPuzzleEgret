@@ -43,6 +43,7 @@ class WaterScript extends eui.Component {
     private water:egret.Bitmap;
     private waterFlow:egret.MovieClip;
     private hide:egret.Bitmap;
+    private hideTxt:egret.TextField;
     private _isFlow:boolean;
 
     private _waterWidth:number=80;//默认就是80宽度
@@ -70,6 +71,7 @@ class WaterScript extends eui.Component {
         this.water.width=w;
         this.waterFlow.width=w;
         this.hide.width=w;
+        this.hideTxt.width=w;
     }
     public set waterHeight(h:number){
         this._waterHeight=h;
@@ -77,6 +79,7 @@ class WaterScript extends eui.Component {
         this.water.height=h;
         this.waterFlow.height=h;
         this.hide.height=h;
+        this.hideTxt.height=h;
     }
 
     public get RealHeight():number{return this.waterHeight * this.data.num;}
@@ -96,6 +99,23 @@ class WaterScript extends eui.Component {
         this.waterHeight = _tube.waterHeight;
         this.SetSize(this.waterWidth, this.RealHeight);
         this.isFlow = false;
+
+        _tube.waterContainer.addChild(this);
+        this.water.mask = _tube.waterMask;
+        this.waterFlow.mask = _tube.waterMask;
+
+        if(_data.isHide){
+            this.hide.mask = _tube.waterMask;
+            this.hideTxt.mask = _tube.waterMask;
+        }else{
+            this.removeChild(this.hide);
+            this.removeChild(this.hideTxt);
+            delete this.hide;
+            delete this.hideTxt;
+            this.hide = null;
+            this.hideTxt = null;
+        }
+        
     }
 
     private InitUI():void{
@@ -136,6 +156,22 @@ class WaterScript extends eui.Component {
         hide.y = 0;
         this.addChild(hide);
         this.hide = hide;
+        //hideTxt
+        let txtField = new egret.TextField();
+        txtField.text = "?";
+        txtField.fontFamily = "myFirstFont";
+        txtField.textColor = 0xFFFFFF;
+        txtField.textAlign = egret.HorizontalAlign.CENTER;  //水平右对齐，相对于 textField 控件自身的 width 与 height
+        txtField.verticalAlign = egret.VerticalAlign.MIDDLE;
+        txtField.width = hide.width;
+        txtField.height = hide.height;
+        hide.anchorOffsetX = hide.width/2;
+        hide.anchorOffsetY = hide.height;
+        hide.x = 0;
+        hide.y = 0;
+        txtField.size = 30;
+        this.hideTxt=txtField;
+        this.addChild(txtField);
     }
 
     private InitAngleInfos():void{
@@ -190,8 +226,11 @@ class WaterScript extends eui.Component {
 
     public CloseHideImg():void{
         let tw = egret.Tween.get(this.hide);
+        this.removeChild(this.hideTxt);
         tw.to({ "alpha": 0 }, 500).call(()=>{
             this.removeChild(this.hide);
+            this.hideTxt=null;
+            this.hide=null;
         },this);
     }
 
@@ -335,6 +374,41 @@ class WaterScript extends eui.Component {
         if(this.tube.onPullInComplete!=null){
             this.tube.onPullInComplete(this.tube);
         }
+    }
+
+    public SetHideTextActive(active:boolean):void{
+        if(active){
+            this.hideTxt.alpha=1;
+        }else{
+            this.hideTxt.alpha=0;
+        }
+    }
+
+    public RefreshUI():void{
+        this.SetSize(this.width,this.RealHeight);
+    }
+
+    public Destroy():void{
+        this.water.mask = null;
+        this.waterFlow.mask = null;
+        this.hide.mask = null;
+        this.parent.removeChild(this);
+        this.removeChild(this.water);
+        this.removeChild(this.waterFlow);
+        if(this.hide!=null){
+            this.removeChild(this.hide);
+            delete this.hide;
+            this.hide=null;
+        }
+        if(this.hideTxt!=null){
+            this.removeChild(this.hideTxt);
+            delete this.hideTxt;
+            this.hideTxt=null;
+        }
+        delete this.water;
+        delete this.waterFlow;
+        this.water=null;
+        this.waterFlow=null;
     }
 
 }

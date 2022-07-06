@@ -88,6 +88,7 @@ var WaterScript = (function (_super) {
             this.water.width = w;
             this.waterFlow.width = w;
             this.hide.width = w;
+            this.hideTxt.width = w;
         },
         enumerable: true,
         configurable: true
@@ -100,6 +101,7 @@ var WaterScript = (function (_super) {
             this.water.height = h;
             this.waterFlow.height = h;
             this.hide.height = h;
+            this.hideTxt.height = h;
         },
         enumerable: true,
         configurable: true
@@ -118,6 +120,21 @@ var WaterScript = (function (_super) {
         this.waterHeight = _tube.waterHeight;
         this.SetSize(this.waterWidth, this.RealHeight);
         this.isFlow = false;
+        _tube.waterContainer.addChild(this);
+        this.water.mask = _tube.waterMask;
+        this.waterFlow.mask = _tube.waterMask;
+        if (_data.isHide) {
+            this.hide.mask = _tube.waterMask;
+            this.hideTxt.mask = _tube.waterMask;
+        }
+        else {
+            this.removeChild(this.hide);
+            this.removeChild(this.hideTxt);
+            delete this.hide;
+            delete this.hideTxt;
+            this.hide = null;
+            this.hideTxt = null;
+        }
     };
     WaterScript.prototype.InitUI = function () {
         this.width = this.waterWidth;
@@ -157,6 +174,22 @@ var WaterScript = (function (_super) {
         hide.y = 0;
         this.addChild(hide);
         this.hide = hide;
+        //hideTxt
+        var txtField = new egret.TextField();
+        txtField.text = "?";
+        txtField.fontFamily = "myFirstFont";
+        txtField.textColor = 0xFFFFFF;
+        txtField.textAlign = egret.HorizontalAlign.CENTER; //水平右对齐，相对于 textField 控件自身的 width 与 height
+        txtField.verticalAlign = egret.VerticalAlign.MIDDLE;
+        txtField.width = hide.width;
+        txtField.height = hide.height;
+        hide.anchorOffsetX = hide.width / 2;
+        hide.anchorOffsetY = hide.height;
+        hide.x = 0;
+        hide.y = 0;
+        txtField.size = 30;
+        this.hideTxt = txtField;
+        this.addChild(txtField);
     };
     WaterScript.prototype.InitAngleInfos = function () {
         if (this.angleInfos.length > 0) {
@@ -217,8 +250,11 @@ var WaterScript = (function (_super) {
     WaterScript.prototype.CloseHideImg = function () {
         var _this = this;
         var tw = egret.Tween.get(this.hide);
+        this.removeChild(this.hideTxt);
         tw.to({ "alpha": 0 }, 500).call(function () {
             _this.removeChild(_this.hide);
+            _this.hideTxt = null;
+            _this.hide = null;
         }, this);
     };
     WaterScript.prototype.DoRotate = function (angle) {
@@ -343,6 +379,39 @@ var WaterScript = (function (_super) {
         if (this.tube.onPullInComplete != null) {
             this.tube.onPullInComplete(this.tube);
         }
+    };
+    WaterScript.prototype.SetHideTextActive = function (active) {
+        if (active) {
+            this.hideTxt.alpha = 1;
+        }
+        else {
+            this.hideTxt.alpha = 0;
+        }
+    };
+    WaterScript.prototype.RefreshUI = function () {
+        this.SetSize(this.width, this.RealHeight);
+    };
+    WaterScript.prototype.Destroy = function () {
+        this.water.mask = null;
+        this.waterFlow.mask = null;
+        this.hide.mask = null;
+        this.parent.removeChild(this);
+        this.removeChild(this.water);
+        this.removeChild(this.waterFlow);
+        if (this.hide != null) {
+            this.removeChild(this.hide);
+            delete this.hide;
+            this.hide = null;
+        }
+        if (this.hideTxt != null) {
+            this.removeChild(this.hideTxt);
+            delete this.hideTxt;
+            this.hideTxt = null;
+        }
+        delete this.water;
+        delete this.waterFlow;
+        this.water = null;
+        this.waterFlow = null;
     };
     return WaterScript;
 }(eui.Component));

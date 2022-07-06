@@ -38,13 +38,17 @@ class DataConfig {
         this.configs.set(name,cfg);
     }
 
-    public GetConfig(name: string) {
+    public GetConfig(name: string):any {
         return this.configs.get(name);
     }
 
-    public GetDataByIndex(name: string,index:number){
+    public GetDataByIndex(name: string,index:number):any{
         let cfg = this.configs.get(name);
         if(cfg==null){return null;}
         return cfg[index];
+    }
+
+    public get SettingData():any{
+        return this.GetDataByIndex("setting",0);
     }
 }

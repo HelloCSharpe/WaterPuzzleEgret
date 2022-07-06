@@ -3,6 +3,7 @@ class GameScene extends Scene {
 
     protected onComplete() {
         this.InitTubes();
+        this.Test();
     }
 
     private InitBG():void{
@@ -29,28 +30,28 @@ class GameScene extends Scene {
         // aa.y = SceneManager.ScreenHeight/2;
         // this.addChild(aa);
 
-        let tube:egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-        tube.width = 80;
-        tube.height = 308;
-        tube.x = SceneManager.ScreenWidth/2;
-        tube.y = SceneManager.ScreenHeight/2;
-        this.addChild(tube);
-        let tubeBG = this.createBitmapByName("pz_di_bt_1_2_png");
-        tubeBG.width = 80;
-        tubeBG.height = 308;
-        tubeBG.anchorOffsetX = tubeBG.width/2;
-        tubeBG.anchorOffsetY = tubeBG.height;
-        tubeBG.x = tubeBG.width/2;
-        tubeBG.y = tubeBG.height;
-        tube.addChild(tubeBG);
-        let water1 = this.createBitmapByName("white_jpg");
-        water1.width = 80;
-        water1.height = 66;
-        water1.x = 0;
-        water1.y = 0;
-        Utility.setImageColor(water1,Utility.getRandomColor());
-        water1.mask = tubeBG;
-        tube.addChild(water1);
+        // let tube:egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
+        // tube.width = 80;
+        // tube.height = 308;
+        // tube.x = SceneManager.ScreenWidth/2;
+        // tube.y = SceneManager.ScreenHeight/2;
+        // this.addChild(tube);
+        // let tubeBG = this.createBitmapByName("pz_di_bt_1_2_png");
+        // tubeBG.width = 80;
+        // tubeBG.height = 308;
+        // tubeBG.anchorOffsetX = tubeBG.width/2;
+        // tubeBG.anchorOffsetY = tubeBG.height;
+        // tubeBG.x = tubeBG.width/2;
+        // tubeBG.y = tubeBG.height;
+        // tube.addChild(tubeBG);
+        // let water1 = this.createBitmapByName("white_jpg");
+        // water1.width = 80;
+        // water1.height = 66;
+        // water1.x = 0;
+        // water1.y = 0;
+        // Utility.setImageColor(water1,Utility.getRandomColor());
+        // water1.mask = tubeBG;
+        // tube.addChild(water1);
     }
 
     private Test():void{
@@ -58,8 +59,8 @@ class GameScene extends Scene {
         let flow = this.createBitmapByName("white_jpg");
         flow.width = 80;
         flow.height = 80;
-        flow.anchorOffsetX = flow.width/2;
-        flow.anchorOffsetY = flow.height;
+        // flow.anchorOffsetX = flow.width/2;
+        // flow.anchorOffsetY = flow.height;
         flow.x = SceneManager.ScreenWidth/2;
         flow.y = SceneManager.ScreenHeight/2;
         this.flow = flow;
@@ -86,23 +87,67 @@ class GameScene extends Scene {
         btn.y = 100;
         btn.touchEnabled = true;
         btn.addEventListener(egret.TouchEvent.TOUCH_TAP, ()=>{
-            // this.flow.scaleY +=0.1;
-            Utility.setImageColor(this.flow,16777215)
+
+            // this.flow.anchorOffsetX +=10;
+            // this.flow.x+=10;
+            function foo(...args:any[]){
+                console.log("args",this.flow.x,this.flow.y,this.flow.rotation);
+            }
+            let tw = egret.Tween.get(this.flow,{loop:false,onChange:foo,onChangeObj:this});
+            tw.to({"x":100,"y":300,"rotation":75},0.2*1000).call(()=>{
+                Utility.setImageColor(this.flow,Utility.getRandomColor())
+            },this).call(()=>{
+                function foo2(...args:any[]){
+                    console.log("args22",this.flow.x,this.flow.y,this.flow.rotation);
+                }
+                let tw2 = egret.Tween.get(this.flow,{loop:false,onChange:foo2,onChangeObj:this});
+                tw2.to({"x":300,"y":600,"rotation":0},0.2*1000).call(()=>{
+                    Utility.setImageColor(this.flow,Utility.getRandomColor())
+                },this);
+            },this);
+            
         }, this);
         this.addChild(btn);
 
-
         //GIF
+        let container = new egret.DisplayObjectContainer();
+        container.width = 80;
+        container.height = 80;
+        container.anchorOffsetX = container.width/2;
+        container.anchorOffsetY = container.height;
+        container.x=this.flow.x;
+        container.y=this.flow.y;
+        this.addChild(container);
+        let qwer = this.createBitmapByName("white_jpg");
+        qwer.width = 80;
+        qwer.height = 80;
+        qwer.x=0;
+        qwer.y=0;
+        container.addChild(qwer);
+
         let waterGif:egret.MovieClip = this.createGif("water_flow_json","water_flow_png");
         waterGif.width = 80;
         waterGif.height = 80;
-        waterGif.anchorOffsetX = waterGif.width/2;
-        waterGif.anchorOffsetY = waterGif.height;
+        // waterGif.anchorOffsetX = waterGif.width/2;
+        // waterGif.anchorOffsetY = waterGif.height;
+        waterGif.x=0;
+        waterGif.y=0;
+        Utility.setGifColor(waterGif,Utility.getRandomColor());
+        container.addChild(waterGif);
         // waterGif.x = SceneManager.ScreenWidth/2+260;
         // waterGif.y = SceneManager.ScreenHeight/2;
         waterGif.gotoAndPlay(0,-1);
-        this.addChild(waterGif);
         this.waterGif = waterGif;
+
+        let aa = this.createBitmapByName("icon1_png");
+        aa.width = 80;
+        aa.height = 80;
+        // aa.anchorOffsetX = aa.width/2;
+        // aa.anchorOffsetY = aa.height/2;
+        aa.x=0;
+        aa.y=0;
+        container.addChild(aa);
+
 
         let btn2 = this.createBitmapByName("rank_png");
         btn2.fillMode = egret.BitmapFillMode.SCALE;
@@ -114,8 +159,10 @@ class GameScene extends Scene {
         btn2.y = 100;
         btn2.touchEnabled = true;
         btn2.addEventListener(egret.TouchEvent.TOUCH_TAP, ()=>{
-            this.waterGif.scaleX +=0.1;
-            Utility.setGifColor(this.waterGif,Utility.getRandomColor());
+            // container.rotation+=5;
+            aa.x+=5;
+            // this.removeChild(this.flow);
+            // delete this.flow;
         }, this);
         this.addChild(btn2);
     }

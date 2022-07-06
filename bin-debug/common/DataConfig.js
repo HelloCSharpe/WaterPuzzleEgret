@@ -39,6 +39,13 @@ var DataConfig = (function () {
         }
         return cfg[index];
     };
+    Object.defineProperty(DataConfig.prototype, "SettingData", {
+        get: function () {
+            return this.GetDataByIndex("setting", 0);
+        },
+        enumerable: true,
+        configurable: true
+    });
     DataConfig.instance = null;
     return DataConfig;
 }());

@@ -15,6 +15,7 @@ var Dictionary = (function () {
     Dictionary.prototype.delete = function (key) {
         if (this.has(key)) {
             delete this.items[key];
+            this.items[key] = null;
         }
         return false;
     };
@@ -29,6 +30,13 @@ var Dictionary = (function () {
             }
         }
         return values;
+    };
+    Dictionary.prototype.clear = function () {
+        for (var k in this.items) {
+            if (this.has(k)) {
+                this.delete(k);
+            }
+        }
     };
     return Dictionary;
 }());

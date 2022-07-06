@@ -13,6 +13,7 @@ class Dictionary {
   delete(key: any): boolean {
     if (this.has(key)) {
       delete this.items[key];
+      this.items[key]=null;
     }
     return false;
   }
@@ -27,5 +28,12 @@ class Dictionary {
       }
     }
     return values;
+  }
+  clear():void{
+    for (let k in this.items) {
+      if (this.has(k)) {
+        this.delete(k);
+      }
+    }
   }
 }

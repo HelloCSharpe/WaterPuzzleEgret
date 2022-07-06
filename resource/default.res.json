@@ -19,6 +19,10 @@
 		{
 			"keys": "loading_bg_jpg,loading_icon_png",
 			"name": "loading"
+		},
+		{
+			"keys": "description_json,level_json,purchaser_json,settings_json,theme_json,tube_json,water_json",
+			"name": "cfg"
 		}
 	],
 	"resources": [
@@ -146,11 +150,6 @@
 			"url": "config/description.json",
 			"type": "json",
 			"name": "description_json"
-		},
-		{
-			"url": "config/roles.json",
-			"type": "json",
-			"name": "roles_json"
 		},
 		{
 			"url": "assets/themes/bg_1.png",
@@ -691,6 +690,36 @@
 			"url": "assets/UI/hide1.jpg",
 			"type": "image",
 			"name": "hide1_jpg"
+		},
+		{
+			"url": "config/purchaser.json",
+			"type": "json",
+			"name": "purchaser_json"
+		},
+		{
+			"url": "config/settings.json",
+			"type": "json",
+			"name": "settings_json"
+		},
+		{
+			"url": "config/theme.json",
+			"type": "json",
+			"name": "theme_json"
+		},
+		{
+			"url": "config/level.json",
+			"type": "json",
+			"name": "level_json"
+		},
+		{
+			"url": "config/tube.json",
+			"type": "json",
+			"name": "tube_json"
+		},
+		{
+			"url": "config/water.json",
+			"type": "json",
+			"name": "water_json"
 		}
 	]
 }
