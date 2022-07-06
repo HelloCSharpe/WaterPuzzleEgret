@@ -240,7 +240,7 @@ class Utility {
         return ret;
     }
 
-    public static Deg2Rad():number{
+    public static get Deg2Rad():number{
         return Math.PI/180;
     }
 

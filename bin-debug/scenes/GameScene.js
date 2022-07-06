@@ -36,7 +36,6 @@ var GameScene = (function (_super) {
         var tube = new egret.DisplayObjectContainer();
         tube.width = 80;
         tube.height = 308;
-        0;
         tube.x = SceneManager.ScreenWidth / 2;
         tube.y = SceneManager.ScreenHeight / 2;
         this.addChild(tube);

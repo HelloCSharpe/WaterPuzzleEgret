@@ -257,6 +257,17 @@ var Utility = (function () {
             + (Math.floor(Math.random() * 0xff) << 8)
             + Math.floor(Math.random() * 0xff);
     };
+    Utility.Lerp = function (a, b, v) {
+        var ret = a + (b - a) * v;
+        return ret;
+    };
+    Object.defineProperty(Utility, "Deg2Rad", {
+        get: function () {
+            return Math.PI / 180;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Utility._notibox = null;
     Utility.btnScaleFuns = new Dictionary();
     return Utility;

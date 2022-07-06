@@ -15,10 +15,24 @@ var TubeScript = (function () {
         this.waterHeight = 66;
         this.tubeMouthWidth = 80; //试管瓶口宽度
         this.flowLength = 450; //水流的高度
+        this.onPullInComplete = null;
         this.initDatas = [];
+        this._pullDir = PullDir.Left;
     }
     Object.defineProperty(TubeScript.prototype, "MaxWaterNum", {
         get: function () { return 4; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TubeScript.prototype, "PullAngles", {
+        get: function () {
+            return [90, 75, 60, 45, 30];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TubeScript.prototype, "pullDir", {
+        get: function () { return this._pullDir; },
         enumerable: true,
         configurable: true
     });

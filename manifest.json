@@ -11,18 +11,19 @@
 		"libs/egretmgobe/egretmgobe.js"
 	],
 	"game": [
-		"bin-debug/common/Dictionary.js",
 		"bin-debug/common/Scene.js",
-		"bin-debug/common/LzyScrollView.js",
+		"bin-debug/common/Dictionary.js",
+		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
 		"bin-debug/ThemeAdapter.js",
 		"bin-debug/common/DataConfig.js",
 		"bin-debug/AssetAdapter.js",
+		"bin-debug/common/LzyScrollView.js",
 		"bin-debug/LoadingUI.js",
-		"bin-debug/Main.js",
 		"bin-debug/common/SHA1.js",
 		"bin-debug/common/Utility.js",
 		"bin-debug/game/TubeScript.js",
+		"bin-debug/game/WaterScript.js",
 		"bin-debug/scenes/GameScene.js",
 		"bin-debug/scenes/StartScene.js",
 		"bin-debug/scenes/TestScene.js"

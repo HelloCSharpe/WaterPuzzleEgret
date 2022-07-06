@@ -13,11 +13,15 @@ declare interface Platform {
 }
 
 class DebugPlatform implements Platform {
+    private userInfo : Object;
+
     async getUserInfo() {
-        return { nickName: "username" }
+        return this.userInfo;
     }
     async login() {
-
+        this.userInfo = { 
+            nickName: "username"
+        };
     }
 }
 
@@ -28,7 +32,9 @@ class WXPlatform implements Platform{
         return this.userInfo;
     }
     async login() {
-        this.userInfo = { nickName: "username" };
+        this.userInfo = { 
+            nickName: "username"
+        };
     }
 }
 
