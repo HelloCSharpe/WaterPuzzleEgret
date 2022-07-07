@@ -10,27 +10,24 @@ class DataConfig {
     }
 
     private constructor() {
-        this.Init();
+        this.configs = new Dictionary();
     }
-
-
-    private rolescfg;
-    private enemyscfg;
-    private missioncfg;
-    private bulletcfg;
 
     private configs:Dictionary;
 
-    private Init(): void {
-        this.configs = new Dictionary();
+    public async Init(): Promise<any> {
+        await RES.loadGroup("cfg");
         this.IniConfigs();
     }
 
     private IniConfigs(){
         this.InitConfig("description","description_json");
-        this.InitConfig("roles","roles_json");
-        // this.InitConfig("enermy","enermy_json");
-        // this.InitConfig("setting","setting_json");
+        this.InitConfig("level","level_json");
+        this.InitConfig("purchaser","purchaser_json");
+        this.InitConfig("settings","settings_json");
+        this.InitConfig("theme","theme_json");
+        this.InitConfig("tube","tube_json");
+        this.InitConfig("water","water_json");
     }
 
     private InitConfig(name:string,cfgResName:string){
@@ -38,17 +35,17 @@ class DataConfig {
         this.configs.set(name,cfg);
     }
 
-    public GetConfig(name: string):any {
+    public GetConfig(name: string) {
         return this.configs.get(name);
     }
 
-    public GetDataByIndex(name: string,index:number):any{
+    public GetDataByIndex(name: string,index:number){
         let cfg = this.configs.get(name);
         if(cfg==null){return null;}
         return cfg[index];
     }
 
     public get SettingData():any{
-        return this.GetDataByIndex("setting",0);
+        return this.GetDataByIndex("settings",0);
     }
 }

@@ -35,7 +35,7 @@ class AngleInfo{
     }
 }
 
-class WaterScript extends eui.Component {
+class WaterScript extends egret.DisplayObjectContainer {
     private tube:TubeScript;
     private data:WaterData;
     private angleInfos:AngleInfo[]=[];
@@ -87,11 +87,11 @@ class WaterScript extends eui.Component {
     public constructor(){
         super();
         this.InitUI();
-        this.InitAngleInfos();
     }
 
     public Init(_tube:TubeScript,_data:WaterData){
         this.tube = _tube;
+        this.InitAngleInfos();
         this.data = _data;
         Utility.setImageColor(this.water,_data.color);
         Utility.setGifColor(this.waterFlow,_data.color);
@@ -101,21 +101,10 @@ class WaterScript extends eui.Component {
         this.isFlow = false;
 
         _tube.waterContainer.addChild(this);
-        this.water.mask = _tube.waterMask;
-        this.waterFlow.mask = _tube.waterMask;
 
-        if(_data.isHide){
-            this.hide.mask = _tube.waterMask;
-            this.hideTxt.mask = _tube.waterMask;
-        }else{
-            this.removeChild(this.hide);
-            this.removeChild(this.hideTxt);
-            delete this.hide;
-            delete this.hideTxt;
-            this.hide = null;
-            this.hideTxt = null;
-        }
-        
+        let a = _data.isHide?1:0;
+        this.hide.alpha=a;
+        this.hideTxt.alpha=a;
     }
 
     private InitUI():void{
@@ -129,8 +118,6 @@ class WaterScript extends eui.Component {
         let water = Utility.createBitmapByName("white_jpg");
         water.width = this.width;
         water.height = this.height;
-        water.anchorOffsetX = water.width/2;
-        water.anchorOffsetY = water.height;
         water.x = 0;
         water.y = 0;
         this.addChild(water);
@@ -138,20 +125,17 @@ class WaterScript extends eui.Component {
         //waterFlow
         let waterFlow = Utility.createGif("water_flow_json","water_flow_png");
         waterFlow.width = this.width;
-        waterFlow.height = this.width;
-        waterFlow.anchorOffsetX = waterFlow.width/2;
-        waterFlow.anchorOffsetY = waterFlow.height;
+        waterFlow.height = this.height;
         waterFlow.x = 0;
         waterFlow.y = 0;
         waterFlow.gotoAndPlay(0,-1);
         this.addChild(waterFlow);
         this.waterFlow = waterFlow;
         //hide
-        let hide = Utility.createBitmapByName("hide1_jpg");
+        let hide = Utility.createBitmapByName("white_jpg");
+        Utility.setImageColor(hide,Utility.ColorHTMLToInt("#3F3F3F"));
         hide.width = this.width;
         hide.height = this.height;
-        hide.anchorOffsetX = hide.width/2;
-        hide.anchorOffsetY = hide.height;
         hide.x = 0;
         hide.y = 0;
         this.addChild(hide);
@@ -163,12 +147,10 @@ class WaterScript extends eui.Component {
         txtField.textColor = 0xFFFFFF;
         txtField.textAlign = egret.HorizontalAlign.CENTER;  //水平右对齐，相对于 textField 控件自身的 width 与 height
         txtField.verticalAlign = egret.VerticalAlign.MIDDLE;
-        txtField.width = hide.width;
-        txtField.height = hide.height;
-        hide.anchorOffsetX = hide.width/2;
-        hide.anchorOffsetY = hide.height;
-        hide.x = 0;
-        hide.y = 0;
+        txtField.width = this.width;
+        txtField.height = this.height;
+        txtField.x = 0;
+        txtField.y = 0;
         txtField.size = 30;
         this.hideTxt=txtField;
         this.addChild(txtField);
@@ -216,12 +198,12 @@ class WaterScript extends eui.Component {
     public SetPos(x:number,y:number){
         this.x = x;
         this.y = y;
-        this.water.x = x;
-        this.water.y = y;
-        this.waterFlow.x = x;
-        this.waterFlow.y = y;
-        this.hide.x = x;
-        this.hide.y = y;
+        // this.water.x = x;
+        // this.water.y = y;
+        // this.waterFlow.x = x;
+        // this.waterFlow.y = y;
+        // this.hide.x = x;
+        // this.hide.y = y;
     }
 
     public CloseHideImg():void{
@@ -229,8 +211,10 @@ class WaterScript extends eui.Component {
         this.removeChild(this.hideTxt);
         tw.to({ "alpha": 0 }, 500).call(()=>{
             this.removeChild(this.hide);
-            this.hideTxt=null;
+            delete this.hide;
+            delete this.hideTxt;
             this.hide=null;
+            this.hideTxt=null;
         },this);
     }
 
@@ -371,9 +355,7 @@ class WaterScript extends eui.Component {
     }
 
     private OnPullInDone():void{
-        if(this.tube.onPullInComplete!=null){
-            this.tube.onPullInComplete(this.tube);
-        }
+        this.tube.DoPullInComplete(this.tube);
     }
 
     public SetHideTextActive(active:boolean):void{
@@ -385,13 +367,10 @@ class WaterScript extends eui.Component {
     }
 
     public RefreshUI():void{
-        this.SetSize(this.width,this.RealHeight);
+        this.SetSize(this.waterWidth,this.RealHeight);
     }
 
     public Destroy():void{
-        this.water.mask = null;
-        this.waterFlow.mask = null;
-        this.hide.mask = null;
         this.parent.removeChild(this);
         this.removeChild(this.water);
         this.removeChild(this.waterFlow);

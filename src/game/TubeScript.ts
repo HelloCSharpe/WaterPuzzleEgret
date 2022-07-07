@@ -3,7 +3,9 @@ enum PullDir{
     Right
 }
 
-class TubeScript extends eui.Component {
+class TubeScript extends egret.DisplayObjectContainer {
+    public tubeClickFunc:Function;//tube点击事件
+
     public tubeWidth:number = 80;//试管宽度
     public tubeHeight:number = 308;//试管高度
     public tubeSlash:number = 318;//试管斜线长度：根号（宽度*宽度+高度*高度）
@@ -11,17 +13,17 @@ class TubeScript extends eui.Component {
     public waterHeight:number = 66;
     public tubeMouthWidth:number = 80;//试管瓶口宽度
     public flowLength:number = 450;//水流的高度
-    public onPullInComplete:Function=null;
+    private onPullInComplete:Function=null;
+    private pullInObj:any=null;
 
     public get MaxWaterNum():number{return 4;}
 
-    private tubeBG:egret.Bitmap;//底图
+    // private tubeBG:egret.Bitmap;//底图
     public waterContainer:egret.DisplayObjectContainer;//水的容器
     public waterMask:egret.Bitmap;//水的遮罩
     private waterFlow:egret.Bitmap;//水流
     private tubeFG:egret.Bitmap;//前景图
 
-    private initDatas:number[];
     private _pullDir:PullDir=PullDir.Left;//倾倒方向
     private waterUIScripts:WaterScript[];
     private pullDir2Position:Dictionary;
@@ -87,11 +89,13 @@ class TubeScript extends eui.Component {
         this.InitParams();
         this.InitUI();
         this.RefreshTubeType();
+        this.addListener();
+        this.touchEnabled=true;
     }
 
     private InitParams():void{
         this.tubeSlash = Math.sqrt(this.tubeWidth*this.tubeWidth+this.tubeHeight*this.tubeHeight);
-        this.waterWidth = this.tubeHeight;
+        this.waterWidth = this.tubeWidth;
         this.PullStartTime = DataConfig.Instance.SettingData.PullStartTime;
         this.PullTimes[0] = DataConfig.Instance.SettingData.PullTime1;
         this.PullTimes[1] = DataConfig.Instance.SettingData.PullTime2;
@@ -102,27 +106,68 @@ class TubeScript extends eui.Component {
     }
 
     private InitUI():void{
+        this.width=this.tubeWidth;
+        this.height=this.tubeHeight;
+
+        let _mask = Utility.createBitmapByName("pz_di_bt_1_2_png");
+        _mask.fillMode = egret.BitmapFillMode.SCALE;
+        _mask.width = 80;
+        _mask.height = 302;
+        this.waterMask=_mask;
+        this.addChild(_mask);
+
+        let container = new egret.DisplayObjectContainer();
+        container.width = 80;
+        container.height = 302;
+        this.waterContainer=container;
+        this.waterContainer.mask=_mask;
+        this.addChild(container);
+
+        let fg = Utility.createBitmapByName("pz_di_bt_1_1_png");
+        fg.fillMode = egret.BitmapFillMode.SCALE;
+        fg.width = 80;
+        fg.height = 302;
+        this.tubeFG=fg;
+        this.addChild(fg);
+
+        let flow = Utility.createBitmapByName("white_jpg");
+        flow.fillMode = egret.BitmapFillMode.SCALE;
+        flow.width = 2;
+        flow.height = this.flowLength;
+        flow.alpha=0;
+        this.waterFlow=flow;
+        this.addChild(flow);
         
+    }
+
+    public SetPullInComplete(callback:Function,thisObj:any):void{
+        this.onPullInComplete=callback;
+        this.pullInObj=thisObj;
+    }
+
+    public DoPullInComplete(tube:TubeScript):void{
+        if(this.onPullInComplete!=null){
+            this.onPullInComplete.bind(this.pullInObj)(tube);
+        }
     }
 
     public Init(waterDatas:WaterData[]):void{
         this.waterUIScripts = [];
-        this.initDatas = [];
         for (let i = 0; i < waterDatas.length; i++)
         {
             let waterData:WaterData = waterDatas[i];
-            this.initDatas.push(waterData.orginId);
+            if(waterData.orginId==0){return;}
             let water:WaterScript = new WaterScript();
             water.Init(this,waterData);
             if (i == 0)
             {
-                water.SetPos(0, 0);
+                water.SetPos(this.tubeWidth/2, this.tubeHeight);
             }
             else
             {
                 let prevWater = this.waterUIScripts[i - 1];
                 let pos:Vector2 = prevWater.GetPos();
-                water.SetPos(0, pos.y + prevWater.RealHeight);
+                water.SetPos(pos.x, pos.y - prevWater.RealHeight);
             }
             this.waterUIScripts.push(water);
         }
@@ -202,9 +247,9 @@ class TubeScript extends eui.Component {
         this.parent.setChildIndex(this,len-1);
         let v:Vector2 = this.pullDir2Position.get(PullDir.Left);
         let v2:Vector2 = new Vector2(0,this.selectHeight);
-        let pos:Vector2 = new Vector2(v.x+v2.x,v.y+v2.y);
+        let pos:Vector2 = new Vector2(v.x+v2.x,v.y-v2.y);
         TubeScript.selectTweener = egret.Tween.get(this);
-        TubeScript.selectTweener.to({"x":pos.x,"y":pos.y},300).call(()=>{
+        TubeScript.selectTweener.to({"x":pos.x,"y":pos.y},100).call(()=>{
             TubeScript.selectTweener=null;
         },this);
         return true;
@@ -218,7 +263,7 @@ class TubeScript extends eui.Component {
         }
         let pos:Vector2 = this.pullDir2Position.get(PullDir.Left);
         TubeScript.selectTweener = egret.Tween.get(this);
-        TubeScript.selectTweener.to({"x":pos.x,"y":pos.y},300).call(()=>{
+        TubeScript.selectTweener.to({"x":pos.x,"y":pos.y},100).call(()=>{
             TubeScript.selectTweener=null;
         },this);
         return true;
@@ -337,7 +382,7 @@ class TubeScript extends eui.Component {
             }
             let pulltime:number = this.PullTimes[pullNum - 1];
             targetWater.DealPullIn(pulltime);
-            AudioManager.Instance.PlaySound("pourWater", pulltime);
+            // AudioManager.Instance.PlaySound("pourWater", pulltime);
             //到达指定位置后，角度开始变大，开始倾倒（倒入阶段）
             if (this._pullDir == PullDir.Left)
             {
@@ -552,7 +597,7 @@ class TubeScript extends eui.Component {
             this.tubeFG.texture=texture;
         }
         let texture: egret.Texture = RES.getRes(tubeData.bgSprite);
-        this.tubeBG.texture=texture;
+        // this.tubeBG.texture=texture;
         this.waterMask.texture=texture;
         this.tubeMouthWidth = tubeData.width;
     }
@@ -566,7 +611,7 @@ class TubeScript extends eui.Component {
         {
             this.pullDir2Position.clear();
         }
-        let pos = new Vector2(this.x,this.y)
+        let pos = new Vector2(this.x,this.y);
         this.pullDir2Position.set(PullDir.Left, pos);
         this.pullDir2Position.set(PullDir.Right, new Vector2(pos.x+this.tubeWidth, pos.y));
         if (this.pullDir2MouthPosition == null)
@@ -660,9 +705,57 @@ class TubeScript extends eui.Component {
                 water.Destroy();
             }
         }
-        else
-        {
+    }
 
+    public Shake():void{
+        
+    }
+
+    public Destroy():void{
+        this.removeListener();
+        this.onPullInComplete=null;
+        this.pullInObj=null;
+        if(this.waterUIScripts!=null){
+            let len = this.waterUIScripts.length;
+            for(let i=len-1;i>=0;i--){
+                if(this.waterUIScripts[i]!=null){
+                    this.waterUIScripts[i].Destroy();
+                    delete this.waterUIScripts[i];
+                }
+            }
+            this.waterUIScripts=null;
+        }
+        this.waterContainer.mask=null;
+        delete this.waterContainer;
+        delete this.waterMask;
+        delete this.waterFlow;
+        delete this.tubeFG;
+        this.waterContainer=null;
+        this.waterMask=null;
+        this.waterFlow=null;
+        this.tubeFG=null;
+
+    }
+
+    private addListener():void{
+        EventCenter.AddListener(EventID.ThemeBtnClicked,this.onThemeBtnClicked,this);
+    }
+
+    private removeListener():void{
+        EventCenter.RemoveListener(EventID.ThemeBtnClicked,this.onThemeBtnClicked,this);
+    }
+
+    private onThemeBtnClicked(...args:any[]):void{
+        let isSun=args[0];
+        let tubeId = PlayerData.Instance.curTubeID;
+        let tubeData = DataConfig.Instance.GetDataByIndex("tube",tubeId);
+        if(tubeData==null){return;}
+        if(isSun){
+            let texture: egret.Texture = RES.getRes(tubeData.fgSprite);
+            this.tubeFG.texture=texture;
+        }else{
+            let texture: egret.Texture = RES.getRes(tubeData.fgSprite2);
+            this.tubeFG.texture=texture;
         }
     }
 
