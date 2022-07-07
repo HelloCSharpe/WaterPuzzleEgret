@@ -27,6 +27,12 @@ var Scene = (function (_super) {
     Scene.prototype.createBitmapByName = function (res_name) {
         return Utility.createBitmapByName(res_name);
     };
+    Scene.prototype.createButton = function (res_name, w, h) {
+        return Utility.createButton(res_name, w, h);
+    };
+    Scene.prototype.createTextField = function (width, height, color, fontSize, text, fontFamily, HAlign, VAlign) {
+        return Utility.createTextField(width, height, color, fontSize, text, fontFamily, HAlign, VAlign);
+    };
     Scene.prototype.createGif = function (jsonRes, pngRes) {
         return Utility.createGif(jsonRes, pngRes);
     };

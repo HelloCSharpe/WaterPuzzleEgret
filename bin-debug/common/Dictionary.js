@@ -15,7 +15,6 @@ var Dictionary = (function () {
     Dictionary.prototype.delete = function (key) {
         if (this.has(key)) {
             delete this.items[key];
-            this.items[key] = null;
         }
         return false;
     };

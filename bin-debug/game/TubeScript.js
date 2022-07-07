@@ -25,6 +25,7 @@ var TubeScript = (function (_super) {
         _this.tubeMouthWidth = 80; //试管瓶口宽度
         _this.flowLength = 450; //水流的高度
         _this.onPullInComplete = null;
+        _this.pullInObj = null;
         _this._pullDir = PullDir.Left; //倾倒方向
         _this.pullTweener = null;
         _this.PullStartTime = 0.4; //从初始位置到倾倒位置的时间
@@ -34,6 +35,8 @@ var TubeScript = (function (_super) {
         _this.InitParams();
         _this.InitUI();
         _this.RefreshTubeType();
+        _this.addListener();
+        _this.touchEnabled = true;
         return _this;
     }
     Object.defineProperty(TubeScript.prototype, "MaxWaterNum", {
@@ -104,7 +107,7 @@ var TubeScript = (function (_super) {
     });
     TubeScript.prototype.InitParams = function () {
         this.tubeSlash = Math.sqrt(this.tubeWidth * this.tubeWidth + this.tubeHeight * this.tubeHeight);
-        this.waterWidth = this.tubeHeight;
+        this.waterWidth = this.tubeWidth;
         this.PullStartTime = DataConfig.Instance.SettingData.PullStartTime;
         this.PullTimes[0] = DataConfig.Instance.SettingData.PullTime1;
         this.PullTimes[1] = DataConfig.Instance.SettingData.PullTime2;
@@ -114,22 +117,59 @@ var TubeScript = (function (_super) {
         this.InitPivotPosition();
     };
     TubeScript.prototype.InitUI = function () {
+        this.width = this.tubeWidth;
+        this.height = this.tubeHeight;
+        var _mask = Utility.createBitmapByName("pz_di_bt_1_2_png");
+        _mask.fillMode = egret.BitmapFillMode.SCALE;
+        _mask.width = 80;
+        _mask.height = 302;
+        this.waterMask = _mask;
+        this.addChild(_mask);
+        var container = new egret.DisplayObjectContainer();
+        container.width = 80;
+        container.height = 302;
+        this.waterContainer = container;
+        this.waterContainer.mask = _mask;
+        this.addChild(container);
+        var fg = Utility.createBitmapByName("pz_di_bt_1_1_png");
+        fg.fillMode = egret.BitmapFillMode.SCALE;
+        fg.width = 80;
+        fg.height = 302;
+        this.tubeFG = fg;
+        this.addChild(fg);
+        var flow = Utility.createBitmapByName("white_jpg");
+        flow.fillMode = egret.BitmapFillMode.SCALE;
+        flow.width = 2;
+        flow.height = this.flowLength;
+        flow.alpha = 0;
+        this.waterFlow = flow;
+        this.addChild(flow);
+    };
+    TubeScript.prototype.SetPullInComplete = function (callback, thisObj) {
+        this.onPullInComplete = callback;
+        this.pullInObj = thisObj;
+    };
+    TubeScript.prototype.DoPullInComplete = function (tube) {
+        if (this.onPullInComplete != null) {
+            this.onPullInComplete.bind(this.pullInObj)(tube);
+        }
     };
     TubeScript.prototype.Init = function (waterDatas) {
         this.waterUIScripts = [];
-        this.initDatas = [];
         for (var i = 0; i < waterDatas.length; i++) {
             var waterData = waterDatas[i];
-            this.initDatas.push(waterData.orginId);
+            if (waterData.orginId == 0) {
+                return;
+            }
             var water = new WaterScript();
             water.Init(this, waterData);
             if (i == 0) {
-                water.SetPos(0, 0);
+                water.SetPos(this.tubeWidth / 2, this.tubeHeight);
             }
             else {
                 var prevWater = this.waterUIScripts[i - 1];
                 var pos = prevWater.GetPos();
-                water.SetPos(0, pos.y + prevWater.RealHeight);
+                water.SetPos(pos.x, pos.y - prevWater.RealHeight);
             }
             this.waterUIScripts.push(water);
         }
@@ -218,9 +258,9 @@ var TubeScript = (function (_super) {
         this.parent.setChildIndex(this, len - 1);
         var v = this.pullDir2Position.get(PullDir.Left);
         var v2 = new Vector2(0, this.selectHeight);
-        var pos = new Vector2(v.x + v2.x, v.y + v2.y);
+        var pos = new Vector2(v.x + v2.x, v.y - v2.y);
         TubeScript.selectTweener = egret.Tween.get(this);
-        TubeScript.selectTweener.to({ "x": pos.x, "y": pos.y }, 300).call(function () {
+        TubeScript.selectTweener.to({ "x": pos.x, "y": pos.y }, 100).call(function () {
             TubeScript.selectTweener = null;
         }, this);
         return true;
@@ -231,7 +271,7 @@ var TubeScript = (function (_super) {
         }
         var pos = this.pullDir2Position.get(PullDir.Left);
         TubeScript.selectTweener = egret.Tween.get(this);
-        TubeScript.selectTweener.to({ "x": pos.x, "y": pos.y }, 300).call(function () {
+        TubeScript.selectTweener.to({ "x": pos.x, "y": pos.y }, 100).call(function () {
             TubeScript.selectTweener = null;
         }, this);
         return true;
@@ -346,7 +386,7 @@ var TubeScript = (function (_super) {
             }
             var pulltime = _this.PullTimes[pullNum - 1];
             targetWater.DealPullIn(pulltime);
-            AudioManager.Instance.PlaySound("pourWater", pulltime);
+            // AudioManager.Instance.PlaySound("pourWater", pulltime);
             //到达指定位置后，角度开始变大，开始倾倒（倒入阶段）
             if (_this._pullDir == PullDir.Left) {
                 _this.waterFlow.x = -_this.tubeMouthWidth / 2;
@@ -524,7 +564,7 @@ var TubeScript = (function (_super) {
             this.tubeFG.texture = texture_2;
         }
         var texture = RES.getRes(tubeData.bgSprite);
-        this.tubeBG.texture = texture;
+        // this.tubeBG.texture=texture;
         this.waterMask.texture = texture;
         this.tubeMouthWidth = tubeData.width;
     };
@@ -606,11 +646,61 @@ var TubeScript = (function (_super) {
                 water.Destroy();
             }
         }
+    };
+    TubeScript.prototype.Shake = function () {
+    };
+    TubeScript.prototype.Destroy = function () {
+        this.removeListener();
+        this.onPullInComplete = null;
+        this.pullInObj = null;
+        if (this.waterUIScripts != null) {
+            var len = this.waterUIScripts.length;
+            for (var i = len - 1; i >= 0; i--) {
+                if (this.waterUIScripts[i] != null) {
+                    this.waterUIScripts[i].Destroy();
+                    delete this.waterUIScripts[i];
+                }
+            }
+            this.waterUIScripts = null;
+        }
+        this.waterContainer.mask = null;
+        delete this.waterContainer;
+        delete this.waterMask;
+        delete this.waterFlow;
+        delete this.tubeFG;
+        this.waterContainer = null;
+        this.waterMask = null;
+        this.waterFlow = null;
+        this.tubeFG = null;
+    };
+    TubeScript.prototype.addListener = function () {
+        EventCenter.AddListener(EventID.ThemeBtnClicked, this.onThemeBtnClicked, this);
+    };
+    TubeScript.prototype.removeListener = function () {
+        EventCenter.RemoveListener(EventID.ThemeBtnClicked, this.onThemeBtnClicked, this);
+    };
+    TubeScript.prototype.onThemeBtnClicked = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        var isSun = args[0];
+        var tubeId = PlayerData.Instance.curTubeID;
+        var tubeData = DataConfig.Instance.GetDataByIndex("tube", tubeId);
+        if (tubeData == null) {
+            return;
+        }
+        if (isSun) {
+            var texture = RES.getRes(tubeData.fgSprite);
+            this.tubeFG.texture = texture;
+        }
         else {
+            var texture = RES.getRes(tubeData.fgSprite2);
+            this.tubeFG.texture = texture;
         }
     };
     TubeScript.selectTweener = null;
     return TubeScript;
-}(eui.Component));
+}(egret.DisplayObjectContainer));
 __reflect(TubeScript.prototype, "TubeScript");
 //# sourceMappingURL=TubeScript.js.map

@@ -42,6 +42,30 @@ var Utility = (function () {
         result.texture = texture;
         return result;
     };
+    Utility.createButton = function (resName, width, height) {
+        var btn = new egret.DisplayObjectContainer();
+        btn.width = width;
+        btn.height = height;
+        var btnBg = Utility.createBitmapByName(resName);
+        btnBg.fillMode = egret.BitmapFillMode.SCALE;
+        btnBg.name = "btnBg";
+        btnBg.width = width;
+        btnBg.height = height;
+        btn.addChild(btnBg);
+        return btn;
+    };
+    Utility.createTextField = function (width, height, color, fontSize, text, fontFamily, HAlign, VAlign) {
+        var textField = new egret.TextField();
+        textField.width = width;
+        textField.height = height;
+        textField.textColor = color;
+        textField.size = (fontSize == null) ? 30 : fontSize;
+        textField.fontFamily = (fontFamily == null) ? "myFirstFont" : fontFamily;
+        textField.text = (text == null) ? "" : text;
+        textField.textAlign = (HAlign == null) ? egret.HorizontalAlign.LEFT : HAlign;
+        textField.verticalAlign = (VAlign == null) ? egret.VerticalAlign.MIDDLE : VAlign;
+        return textField;
+    };
     Object.defineProperty(Utility, "NotiBoxGo", {
         get: function () {
             if (Utility._notibox == null) {
@@ -53,7 +77,8 @@ var Utility = (function () {
                 Utility._notibox.x = 0;
                 Utility._notibox.y = 0;
                 Utility._notibox.alpha = 0;
-                var bg = Utility.createBitmapByName("notice_png");
+                var bg = Utility.createBitmapByName("tog3_png");
+                Utility.setImageColor(bg, 0x000000);
                 bg.name = "BG";
                 bg.fillMode = egret.BitmapFillMode.REPEAT;
                 bg.width = Utility._notibox.width;
@@ -106,24 +131,37 @@ var Utility = (function () {
         tw.wait(1000);
         tw.to({ "alpha": 0, "y": start_y }, 500);
     };
-    Utility.ButtonEnable = function (obj, bindObj) {
-        obj.touchEnabled = true;
-        var func = function () {
-            var tw = egret.Tween.get(obj);
-            tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
-            if (bindObj != null) {
-                var tw2 = egret.Tween.get(bindObj);
-                tw2.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
-            }
-        };
-        func.bind(obj, bindObj);
-        Utility.btnScaleFuns.set(obj, func);
-        obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN, func, obj);
+    Utility.ButtonActive = function (obj, active) {
+        obj.touchEnabled = active;
+        if (active) {
+            var func = function () {
+                var tw = egret.Tween.get(obj);
+                tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
+            };
+            func.bind(obj);
+            Utility.btnScaleFuns.set(obj, func);
+            obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN, func, obj);
+        }
+        else {
+            var func = Utility.btnScaleFuns.get(obj);
+            obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, func, obj);
+        }
     };
-    Utility.ButtonDisable = function (obj) {
-        obj.touchEnabled = false;
-        var func = Utility.btnScaleFuns.get(obj);
-        obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, func, obj);
+    Utility.ButtonActive2 = function (obj, active) {
+        obj.touchEnabled = active;
+        if (active) {
+            var func = function () {
+                var tw = egret.Tween.get(obj);
+                tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
+            };
+            func.bind(obj);
+            Utility.btnScaleFuns.set(obj, func);
+            obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN, func, obj);
+        }
+        else {
+            var func = Utility.btnScaleFuns.get(obj);
+            obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, func, obj);
+        }
     };
     Utility.Str2Int = function (char) {
         if (char == "0") {
@@ -156,22 +194,22 @@ var Utility = (function () {
         if (char == "9") {
             return 9;
         }
-        if (char == "A" || char == "a") {
+        if (char == "A") {
             return 10;
         }
-        if (char == "B" || char == "b") {
+        if (char == "B") {
             return 11;
         }
-        if (char == "C" || char == "c") {
+        if (char == "C") {
             return 12;
         }
-        if (char == "D" || char == "d") {
+        if (char == "D") {
             return 13;
         }
-        if (char == "E" || char == "e") {
+        if (char == "E") {
             return 14;
         }
-        if (char == "F" || char == "f") {
+        if (char == "F") {
             return 15;
         }
         return 0;

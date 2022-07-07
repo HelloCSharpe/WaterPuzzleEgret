@@ -5,12 +5,13 @@ var PlayerData = (function () {
     function PlayerData() {
         this.noAds = false;
         this.curTubeID = 1;
-        this.curThemeID = 1;
+        this.curThemeID = 6;
         this.backNum = 5;
         this.newTubeNum = 2;
         this.tubes = [1];
         this.themes = [1];
         this.diamon = 2000;
+        this.curLevel = 4;
     }
     Object.defineProperty(PlayerData, "Instance", {
         get: function () {
@@ -36,6 +37,7 @@ var PlayerData = (function () {
         this.tubes = gameInfo.tubes;
         this.themes = gameInfo.themes;
         this.diamon = gameInfo.diamon;
+        this.curLevel = gameInfo.curLevel;
     };
     //保存进度
     PlayerData.prototype.Save = function () {

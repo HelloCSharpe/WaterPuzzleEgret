@@ -50,7 +50,6 @@ var WaterScript = (function (_super) {
         _this._waterHeight = 66; //默认就是66高度
         _this.tweener = null;
         _this.InitUI();
-        _this.InitAngleInfos();
         return _this;
     }
     Object.defineProperty(WaterScript.prototype, "Deg2Rad", {
@@ -113,6 +112,7 @@ var WaterScript = (function (_super) {
     });
     WaterScript.prototype.Init = function (_tube, _data) {
         this.tube = _tube;
+        this.InitAngleInfos();
         this.data = _data;
         Utility.setImageColor(this.water, _data.color);
         Utility.setGifColor(this.waterFlow, _data.color);
@@ -121,20 +121,9 @@ var WaterScript = (function (_super) {
         this.SetSize(this.waterWidth, this.RealHeight);
         this.isFlow = false;
         _tube.waterContainer.addChild(this);
-        this.water.mask = _tube.waterMask;
-        this.waterFlow.mask = _tube.waterMask;
-        if (_data.isHide) {
-            this.hide.mask = _tube.waterMask;
-            this.hideTxt.mask = _tube.waterMask;
-        }
-        else {
-            this.removeChild(this.hide);
-            this.removeChild(this.hideTxt);
-            delete this.hide;
-            delete this.hideTxt;
-            this.hide = null;
-            this.hideTxt = null;
-        }
+        var a = _data.isHide ? 1 : 0;
+        this.hide.alpha = a;
+        this.hideTxt.alpha = a;
     };
     WaterScript.prototype.InitUI = function () {
         this.width = this.waterWidth;
@@ -147,8 +136,6 @@ var WaterScript = (function (_super) {
         var water = Utility.createBitmapByName("white_jpg");
         water.width = this.width;
         water.height = this.height;
-        water.anchorOffsetX = water.width / 2;
-        water.anchorOffsetY = water.height;
         water.x = 0;
         water.y = 0;
         this.addChild(water);
@@ -156,20 +143,17 @@ var WaterScript = (function (_super) {
         //waterFlow
         var waterFlow = Utility.createGif("water_flow_json", "water_flow_png");
         waterFlow.width = this.width;
-        waterFlow.height = this.width;
-        waterFlow.anchorOffsetX = waterFlow.width / 2;
-        waterFlow.anchorOffsetY = waterFlow.height;
+        waterFlow.height = this.height;
         waterFlow.x = 0;
         waterFlow.y = 0;
         waterFlow.gotoAndPlay(0, -1);
         this.addChild(waterFlow);
         this.waterFlow = waterFlow;
         //hide
-        var hide = Utility.createBitmapByName("hide1_jpg");
+        var hide = Utility.createBitmapByName("white_jpg");
+        Utility.setImageColor(hide, Utility.ColorHTMLToInt("#3F3F3F"));
         hide.width = this.width;
         hide.height = this.height;
-        hide.anchorOffsetX = hide.width / 2;
-        hide.anchorOffsetY = hide.height;
         hide.x = 0;
         hide.y = 0;
         this.addChild(hide);
@@ -181,12 +165,10 @@ var WaterScript = (function (_super) {
         txtField.textColor = 0xFFFFFF;
         txtField.textAlign = egret.HorizontalAlign.CENTER; //水平右对齐，相对于 textField 控件自身的 width 与 height
         txtField.verticalAlign = egret.VerticalAlign.MIDDLE;
-        txtField.width = hide.width;
-        txtField.height = hide.height;
-        hide.anchorOffsetX = hide.width / 2;
-        hide.anchorOffsetY = hide.height;
-        hide.x = 0;
-        hide.y = 0;
+        txtField.width = this.width;
+        txtField.height = this.height;
+        txtField.x = 0;
+        txtField.y = 0;
         txtField.size = 30;
         this.hideTxt = txtField;
         this.addChild(txtField);
@@ -240,12 +222,12 @@ var WaterScript = (function (_super) {
     WaterScript.prototype.SetPos = function (x, y) {
         this.x = x;
         this.y = y;
-        this.water.x = x;
-        this.water.y = y;
-        this.waterFlow.x = x;
-        this.waterFlow.y = y;
-        this.hide.x = x;
-        this.hide.y = y;
+        // this.water.x = x;
+        // this.water.y = y;
+        // this.waterFlow.x = x;
+        // this.waterFlow.y = y;
+        // this.hide.x = x;
+        // this.hide.y = y;
     };
     WaterScript.prototype.CloseHideImg = function () {
         var _this = this;
@@ -253,8 +235,10 @@ var WaterScript = (function (_super) {
         this.removeChild(this.hideTxt);
         tw.to({ "alpha": 0 }, 500).call(function () {
             _this.removeChild(_this.hide);
-            _this.hideTxt = null;
+            delete _this.hide;
+            delete _this.hideTxt;
             _this.hide = null;
+            _this.hideTxt = null;
         }, this);
     };
     WaterScript.prototype.DoRotate = function (angle) {
@@ -376,9 +360,7 @@ var WaterScript = (function (_super) {
         }
     };
     WaterScript.prototype.OnPullInDone = function () {
-        if (this.tube.onPullInComplete != null) {
-            this.tube.onPullInComplete(this.tube);
-        }
+        this.tube.DoPullInComplete(this.tube);
     };
     WaterScript.prototype.SetHideTextActive = function (active) {
         if (active) {
@@ -389,12 +371,9 @@ var WaterScript = (function (_super) {
         }
     };
     WaterScript.prototype.RefreshUI = function () {
-        this.SetSize(this.width, this.RealHeight);
+        this.SetSize(this.waterWidth, this.RealHeight);
     };
     WaterScript.prototype.Destroy = function () {
-        this.water.mask = null;
-        this.waterFlow.mask = null;
-        this.hide.mask = null;
         this.parent.removeChild(this);
         this.removeChild(this.water);
         this.removeChild(this.waterFlow);
@@ -414,6 +393,6 @@ var WaterScript = (function (_super) {
         this.waterFlow = null;
     };
     return WaterScript;
-}(eui.Component));
+}(egret.DisplayObjectContainer));
 __reflect(WaterScript.prototype, "WaterScript");
 //# sourceMappingURL=WaterScript.js.map
