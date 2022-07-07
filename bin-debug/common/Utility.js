@@ -156,22 +156,22 @@ var Utility = (function () {
         if (char == "9") {
             return 9;
         }
-        if (char == "A") {
+        if (char == "A" || char == "a") {
             return 10;
         }
-        if (char == "B") {
+        if (char == "B" || char == "b") {
             return 11;
         }
-        if (char == "C") {
+        if (char == "C" || char == "c") {
             return 12;
         }
-        if (char == "D") {
+        if (char == "D" || char == "d") {
             return 13;
         }
-        if (char == "E") {
+        if (char == "E" || char == "e") {
             return 14;
         }
-        if (char == "F") {
+        if (char == "F" || char == "f") {
             return 15;
         }
         return 0;

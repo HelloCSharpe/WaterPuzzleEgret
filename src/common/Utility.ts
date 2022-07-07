@@ -141,12 +141,12 @@ class Utility {
         if(char=="7"){return 7;}
         if(char=="8"){return 8;}
         if(char=="9"){return 9;}
-        if(char=="A"){return 10;}
-        if(char=="B"){return 11;}
-        if(char=="C"){return 12;}
-        if(char=="D"){return 13;}
-        if(char=="E"){return 14;}
-        if(char=="F"){return 15;}
+        if(char=="A"||char=="a"){return 10;}
+        if(char=="B"||char=="b"){return 11;}
+        if(char=="C"||char=="c"){return 12;}
+        if(char=="D"||char=="d"){return 13;}
+        if(char=="E"||char=="e"){return 14;}
+        if(char=="F"||char=="f"){return 15;}
         return 0;
     }
     //将HTML的"#FEAD48"字符串转换成egret能够识别的number
