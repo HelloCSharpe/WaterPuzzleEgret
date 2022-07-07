@@ -44,6 +44,32 @@ class Utility {
         return result;
     }
 
+    public static createButton(resName: string,width:number,height:number):egret.DisplayObjectContainer{
+        let btn = new egret.DisplayObjectContainer();
+        btn.width=width;
+        btn.height=height;
+        let btnBg=Utility.createBitmapByName(resName);
+        btnBg.fillMode = egret.BitmapFillMode.SCALE;
+        btnBg.name="btnBg";
+        btnBg.width=width;
+        btnBg.height=height;
+        btn.addChild(btnBg);
+        return btn;
+    }
+
+    public static createTextField(width:number,height:number,color:number,fontSize?:number,text?:string,fontFamily?:string,HAlign?:string,VAlign?:string):egret.TextField{
+        let textField=new egret.TextField();
+        textField.width=width;
+        textField.height=height;
+        textField.textColor=color;
+        textField.size = (fontSize==null)?30:fontSize;
+        textField.fontFamily=(fontFamily==null)?"myFirstFont":fontFamily;
+        textField.text=(text==null)?"":text;
+        textField.textAlign=(HAlign==null)?egret.HorizontalAlign.LEFT:HAlign;
+        textField.verticalAlign=(VAlign==null)?egret.VerticalAlign.MIDDLE:VAlign;
+        return textField;
+    }
+
     static _notibox: egret.DisplayObjectContainer = null;
     static get NotiBoxGo(): egret.DisplayObjectContainer {
         if (Utility._notibox == null) {
@@ -55,7 +81,8 @@ class Utility {
             Utility._notibox.x = 0;
             Utility._notibox.y = 0;
             Utility._notibox.alpha = 0;
-            let bg = Utility.createBitmapByName("notice_png");
+            let bg = Utility.createBitmapByName("tog3_png");
+            Utility.setImageColor(bg,0x000000);
             bg.name = "BG";
             bg.fillMode = egret.BitmapFillMode.REPEAT;
             bg.width = Utility._notibox.width;
@@ -109,27 +136,38 @@ class Utility {
 
     private static btnScaleFuns:Dictionary = new Dictionary();
 
-    public static ButtonEnable(obj:egret.Bitmap,bindObj?:egret.TextField):void{
-        obj.touchEnabled = true;
-        let func = ()=>{
-            let tw = egret.Tween.get(obj);
-            tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
-            if(bindObj!=null){
-                let tw2 = egret.Tween.get(bindObj);
-                tw2.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
-            }
-        };
-        func.bind(obj,bindObj);
-        Utility.btnScaleFuns.set(obj,func);
-        obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN,func, obj);
-    }
-
-    public static ButtonDisable(obj:egret.Bitmap):void{
-        obj.touchEnabled = false;
-        let func = Utility.btnScaleFuns.get(obj);
-        obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,func,obj);
+    public static ButtonActive(obj:egret.DisplayObjectContainer,active:boolean):void{
+        obj.touchEnabled=active;
+        if(active){
+            let func = ()=>{
+                let tw = egret.Tween.get(obj);
+                tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
+            };
+            func.bind(obj);
+            Utility.btnScaleFuns.set(obj,func);
+            obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN,func, obj);
+        }else{
+            let func = Utility.btnScaleFuns.get(obj);
+            obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,func,obj);
+        }
     }
     
+    public static ButtonActive2(obj:egret.Bitmap,active:boolean):void{
+        obj.touchEnabled=active;
+        if(active){
+            let func = ()=>{
+                let tw = egret.Tween.get(obj);
+                tw.to({ "scaleX": 0.9, "scaleY": 0.9 }, 50).to({ "scaleX": 1, "scaleY": 1 }, 50);
+            };
+            func.bind(obj);
+            Utility.btnScaleFuns.set(obj,func);
+            obj.addEventListener(egret.TouchEvent.TOUCH_BEGIN,func, obj);
+        }else{
+            let func = Utility.btnScaleFuns.get(obj);
+            obj.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,func,obj);
+        }
+    }
+
     private static Str2Int(char:string):number{
         if(char=="0"){return 0;}
         if(char=="1"){return 1;}
@@ -141,12 +179,12 @@ class Utility {
         if(char=="7"){return 7;}
         if(char=="8"){return 8;}
         if(char=="9"){return 9;}
-        if(char=="A"||char=="a"){return 10;}
-        if(char=="B"||char=="b"){return 11;}
-        if(char=="C"||char=="c"){return 12;}
-        if(char=="D"||char=="d"){return 13;}
-        if(char=="E"||char=="e"){return 14;}
-        if(char=="F"||char=="f"){return 15;}
+        if(char=="A"){return 10;}
+        if(char=="B"){return 11;}
+        if(char=="C"){return 12;}
+        if(char=="D"){return 13;}
+        if(char=="E"){return 14;}
+        if(char=="F"){return 15;}
         return 0;
     }
     //将HTML的"#FEAD48"字符串转换成egret能够识别的number
