@@ -28,4 +28,11 @@ class Dictionary {
     }
     return values;
   }
+  clear(){
+    for (let k in this.items) {
+      if (this.has(k)) {
+        this.delete(k);
+      }
+    }
+  }
 }

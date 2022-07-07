@@ -53,6 +53,7 @@ class Main extends eui.UILayer {
         SceneManager.ScreenWidth = this.stage.stageWidth;
         SceneManager.ScreenHeight = this.stage.stageHeight;
         await this.loadResource();
+        await DataConfig.Instance.Init();
         // this.createGameScene();
         this.Init();
         // const result = await RES.getResAsync("description_json")

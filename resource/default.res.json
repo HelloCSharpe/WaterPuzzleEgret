@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,description_json",
+			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg",
 			"name": "preload"
 		},
 		{
@@ -13,12 +13,16 @@
 			"name": "tube"
 		},
 		{
-			"keys": "icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,menu_png,rank_png,share_png,shop_png,start_btn_png,white_jpg,white_gif,water_flow_json,water_flow_png,hide1_jpg",
+			"keys": "bgm_off_png,bgm_on_png,btn1_png,btn2_png,btn3_png,di_png,di2_png,di3_png,home_png,icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,lock_png,menu_png,moon_png,pause_icon1_png,pause_icon2_png,rank_png,share_png,shop_png,sound_off_png,sound_on_png,start_btn_png,sun_png,tag1_png,tag2_png,tag3_png,tog1_png,tog2_png,tog3_png,tog_icon1_png,tog_icon2_png,tog_icon3_png,water_flow_json,water_flow_png,white_jpg,zt_anniu_png,menu2_png,close_png",
 			"name": "ui"
 		},
 		{
 			"keys": "loading_bg_jpg,loading_icon_png",
 			"name": "loading"
+		},
+		{
+			"keys": "description_json,level_json,purchaser_json,settings_json,theme_json,tube_json,water_json",
+			"name": "cfg"
 		}
 	],
 	"resources": [
@@ -146,11 +150,6 @@
 			"url": "config/description.json",
 			"type": "json",
 			"name": "description_json"
-		},
-		{
-			"url": "config/roles.json",
-			"type": "json",
-			"name": "roles_json"
 		},
 		{
 			"url": "assets/themes/bg_1.png",
@@ -453,76 +452,6 @@
 			"name": "menu_png"
 		},
 		{
-			"url": "assets/UI/icon1.png",
-			"type": "image",
-			"name": "icon12_png"
-		},
-		{
-			"url": "assets/UI/icon2.png",
-			"type": "image",
-			"name": "icon22_png"
-		},
-		{
-			"url": "assets/UI/icon3.png",
-			"type": "image",
-			"name": "icon32_png"
-		},
-		{
-			"url": "assets/UI/icon4.png",
-			"type": "image",
-			"name": "icon42_png"
-		},
-		{
-			"url": "assets/UI/icon5.png",
-			"type": "image",
-			"name": "icon52_png"
-		},
-		{
-			"url": "assets/UI/icon6.png",
-			"type": "image",
-			"name": "icon62_png"
-		},
-		{
-			"url": "assets/UI/icon7.png",
-			"type": "image",
-			"name": "icon72_png"
-		},
-		{
-			"url": "assets/UI/icon8.png",
-			"type": "image",
-			"name": "icon82_png"
-		},
-		{
-			"url": "assets/UI/icon9.png",
-			"type": "image",
-			"name": "icon92_png"
-		},
-		{
-			"url": "assets/UI/menu.png",
-			"type": "image",
-			"name": "menu2_png"
-		},
-		{
-			"url": "assets/UI/rank.png",
-			"type": "image",
-			"name": "rank2_png"
-		},
-		{
-			"url": "assets/UI/share.png",
-			"type": "image",
-			"name": "share2_png"
-		},
-		{
-			"url": "assets/UI/shop.png",
-			"type": "image",
-			"name": "shop2_png"
-		},
-		{
-			"url": "assets/UI/start_btn.png",
-			"type": "image",
-			"name": "start_btn2_png"
-		},
-		{
 			"url": "assets/tubes/pz_di_bt_1_1.png",
 			"type": "image",
 			"name": "pz_di_bt_1_12_png"
@@ -673,11 +602,6 @@
 			"name": "white_jpg"
 		},
 		{
-			"url": "assets/UI/white.gif",
-			"type": "image",
-			"name": "white_gif"
-		},
-		{
 			"url": "assets/UI/water_flow.json",
 			"type": "json",
 			"name": "water_flow_json"
@@ -688,9 +612,175 @@
 			"name": "water_flow_png"
 		},
 		{
-			"url": "assets/UI/hide1.jpg",
+			"url": "config/level.json",
+			"type": "json",
+			"name": "level_json"
+		},
+		{
+			"url": "config/purchaser.json",
+			"type": "json",
+			"name": "purchaser_json"
+		},
+		{
+			"url": "config/settings.json",
+			"type": "json",
+			"name": "settings_json"
+		},
+		{
+			"url": "config/theme.json",
+			"type": "json",
+			"name": "theme_json"
+		},
+		{
+			"url": "config/tube.json",
+			"type": "json",
+			"name": "tube_json"
+		},
+		{
+			"url": "config/water.json",
+			"type": "json",
+			"name": "water_json"
+		},
+		{
+			"url": "assets/UI/bgm_off.png",
 			"type": "image",
-			"name": "hide1_jpg"
+			"name": "bgm_off_png"
+		},
+		{
+			"url": "assets/UI/bgm_on.png",
+			"type": "image",
+			"name": "bgm_on_png"
+		},
+		{
+			"url": "assets/UI/btn1.png",
+			"type": "image",
+			"name": "btn1_png"
+		},
+		{
+			"url": "assets/UI/btn2.png",
+			"type": "image",
+			"name": "btn2_png"
+		},
+		{
+			"url": "assets/UI/btn3.png",
+			"type": "image",
+			"name": "btn3_png"
+		},
+		{
+			"url": "assets/UI/di.png",
+			"type": "image",
+			"name": "di_png",
+			"scale9grid": "27,24,10,5"
+		},
+		{
+			"url": "assets/UI/di2.png",
+			"type": "image",
+			"name": "di2_png"
+		},
+		{
+			"url": "assets/UI/di3.png",
+			"type": "image",
+			"name": "di3_png"
+		},
+		{
+			"url": "assets/UI/home.png",
+			"type": "image",
+			"name": "home_png"
+		},
+		{
+			"url": "assets/UI/lock.png",
+			"type": "image",
+			"name": "lock_png"
+		},
+		{
+			"url": "assets/UI/moon.png",
+			"type": "image",
+			"name": "moon_png"
+		},
+		{
+			"url": "assets/UI/pause_icon1.png",
+			"type": "image",
+			"name": "pause_icon1_png"
+		},
+		{
+			"url": "assets/UI/pause_icon2.png",
+			"type": "image",
+			"name": "pause_icon2_png"
+		},
+		{
+			"url": "assets/UI/sound_off.png",
+			"type": "image",
+			"name": "sound_off_png"
+		},
+		{
+			"url": "assets/UI/sound_on.png",
+			"type": "image",
+			"name": "sound_on_png"
+		},
+		{
+			"url": "assets/UI/sun.png",
+			"type": "image",
+			"name": "sun_png"
+		},
+		{
+			"url": "assets/UI/tag1.png",
+			"type": "image",
+			"name": "tag1_png"
+		},
+		{
+			"url": "assets/UI/tag2.png",
+			"type": "image",
+			"name": "tag2_png"
+		},
+		{
+			"url": "assets/UI/tag3.png",
+			"type": "image",
+			"name": "tag3_png"
+		},
+		{
+			"url": "assets/UI/tog1.png",
+			"type": "image",
+			"name": "tog1_png"
+		},
+		{
+			"url": "assets/UI/tog2.png",
+			"type": "image",
+			"name": "tog2_png"
+		},
+		{
+			"url": "assets/UI/tog3.png",
+			"type": "image",
+			"name": "tog3_png"
+		},
+		{
+			"url": "assets/UI/tog_icon1.png",
+			"type": "image",
+			"name": "tog_icon1_png"
+		},
+		{
+			"url": "assets/UI/tog_icon2.png",
+			"type": "image",
+			"name": "tog_icon2_png"
+		},
+		{
+			"url": "assets/UI/tog_icon3.png",
+			"type": "image",
+			"name": "tog_icon3_png"
+		},
+		{
+			"url": "assets/UI/zt_anniu.png",
+			"type": "image",
+			"name": "zt_anniu_png"
+		},
+		{
+			"url": "assets/UI/menu2.png",
+			"type": "image",
+			"name": "menu2_png"
+		},
+		{
+			"url": "assets/UI/close.png",
+			"type": "image",
+			"name": "close_png"
 		}
 	]
 }

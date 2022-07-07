@@ -13,12 +13,13 @@ class PlayerData{
     public userInfo;
     public noAds:boolean=false;
     public curTubeID:number=1;
-    public curThemeID:number=1;
+    public curThemeID:number=6;
     public backNum:number=5;
     public newTubeNum:number=2;
     public tubes:number[]=[1];
     public themes:number[]=[1];
     public diamon:number=2000;
+    public curLevel:number=4;
 
     //设置用户数据
     public SetUserInfo(userInfo):void{
@@ -34,6 +35,7 @@ class PlayerData{
         this.tubes = gameInfo.tubes;
         this.themes = gameInfo.themes;
         this.diamon = gameInfo.diamon;
+        this.curLevel = gameInfo.curLevel;
     }
     //保存进度
     public Save():void{

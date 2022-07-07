@@ -21,6 +21,14 @@ abstract class Scene extends eui.Component {
         return Utility.createBitmapByName(res_name);
     }
 
+    public createButton(res_name: string,w:number,h:number): egret.DisplayObjectContainer {
+        return Utility.createButton(res_name,w,h);
+    }
+
+    public createTextField(width:number,height:number,color:number,fontSize?:number,text?:string,fontFamily?:string,HAlign?:string,VAlign?:string):egret.TextField{
+        return Utility.createTextField(width,height,color,fontSize,text,fontFamily,HAlign,VAlign);
+    }
+
     public createGif(jsonRes:string,pngRes:string):egret.MovieClip {
         return Utility.createGif(jsonRes,pngRes);
     }
@@ -88,7 +96,7 @@ class SceneManager {
             this.rootLayer.removeChild(this.pop_scene);
             this.pop_scene.removeListener();
             this.pop_scene.removeChildren();
-            this.pop_scene = null;            
+            this.pop_scene = null;
         }
     }
 }

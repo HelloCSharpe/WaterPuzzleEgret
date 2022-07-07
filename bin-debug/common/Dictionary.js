@@ -30,6 +30,13 @@ var Dictionary = (function () {
         }
         return values;
     };
+    Dictionary.prototype.clear = function () {
+        for (var k in this.items) {
+            if (this.has(k)) {
+                this.delete(k);
+            }
+        }
+    };
     return Dictionary;
 }());
 __reflect(Dictionary.prototype, "Dictionary");

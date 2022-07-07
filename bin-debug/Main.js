@@ -102,17 +102,20 @@ var Main = (function (_super) {
                         return [4 /*yield*/, this.loadResource()];
                     case 1:
                         _a.sent();
+                        return [4 /*yield*/, DataConfig.Instance.Init()];
+                    case 2:
+                        _a.sent();
                         // this.createGameScene();
                         this.Init();
                         // const result = await RES.getResAsync("description_json")
                         // this.startAnimation(result);
                         return [4 /*yield*/, platform.login()];
-                    case 2:
+                    case 3:
                         // const result = await RES.getResAsync("description_json")
                         // this.startAnimation(result);
                         _a.sent();
                         return [4 /*yield*/, platform.getUserInfo()];
-                    case 3:
+                    case 4:
                         userInfo = _a.sent();
                         console.log(userInfo);
                         return [2 /*return*/];
