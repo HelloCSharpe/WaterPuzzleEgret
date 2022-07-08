@@ -99,7 +99,7 @@ var TubeScript = (function (_super) {
             var x = this.x;
             var y = this.y;
             x += this.waterWidth / 2;
-            y -= (this.flowLength - this.tubeHeight + 5);
+            y = y + this.tubeHeight - this.flowLength - 5;
             return new Vector2(x, y);
         },
         enumerable: true,
@@ -139,7 +139,7 @@ var TubeScript = (function (_super) {
         this.addChild(fg);
         var flow = Utility.createBitmapByName("white_jpg");
         flow.fillMode = egret.BitmapFillMode.SCALE;
-        flow.width = 2;
+        flow.width = 5;
         flow.height = this.flowLength;
         flow.alpha = 0;
         this.waterFlow = flow;
@@ -183,7 +183,7 @@ var TubeScript = (function (_super) {
         if (this.waterUIScripts.length == 0) {
             water = new WaterScript();
             water.Init(this, waterData);
-            water.SetPos(0, 0);
+            water.SetPos(this.tubeWidth / 2, this.tubeHeight);
             this.waterUIScripts.push(water);
             if (isPullIn) {
                 water.SetSize(this.waterWidth, 0);
@@ -199,7 +199,7 @@ var TubeScript = (function (_super) {
             else {
                 water = new WaterScript();
                 water.Init(this, waterData);
-                water.SetPos(0, _tmpWater.GetPos().y + _tmpWater.RealHeight);
+                water.SetPos(this.tubeWidth / 2, _tmpWater.GetPos().y - _tmpWater.RealHeight);
                 this.waterUIScripts.push(water);
                 if (isPullIn) {
                     water.SetSize(this.waterWidth, 0);
@@ -353,12 +353,12 @@ var TubeScript = (function (_super) {
         var endNum = startNum - pullNum;
         //向左倒，角度大于0  向右倒，角度小于0
         if (this._pullDir == PullDir.Left) {
-            this._startPullAngle = this.PullAngles[startNum];
-            this._endPullAngle = this.PullAngles[endNum];
-        }
-        else {
             this._startPullAngle = -this.PullAngles[startNum];
             this._endPullAngle = -this.PullAngles[endNum];
+        }
+        else {
+            this._startPullAngle = this.PullAngles[startNum];
+            this._endPullAngle = this.PullAngles[endNum];
         }
         //位移到指定位置，指定角度（倒入前）
         var topWaterUnit = this.waterUIScripts[this.waterUIScripts.length - 1];
@@ -389,18 +389,21 @@ var TubeScript = (function (_super) {
             // AudioManager.Instance.PlaySound("pourWater", pulltime);
             //到达指定位置后，角度开始变大，开始倾倒（倒入阶段）
             if (_this._pullDir == PullDir.Left) {
-                _this.waterFlow.x = -_this.tubeMouthWidth / 2;
+                _this.waterFlow.x = _this.tubeWidth / 2 - _this.tubeMouthWidth / 2;
                 _this.waterFlow.y = 0;
             }
             else {
-                _this.waterFlow.x = _this.tubeMouthWidth / 2;
+                _this.waterFlow.x = _this.tubeWidth / 2 + _this.tubeMouthWidth / 2;
                 _this.waterFlow.y = 0;
             }
             _this.waterFlow.alpha = 1;
             Utility.setImageColor(_this.waterFlow, sourceWater.waterData.color);
             function PullingFunc() {
                 var curRotation = this.rotation;
-                this.PullRotate(curRotation);
+                this.PullRotate(curRotation, sourceWater);
+                if (Math.abs(this._endPullAngle - curRotation) < 4) {
+                    console.log("aaaaaa", sourceWater); //测试断点
+                }
             }
             _this.pullTweener = egret.Tween.get(_this, { loop: false, onChange: PullingFunc, onChangeObj: _this });
             _this.pullTweener.to({ "rotation": _this._endPullAngle }, pulltime * 1000);
@@ -490,6 +493,9 @@ var TubeScript = (function (_super) {
         if (waterNum > 0) {
             h += 5;
         }
+        else {
+            h -= 5;
+        }
         this.waterFlow.height = h;
     };
     TubeScript.prototype.PullRotate = function (pullAngle, pullWaterUnit) {
@@ -502,22 +508,27 @@ var TubeScript = (function (_super) {
                 waterScript.DoRotate(0);
                 waterScript.SetSize(waterScript.width, waterScript.RealHeight);
                 if (i == 0) {
-                    waterScript.SetPos(0, 0);
+                    waterScript.SetPos(this.tubeWidth / 2, this.tubeHeight);
                 }
                 else {
                     var prevWaterScript = this.waterUIScripts[i - 1];
                     var pos = prevWaterScript.GetPos();
-                    waterScript.SetPos(0, pos.y + prevWaterScript.RealHeight);
+                    waterScript.SetPos(this.tubeWidth / 2, pos.y - prevWaterScript.RealHeight);
                 }
             }
             //if (pullWaterUnit != null)
             //{
             //    pullWaterUnit.DoRotate(0);
-            //    pullWaterUnit.SetSize(pullWaterUnit.width, pullWaterUnit.RealHeight);.
+            //    pullWaterUnit.SetSize(pullWaterUnit.width, pullWaterUnit.RealHeight);
             //}
         }
         else {
-            var offsetY = 0;
+            var bottomLength = 0;
+            if (pullAngle < 90) {
+                var angle = Math.abs(pullAngle);
+                bottomLength = this.tubeWidth / 2 * Math.tan(angle * Utility.Deg2Rad);
+            }
+            var offsetY = this.tubeHeight + bottomLength;
             var totalHeight = 0;
             for (var i = 0; i < this.waterUIScripts.length; i++) {
                 if (this.waterUIScripts[i] == pullWaterUnit) {
@@ -527,13 +538,13 @@ var TubeScript = (function (_super) {
                 this.waterUIScripts[i].DoRotate(-pullAngle);
                 this.waterUIScripts[i].SetWaterAnchoredPosition(offsetY);
                 var _height = this.waterUIScripts[i].RefreshWidthAndHeight(-pullAngle);
-                offsetY += _height / Math.cos(pullAngle * Utility.Deg2Rad);
+                offsetY -= _height / Math.cos(pullAngle * Utility.Deg2Rad);
                 totalHeight += _height;
             }
             if (pullWaterUnit != null) {
                 pullWaterUnit.DoRotate(-pullAngle);
-                pullWaterUnit.SetWaterAnchoredPosition(offsetY);
-                pullWaterUnit.SetPullWaterSize(-pullAngle, totalHeight);
+                pullWaterUnit.SetWaterAnchoredPosition(offsetY); //位置计算有点问题
+                pullWaterUnit.SetPullWaterSize(-pullAngle, totalHeight); //长度也有点问题
             }
         }
     };
@@ -620,7 +631,8 @@ var TubeScript = (function (_super) {
             var data = new WaterData(colorInt);
             data.isHide = false;
             data.num = num;
-            this.EnqueueWater(data, false);
+            var water = this.EnqueueWater(data, false);
+            water.RefreshUI();
             return;
         }
         if (waterUnit.waterData.colorInt == colorInt) {
@@ -631,7 +643,8 @@ var TubeScript = (function (_super) {
             var data = new WaterData(colorInt);
             data.isHide = false;
             data.num = num;
-            this.EnqueueWater(data, false);
+            var water = this.EnqueueWater(data, false);
+            water.RefreshUI();
         }
     };
     TubeScript.prototype.RemoveWaterByBackOperate = function (colorInt, num) {

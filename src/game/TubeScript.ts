@@ -80,7 +80,7 @@ class TubeScript extends egret.DisplayObjectContainer {
         let x = this.x;
         let y = this.y;
         x+=this.waterWidth/2;
-        y-=(this.flowLength - this.tubeHeight + 5);
+        y=y+this.tubeHeight-this.flowLength-5;
         return new Vector2(x,y);
     }
  
@@ -132,7 +132,7 @@ class TubeScript extends egret.DisplayObjectContainer {
 
         let flow = Utility.createBitmapByName("white_jpg");
         flow.fillMode = egret.BitmapFillMode.SCALE;
-        flow.width = 2;
+        flow.width = 5;
         flow.height = this.flowLength;
         flow.alpha=0;
         this.waterFlow=flow;
@@ -180,7 +180,7 @@ class TubeScript extends egret.DisplayObjectContainer {
         if(this.waterUIScripts.length==0){
             water = new WaterScript();
             water.Init(this,waterData);
-            water.SetPos(0, 0);
+            water.SetPos(this.tubeWidth/2, this.tubeHeight);
             this.waterUIScripts.push(water);
             if(isPullIn){
                 water.SetSize(this.waterWidth,0);
@@ -194,13 +194,14 @@ class TubeScript extends egret.DisplayObjectContainer {
             }else{
                 water = new WaterScript();
                 water.Init(this,waterData);
-                water.SetPos(0, _tmpWater.GetPos().y + _tmpWater.RealHeight);
+                water.SetPos(this.tubeWidth/2, _tmpWater.GetPos().y - _tmpWater.RealHeight);
                 this.waterUIScripts.push(water);
                 if(isPullIn){
                     water.SetSize(this.waterWidth,0);
                 }
             }
         }
+        
         return water;
     }
 
@@ -346,13 +347,13 @@ class TubeScript extends egret.DisplayObjectContainer {
         //向左倒，角度大于0  向右倒，角度小于0
         if (this._pullDir == PullDir.Left)
         {
-            this._startPullAngle = this.PullAngles[startNum];
-            this._endPullAngle = this.PullAngles[endNum];
+            this._startPullAngle = -this.PullAngles[startNum];
+            this._endPullAngle = -this.PullAngles[endNum];
         }
         else
         {
-            this._startPullAngle = -this.PullAngles[startNum];
-            this._endPullAngle = -this.PullAngles[endNum];
+            this._startPullAngle = this.PullAngles[startNum];
+            this._endPullAngle = this.PullAngles[endNum];
         }
         //位移到指定位置，指定角度（倒入前）
         let topWaterUnit:WaterScript = this.waterUIScripts[this.waterUIScripts.length - 1];
@@ -386,19 +387,22 @@ class TubeScript extends egret.DisplayObjectContainer {
             //到达指定位置后，角度开始变大，开始倾倒（倒入阶段）
             if (this._pullDir == PullDir.Left)
             {
-                this.waterFlow.x=-this.tubeMouthWidth/2;
+                this.waterFlow.x=this.tubeWidth/2-this.tubeMouthWidth/2;
                 this.waterFlow.y=0;
             }
             else
             {
-                this.waterFlow.x=this.tubeMouthWidth/2;
+                this.waterFlow.x=this.tubeWidth/2+this.tubeMouthWidth/2;
                 this.waterFlow.y=0;
             }
             this.waterFlow.alpha=1;
             Utility.setImageColor(this.waterFlow,sourceWater.waterData.color);
             function PullingFunc(){
                 let curRotation = this.rotation;
-                this.PullRotate(curRotation);
+                this.PullRotate(curRotation,sourceWater);
+                if(Math.abs(this._endPullAngle-curRotation)<4){
+                    console.log("aaaaaa",sourceWater);//测试断点
+                }
             }
             this.pullTweener = egret.Tween.get(this,{loop:false,onChange:PullingFunc,onChangeObj:this});
             this.pullTweener.to({"rotation":this._endPullAngle},pulltime*1000);
@@ -507,6 +511,8 @@ class TubeScript extends egret.DisplayObjectContainer {
         if (waterNum > 0)
         {
             h += 5;
+        }else{
+            h-=5;
         }
         this.waterFlow.height = h;
     }
@@ -525,24 +531,29 @@ class TubeScript extends egret.DisplayObjectContainer {
                 waterScript.SetSize(waterScript.width, waterScript.RealHeight);
                 if (i == 0)
                 {
-                    waterScript.SetPos(0, 0);
+                    waterScript.SetPos(this.tubeWidth/2, this.tubeHeight);
                 }
                 else
                 {
                     let prevWaterScript = this.waterUIScripts[i - 1];
                     let pos = prevWaterScript.GetPos();
-                    waterScript.SetPos(0, pos.y + prevWaterScript.RealHeight);
+                    waterScript.SetPos(this.tubeWidth/2, pos.y - prevWaterScript.RealHeight);
                 }
             }
             //if (pullWaterUnit != null)
             //{
             //    pullWaterUnit.DoRotate(0);
-            //    pullWaterUnit.SetSize(pullWaterUnit.width, pullWaterUnit.RealHeight);.
+            //    pullWaterUnit.SetSize(pullWaterUnit.width, pullWaterUnit.RealHeight);
             //}
         }
         else
         {
-            let offsetY = 0;
+            let bottomLength = 0;
+            if(pullAngle<90){
+                let angle = Math.abs(pullAngle);
+                bottomLength=this.tubeWidth/2*Math.tan(angle * Utility.Deg2Rad);
+            }
+            let offsetY = this.tubeHeight+bottomLength;
             let totalHeight = 0;
             for (let i = 0; i < this.waterUIScripts.length; i++)
             {
@@ -554,14 +565,14 @@ class TubeScript extends egret.DisplayObjectContainer {
                 this.waterUIScripts[i].DoRotate(-pullAngle);
                 this.waterUIScripts[i].SetWaterAnchoredPosition(offsetY);
                 let _height=this.waterUIScripts[i].RefreshWidthAndHeight(-pullAngle);
-                offsetY += _height / Math.cos(pullAngle * Utility.Deg2Rad);
+                offsetY -= _height / Math.cos(pullAngle * Utility.Deg2Rad);
                 totalHeight += _height;
             }
             if (pullWaterUnit != null)
             {
                 pullWaterUnit.DoRotate(-pullAngle);
-                pullWaterUnit.SetWaterAnchoredPosition(offsetY);
-                pullWaterUnit.SetPullWaterSize(-pullAngle, totalHeight);
+                pullWaterUnit.SetWaterAnchoredPosition(offsetY);//位置计算有点问题
+                pullWaterUnit.SetPullWaterSize(-pullAngle, totalHeight);//长度也有点问题
             }
         }
 
@@ -672,7 +683,8 @@ class TubeScript extends egret.DisplayObjectContainer {
             let data:WaterData=new WaterData(colorInt);
             data.isHide=false;
             data.num=num;
-            this.EnqueueWater(data, false);
+            let water = this.EnqueueWater(data, false);
+            water.RefreshUI();
             return;
         }
         if (waterUnit.waterData.colorInt == colorInt)
@@ -685,7 +697,8 @@ class TubeScript extends egret.DisplayObjectContainer {
             let data:WaterData=new WaterData(colorInt);
             data.isHide=false;
             data.num=num;
-            this.EnqueueWater(data, false);
+            let water = this.EnqueueWater(data, false);
+            water.RefreshUI();
         }
     }
 

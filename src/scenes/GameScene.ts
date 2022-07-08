@@ -247,6 +247,7 @@ class GameScene extends Scene {
 
     private InitTube(waterDatas:WaterData[],i:number){
         let tube:TubeScript = new TubeScript();
+        tube.name=String(i);
         tube.Init(waterDatas);//位置等到全部实例化完成后再统一设置位置
         let clickFunc = this.OnTubeClick.bind(this,i);
         tube.addEventListener(egret.TouchEvent.TOUCH_TAP, clickFunc, this);
@@ -420,8 +421,15 @@ class GameScene extends Scene {
     private diamonClick():void{
         SceneManager.Instance.pushScene("ShopScene");
     }
+    private rotate:number=0;
     private pauseClick():void{
-        SceneManager.Instance.pushScene("PauseScene");
+        // SceneManager.Instance.pushScene("PauseScene");
+        this.rotate+=5;
+        console.log(this.rotate)
+        for(let i=0;i<this.tubes.length;i++){
+            this.tubes[i].rotation=this.rotate;
+            this.tubes[i].PullRotate(this.rotate);
+        }
     }
     private themeClick():void{
         if(this.isSun){

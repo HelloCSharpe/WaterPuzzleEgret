@@ -189,6 +189,10 @@ var WaterScript = (function (_super) {
             var waterHeight = waterNum == 0 ? 0 : Math.ceil(_tubeHeight / waterNum);
             this.angleInfos.push(new AngleInfo(angle, waterHeight));
         }
+        // console.log(this.tube.tubeWidth,this.tube.tubeHeight,this.tube.tubeMouthWidth)
+        // for(let i=0;i<this.angleInfos.length;i++){
+        //     console.log("角度和高度",this.angleInfos[i].angle,this.angleInfos[i].height);
+        // }
     };
     WaterScript.prototype.SetSize = function (w, h) {
         this.scaleX = w / this._waterWidth;
@@ -235,6 +239,7 @@ var WaterScript = (function (_super) {
         this.removeChild(this.hideTxt);
         tw.to({ "alpha": 0 }, 500).call(function () {
             _this.removeChild(_this.hide);
+            _this.hideTxt.alpha = 0;
             delete _this.hide;
             delete _this.hideTxt;
             _this.hide = null;
@@ -246,7 +251,7 @@ var WaterScript = (function (_super) {
     };
     WaterScript.prototype.SetWaterAnchoredPosition = function (offsetY) {
         if (this.tube.pullDir == PullDir.Left) {
-            this.SetPos(-this.width / 2, offsetY);
+            this.SetPos(this.width / 2, offsetY);
         }
         else {
             this.SetPos(this.width / 2, offsetY);
@@ -258,11 +263,16 @@ var WaterScript = (function (_super) {
         var curMaxHeight = this.tube.tubeHeight * Math.cos(angle * this.Deg2Rad) + _height;
         var H = curMaxHeight > curHeight ? curMaxHeight - curHeight : 0;
         var W = H == 0 ? 0 : this.CalWidth(angle, H);
+        W = (this.y * Math.sin(angle * Utility.Deg2Rad) + this.waterWidth / 2 * Math.sin(angle * Utility.Deg2Rad)) * 2;
+        console.log("SetPullWaterSize++++++++++++++");
+        console.log(angle, H, W);
         this.SetSize(W, H);
     };
     WaterScript.prototype.RefreshWidthAndHeight = function (angle) {
         var H = this.CalHeight(angle) * this.waterData.num;
-        var W = this.CalWidth(angle, H);
+        // let W = this.CalWidth(angle, H);
+        var W = this.y / Math.cos(angle * Utility.Deg2Rad);
+        W = (this.y * Math.sin(angle * Utility.Deg2Rad) + this.waterWidth / 2 * Math.sin(angle * Utility.Deg2Rad)) * 2;
         this.SetSize(W, H);
         return H;
     };
@@ -322,7 +332,6 @@ var WaterScript = (function (_super) {
                 break;
             }
         }
-        var aa = egret.Tween.get(this);
         return h;
     };
     WaterScript.prototype.SetFlow = function () {
@@ -340,10 +349,12 @@ var WaterScript = (function (_super) {
         var _this = this;
         this.SetFlow();
         var realHeight = this.RealHeight;
+        var target_scaleY = this.data.num;
         if (this.tweener == null) {
             this.tweener = egret.Tween.get(this);
-            this.tweener.to({ "sizeY": realHeight }, duration * 1000).call(function () {
+            this.tweener.to({ "scaleY": target_scaleY }, duration * 1000).call(function () {
                 _this.SetFull();
+                _this.scaleY = target_scaleY;
                 _this.OnPullInDone();
                 _this.tweener = null;
             }, this);
@@ -352,8 +363,9 @@ var WaterScript = (function (_super) {
             egret.Tween.removeTweens(this);
             this.tweener = null;
             this.tweener = egret.Tween.get(this);
-            this.tweener.to({ "sizeY": realHeight }, duration * 1000).call(function () {
+            this.tweener.to({ "scaleY": target_scaleY }, duration * 1000).call(function () {
                 _this.SetFull();
+                _this.scaleY = target_scaleY;
                 _this.OnPullInDone();
                 _this.tweener = null;
             }, this);
@@ -364,7 +376,12 @@ var WaterScript = (function (_super) {
     };
     WaterScript.prototype.SetHideTextActive = function (active) {
         if (active) {
-            this.hideTxt.alpha = 1;
+            if (this.waterData.isHide) {
+                this.hideTxt.alpha = 1;
+            }
+            else {
+                this.hideTxt.alpha = 0;
+            }
         }
         else {
             this.hideTxt.alpha = 0;

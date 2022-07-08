@@ -124,6 +124,7 @@ class WaterScript extends egret.DisplayObjectContainer {
         this.water = water;
         //waterFlow
         let waterFlow = Utility.createGif("water_flow_json","water_flow_png");
+        
         waterFlow.width = this.width;
         waterFlow.height = this.height;
         waterFlow.x = 0;
@@ -170,6 +171,10 @@ class WaterScript extends egret.DisplayObjectContainer {
             let waterHeight = waterNum == 0 ? 0 : Math.ceil(_tubeHeight / waterNum);
             this.angleInfos.push(new AngleInfo(angle,waterHeight));
         }
+        // console.log(this.tube.tubeWidth,this.tube.tubeHeight,this.tube.tubeMouthWidth)
+        // for(let i=0;i<this.angleInfos.length;i++){
+        //     console.log("角度和高度",this.angleInfos[i].angle,this.angleInfos[i].height);
+        // }
     }
 
     public SetSize(w:number,h:number){
@@ -211,6 +216,7 @@ class WaterScript extends egret.DisplayObjectContainer {
         this.removeChild(this.hideTxt);
         tw.to({ "alpha": 0 }, 500).call(()=>{
             this.removeChild(this.hide);
+            this.hideTxt.alpha=0;
             delete this.hide;
             delete this.hideTxt;
             this.hide=null;
@@ -224,24 +230,30 @@ class WaterScript extends egret.DisplayObjectContainer {
 
     public SetWaterAnchoredPosition(offsetY:number){
         if(this.tube.pullDir==PullDir.Left){
-            this.SetPos(-this.width/2,offsetY);
+            this.SetPos(this.width/2,offsetY);
         }else{
             this.SetPos(this.width/2,offsetY);
         }
     }
 
     public SetPullWaterSize(angle:number,curHeight:number):void{
+
         let offsetX = (this.tube.tubeWidth - this.tube.tubeMouthWidth) / 2;//瓶口距离边缘的距离
         let _height = offsetX * Math.sin(angle * this.Deg2Rad);//瓶口距离边缘的垂直高度
         let curMaxHeight = this.tube.tubeHeight * Math.cos(angle * this.Deg2Rad) + _height;
         let H = curMaxHeight > curHeight ? curMaxHeight - curHeight : 0;
         let W = H == 0 ? 0 : this.CalWidth(angle, H);
+        W = (this.y*Math.sin(angle*Utility.Deg2Rad)+this.waterWidth/2*Math.sin(angle*Utility.Deg2Rad))*2;
+        console.log("SetPullWaterSize++++++++++++++");
+        console.log(angle,H,W);
         this.SetSize(W, H);
     }
 
     public RefreshWidthAndHeight(angle:number):number{
         let H = this.CalHeight(angle) * this.waterData.num;
-        let W = this.CalWidth(angle, H);
+        // let W = this.CalWidth(angle, H);
+        let W = this.y/Math.cos(angle*Utility.Deg2Rad);
+        W = (this.y*Math.sin(angle*Utility.Deg2Rad)+this.waterWidth/2*Math.sin(angle*Utility.Deg2Rad))*2;
         this.SetSize(W, H);
         return H;
     }
@@ -314,8 +326,6 @@ class WaterScript extends egret.DisplayObjectContainer {
                 break;
             }
         }
-        let aa = egret.Tween.get(this);
-
         return h;
     }
 
@@ -332,11 +342,13 @@ class WaterScript extends egret.DisplayObjectContainer {
     public DealPullIn(duration:number){
         this.SetFlow();
         let realHeight = this.RealHeight;
+        let target_scaleY = this.data.num;
         if (this.tweener == null)
         {
             this.tweener = egret.Tween.get(this);
-            this.tweener.to({ "sizeY": realHeight }, duration*1000).call(()=>{
+            this.tweener.to({ "scaleY": target_scaleY }, duration*1000).call(()=>{
                  this.SetFull();
+                 this.scaleY=target_scaleY;
                  this.OnPullInDone();
                  this.tweener = null;
             },this);
@@ -346,8 +358,9 @@ class WaterScript extends egret.DisplayObjectContainer {
             egret.Tween.removeTweens(this);
             this.tweener = null;
             this.tweener = egret.Tween.get(this);
-            this.tweener.to({ "sizeY": realHeight }, duration*1000).call(()=>{
+            this.tweener.to({ "scaleY": target_scaleY }, duration*1000).call(()=>{
                  this.SetFull();
+                 this.scaleY=target_scaleY;
                  this.OnPullInDone();
                  this.tweener = null;
             },this);
@@ -360,7 +373,11 @@ class WaterScript extends egret.DisplayObjectContainer {
 
     public SetHideTextActive(active:boolean):void{
         if(active){
-            this.hideTxt.alpha=1;
+            if(this.waterData.isHide){
+                this.hideTxt.alpha=1;
+            }else{
+                this.hideTxt.alpha=0;
+            }
         }else{
             this.hideTxt.alpha=0;
         }

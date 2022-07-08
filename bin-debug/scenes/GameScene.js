@@ -26,6 +26,7 @@ var GameScene = (function (_super) {
         _this.curSelectTube = null;
         _this.operateStack = []; //行动堆栈
         _this.isSetChild = false;
+        _this.rotate = 0;
         return _this;
     }
     GameScene.prototype.onComplete = function () {
@@ -237,6 +238,7 @@ var GameScene = (function (_super) {
     };
     GameScene.prototype.InitTube = function (waterDatas, i) {
         var tube = new TubeScript();
+        tube.name = String(i);
         tube.Init(waterDatas); //位置等到全部实例化完成后再统一设置位置
         var clickFunc = this.OnTubeClick.bind(this, i);
         tube.addEventListener(egret.TouchEvent.TOUCH_TAP, clickFunc, this);
@@ -390,7 +392,13 @@ var GameScene = (function (_super) {
         SceneManager.Instance.pushScene("ShopScene");
     };
     GameScene.prototype.pauseClick = function () {
-        SceneManager.Instance.pushScene("PauseScene");
+        // SceneManager.Instance.pushScene("PauseScene");
+        this.rotate += 5;
+        console.log(this.rotate);
+        for (var i = 0; i < this.tubes.length; i++) {
+            this.tubes[i].rotation = this.rotate;
+            this.tubes[i].PullRotate(this.rotate);
+        }
     };
     GameScene.prototype.themeClick = function () {
         if (this.isSun) {

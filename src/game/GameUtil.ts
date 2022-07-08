@@ -8,14 +8,21 @@ class GameUtil{
             datas[i]=[];
             let tubeCfg=tubeCfgs[i];
             let waters:string[]=tubeCfg.split(",");//0 0 0 1
+            let preInt:number=-1;
             for(let j=3;j>=0;j--){
                 let waterStr:string=waters[j];
                 if(waterStr==null){
                     waterStr="0";
                 }
                 let waterInt:number=Number(waterStr);
-                let waterData:WaterData=new WaterData(waterInt);
-                datas[i].push(waterData);
+                if(waterInt!=preInt){
+                    let waterData:WaterData=new WaterData(waterInt);
+                    datas[i].push(waterData);
+                }else{
+                    let idx=datas[i].length-1;
+                    datas[i][idx].num+=1;
+                }
+                preInt=waterInt;
             }
         }
         return datas;

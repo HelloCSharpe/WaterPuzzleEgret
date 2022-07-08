@@ -12,14 +12,22 @@ var GameUtil = (function () {
             datas[i] = [];
             var tubeCfg = tubeCfgs[i];
             var waters = tubeCfg.split(","); //0 0 0 1
+            var preInt = -1;
             for (var j = 3; j >= 0; j--) {
                 var waterStr = waters[j];
                 if (waterStr == null) {
                     waterStr = "0";
                 }
                 var waterInt = Number(waterStr);
-                var waterData = new WaterData(waterInt);
-                datas[i].push(waterData);
+                if (waterInt != preInt) {
+                    var waterData = new WaterData(waterInt);
+                    datas[i].push(waterData);
+                }
+                else {
+                    var idx = datas[i].length - 1;
+                    datas[i][idx].num += 1;
+                }
+                preInt = waterInt;
             }
         }
         return datas;
