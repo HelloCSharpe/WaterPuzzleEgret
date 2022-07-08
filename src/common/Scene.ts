@@ -5,24 +5,25 @@ abstract class Scene extends eui.Component {
         // 监听组件创建完毕 也就是场景的外观创建完毕
         // this.addEventListener(eui.UIEvent.CREATION_COMPLETE, this.onComplete, this);
     }
-    protected abstract onComplete();
+
+    protected abstract onComplete(...args:any[]);
     public abstract Update();
     public abstract addListener();
     public abstract removeListener();
-    public Reset():void {
-        this.removeChildren();
-        this.onComplete();
+    public Reset(...args:any[]):void {
+        this.onComplete(...args);
     }
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
      */
-    public createBitmapByName(res_name: string): egret.Bitmap {
-        return Utility.createBitmapByName(res_name);
+    public createBitmapByName(res_name: string,w?:number,h?:number,isPivotCenter?:boolean): egret.Bitmap {
+        return Utility.createBitmapByName(res_name,w,h,isPivotCenter);
     }
 
-    public createButton(res_name: string,w:number,h:number): egret.DisplayObjectContainer {
-        return Utility.createButton(res_name,w,h);
+    public createButton(res_name: string,w:number,h:number,isPivotCenter?:boolean): egret.DisplayObjectContainer {
+        if(isPivotCenter==null){isPivotCenter=false;}
+        return Utility.createButton(res_name,w,h,isPivotCenter);
     }
 
     public createTextField(width:number,height:number,color:number,fontSize?:number,text?:string,fontFamily?:string,HAlign?:string,VAlign?:string):egret.TextField{
@@ -66,27 +67,26 @@ class SceneManager {
         return this.currentScene;
     }
     //切换场景
-    public changeScene(name: string) {
+    public changeScene(name: string,...args:any[]) {
         let s: Scene = this.sceneDic[name];
         if (this.currentScene) {
             this.rootLayer.removeChild(this.currentScene);
             this.currentScene.removeListener();
-            this.currentScene.removeChildren();
         }
         this.rootLayer.addChild(s);
         this.currentScene = s;
-        this.currentScene.Reset();
+        this.currentScene.Reset(...args);
         this.currentScene.addListener();
     }
 
     //弹出场景层
-    public pushScene(name: string) {
+    public pushScene(name: string,...args:any[]) {
         let s: Scene = this.sceneDic[name];
         this.popScene();
         if (!this.pop_scene) {
             this.rootLayer.addChild(s);
             this.pop_scene = s;
-            this.pop_scene.Reset();
+            this.pop_scene.Reset(...args);
             this.pop_scene.addListener();
         }
     }
@@ -95,7 +95,6 @@ class SceneManager {
         if (this.pop_scene) {
             this.rootLayer.removeChild(this.pop_scene);
             this.pop_scene.removeListener();
-            this.pop_scene.removeChildren();
             this.pop_scene = null;
         }
     }

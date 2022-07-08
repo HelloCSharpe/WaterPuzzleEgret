@@ -142,6 +142,7 @@ var WaterScript = (function (_super) {
         this.water = water;
         //waterFlow
         var waterFlow = Utility.createGif("water_flow_json", "water_flow_png");
+        waterFlow.frameRate = 12;
         waterFlow.width = this.width;
         waterFlow.height = this.height;
         waterFlow.x = 0;
@@ -264,15 +265,13 @@ var WaterScript = (function (_super) {
         var H = curMaxHeight > curHeight ? curMaxHeight - curHeight : 0;
         var W = H == 0 ? 0 : this.CalWidth(angle, H);
         W = (this.y * Math.sin(angle * Utility.Deg2Rad) + this.waterWidth / 2 * Math.sin(angle * Utility.Deg2Rad)) * 2;
-        console.log("SetPullWaterSize++++++++++++++");
-        console.log(angle, H, W);
         this.SetSize(W, H);
     };
     WaterScript.prototype.RefreshWidthAndHeight = function (angle) {
         var H = this.CalHeight(angle) * this.waterData.num;
         // let W = this.CalWidth(angle, H);
-        var W = this.y / Math.cos(angle * Utility.Deg2Rad);
-        W = (this.y * Math.sin(angle * Utility.Deg2Rad) + this.waterWidth / 2 * Math.sin(angle * Utility.Deg2Rad)) * 2;
+        // let W = this.y/Math.cos(angle*Utility.Deg2Rad);
+        var W = (this.y * Math.sin(angle * Utility.Deg2Rad) + this.waterWidth / 2 * Math.sin(angle * Utility.Deg2Rad)) * 2;
         this.SetSize(W, H);
         return H;
     };
@@ -349,12 +348,13 @@ var WaterScript = (function (_super) {
         var _this = this;
         this.SetFlow();
         var realHeight = this.RealHeight;
-        var target_scaleY = this.data.num;
+        var target_scale = this.data.num;
         if (this.tweener == null) {
             this.tweener = egret.Tween.get(this);
-            this.tweener.to({ "scaleY": target_scaleY }, duration * 1000).call(function () {
+            this.tweener.to({ "scaleX": target_scale + 1, "scaleY": target_scale }, duration * 1000).call(function () {
                 _this.SetFull();
-                _this.scaleY = target_scaleY;
+                _this.scaleX = 1;
+                _this.scaleY = target_scale;
                 _this.OnPullInDone();
                 _this.tweener = null;
             }, this);
@@ -363,9 +363,10 @@ var WaterScript = (function (_super) {
             egret.Tween.removeTweens(this);
             this.tweener = null;
             this.tweener = egret.Tween.get(this);
-            this.tweener.to({ "scaleY": target_scaleY }, duration * 1000).call(function () {
+            this.tweener.to({ "scaleX": target_scale + 1, "scaleY": target_scale }, duration * 1000).call(function () {
                 _this.SetFull();
-                _this.scaleY = target_scaleY;
+                _this.scaleX = 1;
+                _this.scaleY = target_scale;
                 _this.OnPullInDone();
                 _this.tweener = null;
             }, this);

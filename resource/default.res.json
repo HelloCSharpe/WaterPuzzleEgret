@@ -13,7 +13,7 @@
 			"name": "tube"
 		},
 		{
-			"keys": "bgm_off_png,bgm_on_png,btn1_png,btn2_png,btn3_png,di_png,di2_png,di3_png,home_png,icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,lock_png,menu_png,moon_png,pause_icon1_png,pause_icon2_png,rank_png,share_png,shop_png,sound_off_png,sound_on_png,start_btn_png,sun_png,tag1_png,tag2_png,tag3_png,tog1_png,tog2_png,tog3_png,tog_icon1_png,tog_icon2_png,tog_icon3_png,water_flow_json,water_flow_png,white_jpg,zt_anniu_png,menu2_png,close_png",
+			"keys": "bgm_off_png,bgm_on_png,btn1_png,btn2_png,btn3_png,di_png,di2_png,di3_png,home_png,icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,lock_png,menu_png,moon_png,pause_icon1_png,pause_icon2_png,rank_png,share_png,shop_png,sound_off_png,sound_on_png,start_btn_png,sun_png,tag1_png,tag2_png,tag3_png,tog1_png,tog2_png,tog3_png,tog_icon1_png,tog_icon2_png,tog_icon3_png,water_flow_json,water_flow_png,white_jpg,zt_anniu_png,menu2_png,close_png,mask_png,help_png,zhuanpan_png,zhizhen_png,chest_png,process1_png,process2_png,js_ad_png,empty_png",
 			"name": "ui"
 		},
 		{
@@ -654,12 +654,14 @@
 		{
 			"url": "assets/UI/btn1.png",
 			"type": "image",
-			"name": "btn1_png"
+			"name": "btn1_png",
+			"scale9grid": "34,33,109,45"
 		},
 		{
 			"url": "assets/UI/btn2.png",
 			"type": "image",
-			"name": "btn2_png"
+			"name": "btn2_png",
+			"scale9grid": "34,33,116,46"
 		},
 		{
 			"url": "assets/UI/btn3.png",
@@ -675,12 +677,14 @@
 		{
 			"url": "assets/UI/di2.png",
 			"type": "image",
-			"name": "di2_png"
+			"name": "di2_png",
+			"scale9grid": "36,39,51,41"
 		},
 		{
 			"url": "assets/UI/di3.png",
 			"type": "image",
-			"name": "di3_png"
+			"name": "di3_png",
+			"scale9grid": "27,26,165,157"
 		},
 		{
 			"url": "assets/UI/home.png",
@@ -740,17 +744,20 @@
 		{
 			"url": "assets/UI/tog1.png",
 			"type": "image",
-			"name": "tog1_png"
+			"name": "tog1_png",
+			"scale9grid": "22,23,266,66"
 		},
 		{
 			"url": "assets/UI/tog2.png",
 			"type": "image",
-			"name": "tog2_png"
+			"name": "tog2_png",
+			"scale9grid": "0,0,1,0"
 		},
 		{
 			"url": "assets/UI/tog3.png",
 			"type": "image",
-			"name": "tog3_png"
+			"name": "tog3_png",
+			"scale9grid": "22,27,261,60"
 		},
 		{
 			"url": "assets/UI/tog_icon1.png",
@@ -770,7 +777,8 @@
 		{
 			"url": "assets/UI/zt_anniu.png",
 			"type": "image",
-			"name": "zt_anniu_png"
+			"name": "zt_anniu_png",
+			"scale9grid": "70,56,269,5"
 		},
 		{
 			"url": "assets/UI/menu2.png",
@@ -781,6 +789,53 @@
 			"url": "assets/UI/close.png",
 			"type": "image",
 			"name": "close_png"
+		},
+		{
+			"url": "assets/UI/mask.png",
+			"type": "image",
+			"name": "mask_png"
+		},
+		{
+			"url": "assets/UI/help.png",
+			"type": "image",
+			"name": "help_png"
+		},
+		{
+			"url": "assets/UI/zhuanpan.png",
+			"type": "image",
+			"name": "zhuanpan_png"
+		},
+		{
+			"url": "assets/UI/zhizhen.png",
+			"type": "image",
+			"name": "zhizhen_png"
+		},
+		{
+			"url": "assets/UI/chest.png",
+			"type": "image",
+			"name": "chest_png"
+		},
+		{
+			"url": "assets/UI/process1.png",
+			"type": "image",
+			"name": "process1_png",
+			"scale9grid": "25,0,333,0"
+		},
+		{
+			"url": "assets/UI/process2.png",
+			"type": "image",
+			"name": "process2_png",
+			"scale9grid": "29,0,329,0"
+		},
+		{
+			"url": "assets/UI/js_ad.png",
+			"type": "image",
+			"name": "js_ad_png"
+		},
+		{
+			"url": "assets/UI/empty.png",
+			"type": "image",
+			"name": "empty_png"
 		}
 	]
 }

@@ -59,7 +59,7 @@ var StartScene = (function (_super) {
         // };
         // change();
         this.addChild(this.textfield);
-        this.level = 1;
+        this.level = PlayerData.Instance.curLevel;
         var text = "LEVEL " + String(this.level);
         this.levelTxt = this.createTextField(400, 200, 0xFFFFFF, 30, text);
         this.levelTxt.textAlign = egret.HorizontalAlign.CENTER; //水平右对齐，相对于 textField 控件自身的 width 与 height

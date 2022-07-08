@@ -11,11 +11,18 @@ class GameOperate{
     }
 }
 
+enum GameType{
+    Normal=0,//普通，
+    Difficult=1,//困难，给好看的试管底图
+    Purgatory=2,//炼狱，给好看的试管底图
+}
+
 class GameScene extends Scene {
 
     private bg:egret.Bitmap;
     private diamonLayout:egret.DisplayObjectContainer;
     private diamonTxt:egret.TextField;
+    private levelTxt:egret.TextField;
     private pauseBtn:egret.Bitmap;
     private themeBtn:egret.Bitmap;
     private restartBtn:egret.DisplayObjectContainer;
@@ -30,10 +37,15 @@ class GameScene extends Scene {
     private operateStack:GameOperate[]=[];//行动堆栈
     private hasAddNewTube:boolean;
     private maskGo:egret.Bitmap;
+
+    private gameType:GameType=GameType.Normal;
+    private levelId:number=1;//当前关卡
     
-    protected onComplete() {
+    protected onComplete(...args:any[]) {
+        this.InitParams(...args);
         this.InitBG();
         this.InitDiamons();
+        this.InitLevelTxt();
         this.InitPauseBtn();
         this.InitTubeContainer();
         this.InitBottomBtn();
@@ -41,63 +53,109 @@ class GameScene extends Scene {
         this.LoadLevel();
     }
 
+    private InitParams(...args:any[]){
+        if(args[0]!= null){
+            if(args[0]==0){
+                this.gameType=GameType.Normal;
+            }else if(args[0]==1){
+                this.gameType=GameType.Difficult;
+            }else if(args[0]==2){
+                this.gameType=GameType.Purgatory;
+            }
+        }else{
+            this.gameType=GameType.Normal;
+        }
+        if(args[1]!=null){
+            this.levelId=args[1];
+        }else{
+            this.levelId=PlayerData.Instance.GetCurLevel(this.gameType);
+        }
+    }
+
     private InitBG():void{
         let themeId = PlayerData.Instance.curThemeID;
         let themeData = DataConfig.Instance.GetDataByIndex("theme",themeId);
         let resName = themeData==null?"bg_1_png":themeData.bgSprite;
-        this.bg = this.createBitmapByName(resName);
-        this.bg.fillMode = egret.BitmapFillMode.SCALE;
-        this.bg.width = SceneManager.ScreenWidth;
-        this.bg.height = SceneManager.ScreenHeight;
-        this.addChild(this.bg);
+        if(this.bg==null){
+            this.bg = this.createBitmapByName(resName);
+            this.bg.fillMode = egret.BitmapFillMode.SCALE;
+            this.bg.width = SceneManager.ScreenWidth;
+            this.bg.height = SceneManager.ScreenHeight;
+            this.addChild(this.bg);
+        }else{
+            let texture: egret.Texture = RES.getRes(name);
+            this.bg.texture=texture;
+        }
+
     }
     private InitDiamons():void{
-        this.diamonLayout = new egret.DisplayObjectContainer();
-        this.diamonLayout.width=210;
-        this.diamonLayout.height=60;
-        this.diamonLayout.x=30;
-        this.diamonLayout.y=30;
-        this.addChild(this.diamonLayout);
+        let diamonResName="icon1_png";
+        if(this.gameType==GameType.Normal){
+            diamonResName="icon1_png";
+        }else if(this.gameType==GameType.Difficult){
+            diamonResName="icon1_png";
+        }else if(this.gameType==GameType.Purgatory){
+            diamonResName="icon1_png";
+        }
+        if (this.diamonLayout==null){
+            this.diamonLayout = new egret.DisplayObjectContainer();
+            this.diamonLayout.width=210;
+            this.diamonLayout.height=60;
+            this.diamonLayout.x=30;
+            this.diamonLayout.y=30;
+            this.addChild(this.diamonLayout);
 
-        let diamonBG = this.createBitmapByName("di_png");
-        diamonBG.fillMode = egret.BitmapFillMode.SCALE;
-        diamonBG.width=this.diamonLayout.width;
-        diamonBG.height=this.diamonLayout.height;
-        this.diamonLayout.addChild(diamonBG);
+            let diamonBG = this.createBitmapByName("di_png");
+            diamonBG.fillMode = egret.BitmapFillMode.SCALE;
+            diamonBG.width=this.diamonLayout.width;
+            diamonBG.height=this.diamonLayout.height;
+            this.diamonLayout.addChild(diamonBG);
 
-        let diamonIcon = this.createBitmapByName("icon1_png");
-        diamonIcon.width = 90;
-        diamonIcon.height = 75;
-        diamonIcon.anchorOffsetX = diamonIcon.width/2;
-        diamonIcon.anchorOffsetY = diamonIcon.height/2;
-        diamonIcon.x=diamonIcon.width/2;
-        diamonIcon.y=this.diamonLayout.height/2;
-        this.diamonLayout.addChild(diamonIcon);
+            let diamonIcon = this.createBitmapByName(diamonResName);
+            diamonIcon.name="diamonIcon";
+            diamonIcon.width = 90;
+            diamonIcon.height = 75;
+            diamonIcon.anchorOffsetX = diamonIcon.width/2;
+            diamonIcon.anchorOffsetY = diamonIcon.height/2;
+            diamonIcon.x=diamonIcon.width/2;
+            diamonIcon.y=this.diamonLayout.height/2;
+            this.diamonLayout.addChild(diamonIcon);
 
-        let diamonTxt= new egret.TextField();
-        diamonTxt.text = String(PlayerData.Instance.diamon);
-        diamonTxt.fontFamily = "myFirstFont";
-        diamonTxt.textColor = 0xFFFFFF;
-        diamonTxt.textAlign = egret.HorizontalAlign.LEFT;  //水平右对齐，相对于 textField 控件自身的 width 与 height
-        diamonTxt.verticalAlign = egret.VerticalAlign.MIDDLE;
-        diamonTxt.width = this.diamonLayout.width-diamonIcon.width;
-        diamonTxt.height = this.diamonLayout.height;
-        diamonTxt.x=diamonIcon.width;
-        diamonTxt.y=0;
-        diamonTxt.size = 36;
-        this.diamonTxt = diamonTxt;
-        this.diamonLayout.addChild(diamonTxt);
+            let diamonTxt= new egret.TextField();
+            diamonTxt.text = String(PlayerData.Instance.diamon);
+            diamonTxt.fontFamily = "myFirstFont";
+            diamonTxt.textColor = 0xFFFFFF;
+            diamonTxt.textAlign = egret.HorizontalAlign.LEFT;  //水平右对齐，相对于 textField 控件自身的 width 与 height
+            diamonTxt.verticalAlign = egret.VerticalAlign.MIDDLE;
+            diamonTxt.width = this.diamonLayout.width-diamonIcon.width;
+            diamonTxt.height = this.diamonLayout.height;
+            diamonTxt.x=diamonIcon.width;
+            diamonTxt.y=0;
+            diamonTxt.size = 36;
+            this.diamonTxt = diamonTxt;
+            this.diamonLayout.addChild(diamonTxt);
+        }else{
+            this.diamonTxt.text=String(PlayerData.Instance.diamon);
+            let diamonIcon:egret.Bitmap = this.diamonLayout.getChildByName("diamonIcon") as egret.Bitmap;
+            diamonIcon.texture = RES.getRes(diamonResName);
+        }
+
     }
-    private InitPauseBtn():void{
-        let topOffset=70;//距离顶部的高度
-        this.pauseBtn = this.createBitmapByName("btn3_png");
-        this.pauseBtn.fillMode=egret.BitmapFillMode.SCALE;
-        this.pauseBtn.width=60;
-        this.pauseBtn.height=60;
-        this.pauseBtn.x=SceneManager.ScreenWidth-this.pauseBtn.width-30;
-        this.pauseBtn.y=topOffset;
-        this.addChild(this.pauseBtn);
 
+    private InitLevelTxt():void{
+        let s = "LEVEL "+String(this.levelId);
+        if(this.levelTxt==null){
+            this.levelTxt=this.createTextField(300,60,0xFFFFFF,30,s);
+            this.levelTxt.textAlign = egret.HorizontalAlign.CENTER;
+            this.levelTxt.x=SceneManager.ScreenWidth/2-this.levelTxt.width/2;
+            this.levelTxt.y=30;
+            this.addChild(this.levelTxt);
+        }else{
+            this.levelTxt.text=s;
+        }
+    }
+
+    private InitPauseBtn():void{
         let themeId = PlayerData.Instance.curThemeID;
         let themeData = DataConfig.Instance.GetDataByIndex("theme",themeId);
         let resName:string="sun_png";
@@ -106,16 +164,44 @@ class GameScene extends Scene {
             resName="moon_png";
             this.isSun=false;
         }
-        this.themeBtn = this.createBitmapByName(resName);
-        this.themeBtn.fillMode = egret.BitmapFillMode.SCALE;
-        this.themeBtn.width=256/4;
-        this.themeBtn.height=360/4;
-        this.themeBtn.x=SceneManager.ScreenWidth-this.themeBtn.width;
-        this.themeBtn.y=this.pauseBtn.y+this.pauseBtn.height;
-        this.addChild(this.themeBtn);
+        if(this.pauseBtn==null){
+            let topOffset=70;//距离顶部的高度
+            this.pauseBtn = this.createBitmapByName("btn3_png");
+            this.pauseBtn.fillMode=egret.BitmapFillMode.SCALE;
+            this.pauseBtn.width=60;
+            this.pauseBtn.height=60;
+            this.pauseBtn.x=SceneManager.ScreenWidth-this.pauseBtn.width-30;
+            this.pauseBtn.y=topOffset;
+            this.addChild(this.pauseBtn);
+
+            this.themeBtn = this.createBitmapByName(resName);
+            this.themeBtn.fillMode = egret.BitmapFillMode.SCALE;
+            this.themeBtn.width=256/4;
+            this.themeBtn.height=360/4;
+            this.themeBtn.x=SceneManager.ScreenWidth-this.themeBtn.width;
+            this.themeBtn.y=this.pauseBtn.y+this.pauseBtn.height;
+            this.addChild(this.themeBtn);
+        }else{
+            this.themeBtn.texture=RES.getRes(resName);
+        }
+
 
     }
     private InitBottomBtn():void{
+        if(this.restartBtn!=null){
+            this.backTxt.text=String(PlayerData.Instance.backNum);
+            this.addTxt.text=String(PlayerData.Instance.newTubeNum);
+            if(this.gameType==GameType.Normal){
+                if(this.getChildByName("addBtn")==null){
+                    this.addChild(this.addBtn);
+                }
+            }else{
+                if(this.getChildByName("addBtn")!=null){
+                    this.removeChild(this.addBtn);
+                }
+            }
+            return;
+        }
         let offsetX = SceneManager.ScreenWidth/4;
         let btnWidth = 120;
         let btnHeight = 80;
@@ -164,6 +250,7 @@ class GameScene extends Scene {
                 addIcon.x=btnWidth/2-20;
                 addIcon.y=btnHeight/2;
                 bottomBtn.addChild(addIcon);
+                bottomBtn.name="addBtn";
                 let str=String(PlayerData.Instance.newTubeNum);
                 let addTxt=this.createTextField(btnWidth/2-10,btnHeight,0xFFFFFF,30,str);
                 addTxt.x=btnWidth/2+10;
@@ -172,10 +259,22 @@ class GameScene extends Scene {
                 this.addTxt=addTxt;
             }
         }
+        if(this.gameType==GameType.Normal){
+            if(this.getChildByName("addBtn")==null){
+                this.addChild(this.addBtn);
+            }
+        }else{
+            if(this.getChildByName("addBtn")!=null){
+                this.removeChild(this.addBtn);
+            }
+        }
 
     }
 
     private InitTubeContainer():void{
+        if(this.tubeContainer!=null){
+            return;
+        }
         let topOffset=220;
         let bottomOffset=280;
         let tubeContainer=new egret.DisplayObjectContainer();
@@ -222,7 +321,9 @@ class GameScene extends Scene {
         }
         this.curSelectTube=null;
         this.hasAddNewTube=false;
-        let levelId = PlayerData.Instance.curLevel;
+
+        let levelId = this.levelId;
+        let type = this.gameType;//根据type去加载对应的关卡信息
         let levelCfg = DataConfig.Instance.GetDataByIndex("level",levelId);
         while(levelCfg==null){
             levelId-=1;
@@ -385,7 +486,7 @@ class GameScene extends Scene {
     }
 
     public Update() {
-        
+
     }
 
     public addListener() {
@@ -402,6 +503,7 @@ class GameScene extends Scene {
         Utility.ButtonActive(this.addBtn,true);
         this.addBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.addTubeClick, this);
 
+        EventCenter.AddListener(EventID.RefreshLevel,this.OnRefreshLevel,this);
     }
     public removeListener() {
         this.diamonLayout.touchEnabled=false;
@@ -416,20 +518,15 @@ class GameScene extends Scene {
         this.backBtn.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.backClick, this);
         Utility.ButtonActive(this.addBtn,false);
         this.addBtn.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.addTubeClick, this);
+
+        EventCenter.RemoveListener(EventID.RefreshLevel,this.OnRefreshLevel,this);
     }
 
     private diamonClick():void{
         SceneManager.Instance.pushScene("ShopScene");
     }
-    private rotate:number=0;
     private pauseClick():void{
-        // SceneManager.Instance.pushScene("PauseScene");
-        this.rotate+=5;
-        console.log(this.rotate)
-        for(let i=0;i<this.tubes.length;i++){
-            this.tubes[i].rotation=this.rotate;
-            this.tubes[i].PullRotate(this.rotate);
-        }
+        SceneManager.Instance.pushScene("PauseScene");
     }
     private themeClick():void{
         if(this.isSun){
@@ -481,6 +578,12 @@ class GameScene extends Scene {
         let i=this.tubes.length;
         this.InitTube(waterDatas,i);
         this.SetTubesPostion();
+    }
+
+    private OnRefreshLevel(...args:any[]){
+        this.gameType=args[0];
+        this.levelId=args[1];
+        this.LoadLevel();
     }
 
 

@@ -36,16 +36,32 @@ var Utility = (function () {
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
      */
-    Utility.createBitmapByName = function (name) {
+    Utility.createBitmapByName = function (name, w, h, isPivotCenter) {
         var result = new egret.Bitmap();
         var texture = RES.getRes(name);
         result.texture = texture;
+        if (w != null) {
+            result.width = w;
+        }
+        if (h != null) {
+            result.height = h;
+        }
+        if (isPivotCenter != null) {
+            if (isPivotCenter) {
+                result.anchorOffsetX = result.width / 2;
+                result.anchorOffsetY = result.height / 2;
+            }
+        }
         return result;
     };
-    Utility.createButton = function (resName, width, height) {
+    Utility.createButton = function (resName, width, height, isPivotCenter) {
         var btn = new egret.DisplayObjectContainer();
         btn.width = width;
         btn.height = height;
+        if (isPivotCenter) {
+            btn.anchorOffsetX = btn.width / 2;
+            btn.anchorOffsetY = btn.height / 2;
+        }
         var btnBg = Utility.createBitmapByName(resName);
         btnBg.fillMode = egret.BitmapFillMode.SCALE;
         btnBg.name = "btnBg";
@@ -130,6 +146,30 @@ var Utility = (function () {
         tw.to({ "alpha": 1, "y": end_y }, 500);
         tw.wait(1000);
         tw.to({ "alpha": 0, "y": start_y }, 500);
+    };
+    Object.defineProperty(Utility, "EmptyGo", {
+        get: function () {
+            if (Utility._empty == null) {
+                Utility._empty = new egret.DisplayObjectContainer();
+                Utility._empty.width = 50;
+                Utility._empty.height = 50;
+                Utility._empty.x = 0;
+                Utility._empty.y = 0;
+            }
+            return Utility._empty;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Utility.Float = function (startNum, endNum, duration, func, thisObj) {
+        var emptyGo = Utility.EmptyGo;
+        emptyGo.x = startNum;
+        var onChanged = function () {
+            var curX = emptyGo.x;
+            func.bind(thisObj)(curX);
+        };
+        var tw = egret.Tween.get(emptyGo, { loop: false, onChange: onChanged, onChangeObj: thisObj });
+        tw.to({ "x": endNum }, duration);
     };
     Utility.ButtonActive = function (obj, active) {
         obj.touchEnabled = active;
@@ -307,6 +347,7 @@ var Utility = (function () {
         configurable: true
     });
     Utility._notibox = null;
+    Utility._empty = null;
     Utility.btnScaleFuns = new Dictionary();
     return Utility;
 }());

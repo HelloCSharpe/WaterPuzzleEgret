@@ -124,7 +124,7 @@ class WaterScript extends egret.DisplayObjectContainer {
         this.water = water;
         //waterFlow
         let waterFlow = Utility.createGif("water_flow_json","water_flow_png");
-        
+        waterFlow.frameRate=12;
         waterFlow.width = this.width;
         waterFlow.height = this.height;
         waterFlow.x = 0;
@@ -244,16 +244,14 @@ class WaterScript extends egret.DisplayObjectContainer {
         let H = curMaxHeight > curHeight ? curMaxHeight - curHeight : 0;
         let W = H == 0 ? 0 : this.CalWidth(angle, H);
         W = (this.y*Math.sin(angle*Utility.Deg2Rad)+this.waterWidth/2*Math.sin(angle*Utility.Deg2Rad))*2;
-        console.log("SetPullWaterSize++++++++++++++");
-        console.log(angle,H,W);
         this.SetSize(W, H);
     }
 
     public RefreshWidthAndHeight(angle:number):number{
         let H = this.CalHeight(angle) * this.waterData.num;
         // let W = this.CalWidth(angle, H);
-        let W = this.y/Math.cos(angle*Utility.Deg2Rad);
-        W = (this.y*Math.sin(angle*Utility.Deg2Rad)+this.waterWidth/2*Math.sin(angle*Utility.Deg2Rad))*2;
+        // let W = this.y/Math.cos(angle*Utility.Deg2Rad);
+        let W = (this.y*Math.sin(angle*Utility.Deg2Rad)+this.waterWidth/2*Math.sin(angle*Utility.Deg2Rad))*2;
         this.SetSize(W, H);
         return H;
     }
@@ -342,13 +340,14 @@ class WaterScript extends egret.DisplayObjectContainer {
     public DealPullIn(duration:number){
         this.SetFlow();
         let realHeight = this.RealHeight;
-        let target_scaleY = this.data.num;
+        let target_scale = this.data.num;
         if (this.tweener == null)
         {
             this.tweener = egret.Tween.get(this);
-            this.tweener.to({ "scaleY": target_scaleY }, duration*1000).call(()=>{
+            this.tweener.to({ "scaleX": target_scale+1,"scaleY": target_scale }, duration*1000).call(()=>{
                  this.SetFull();
-                 this.scaleY=target_scaleY;
+                 this.scaleX=1;
+                 this.scaleY=target_scale;
                  this.OnPullInDone();
                  this.tweener = null;
             },this);
@@ -358,9 +357,10 @@ class WaterScript extends egret.DisplayObjectContainer {
             egret.Tween.removeTweens(this);
             this.tweener = null;
             this.tweener = egret.Tween.get(this);
-            this.tweener.to({ "scaleY": target_scaleY }, duration*1000).call(()=>{
+            this.tweener.to({ "scaleX": target_scale+1,"scaleY": target_scale }, duration*1000).call(()=>{
                  this.SetFull();
-                 this.scaleY=target_scaleY;
+                 this.scaleX=1;
+                 this.scaleY=target_scale;
                  this.OnPullInDone();
                  this.tweener = null;
             },this);

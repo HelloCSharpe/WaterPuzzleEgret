@@ -40,6 +40,21 @@ class TubeScript extends egret.DisplayObjectContainer {
 
     private static selectTweener:egret.Tween=null;
     private selectHeight:number=69;
+
+    public TestFlow(flow:boolean):void{
+        if(this.waterUIScripts==null||this.waterUIScripts.length==0){
+            return;
+        }
+        let len = this.waterUIScripts.length;
+        for(let i=0;i<len;i++){
+            if(flow){
+                this.waterUIScripts[i].SetFlow();
+            }else{
+                this.waterUIScripts[i].SetFull();
+            }
+
+        }
+    }
     
     //每个水对应的倾倒角度
     public get PullAngles():number[]{
@@ -59,7 +74,7 @@ class TubeScript extends egret.DisplayObjectContainer {
         if(this.waterUIScripts==null||this.waterUIScripts.length==0){
             return null;
         }
-                let len = this.waterUIScripts.length;
+        let len = this.waterUIScripts.length;
         return this.waterUIScripts[len-1];
     }
 
@@ -334,7 +349,7 @@ class TubeScript extends egret.DisplayObjectContainer {
         this.anchorOffsetX+=offsetX;
         this.x+=offsetX;
 
-        let startPos:Vector2=new Vector2(this.x,this.y);
+        let startPos:Vector2=new Vector2(this.x,this.y);//anchorOffsetX后的位置
         let startNum=this.CurTotalWaterNum;
         let canPullNum = otherTube.MaxWaterNum - otherTube.CurTotalWaterNum;//另外试管能容下多少水
         let topWaterNum = this.TopWaterData.num;//当前试管顶部有多少水
@@ -400,9 +415,6 @@ class TubeScript extends egret.DisplayObjectContainer {
             function PullingFunc(){
                 let curRotation = this.rotation;
                 this.PullRotate(curRotation,sourceWater);
-                if(Math.abs(this._endPullAngle-curRotation)<4){
-                    console.log("aaaaaa",sourceWater);//测试断点
-                }
             }
             this.pullTweener = egret.Tween.get(this,{loop:false,onChange:PullingFunc,onChangeObj:this});
             this.pullTweener.to({"rotation":this._endPullAngle},pulltime*1000);
@@ -417,8 +429,7 @@ class TubeScript extends egret.DisplayObjectContainer {
                     sourceWater.SetFull();
                 }
                 this.waterFlow.alpha=0;
-                let _startPos = targetPullPos;
-                let _endPos = new Vector2(startPos.x, startPos.y-this.selectHeight);
+                let _endPos = new Vector2(startPos.x, startPos.y+this.selectHeight);
                 function PullEndFunc(){
                     let curRotation = this.rotation;
                     this.PullRotate(curRotation);
@@ -503,16 +514,16 @@ class TubeScript extends egret.DisplayObjectContainer {
 
     private SetFlowHeight(otherTube:TubeScript):void
     {
-        let h = this.waterFlow.height;
-        let waterNum = otherTube.CurTotalWaterNum;
-        let totalWaterHeight = waterNum * otherTube.waterHeight;
-        let _h = otherTube.flowLength - totalWaterHeight;
-        h = _h;
-        if (waterNum > 0)
-        {
-            h += 5;
+        let myY = this.y;
+        let otherBottomY=otherTube.y+otherTube.tubeHeight;
+        let otherWaterNum = otherTube.CurTotalWaterNum;
+        let otherWaterTotalHeight=otherWaterNum * otherTube.waterHeight;
+        let otherY=otherBottomY-otherWaterTotalHeight;
+        let h=Math.abs(otherY-myY);
+        if(otherWaterNum==0){
+            h-=10;
         }else{
-            h-=5;
+            h+=10;
         }
         this.waterFlow.height = h;
     }

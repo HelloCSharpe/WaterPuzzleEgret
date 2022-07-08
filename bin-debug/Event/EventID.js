@@ -7,6 +7,7 @@ var EventID = (function () {
     EventID.TubeChanged = "TubeChanged";
     EventID.ThemeChanged = "ThemeChanged";
     EventID.ThemeBtnClicked = "ThemeBtnClicked";
+    EventID.RefreshLevel = "RefreshLevel"; //通知GameScene刷新关卡
     return EventID;
 }());
 __reflect(EventID.prototype, "EventID");

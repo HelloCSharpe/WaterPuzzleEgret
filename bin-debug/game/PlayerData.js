@@ -11,7 +11,15 @@ var PlayerData = (function () {
         this.tubes = [1];
         this.themes = [1];
         this.diamon = 2000;
-        this.curLevel = 4;
+        this.diamon2 = 0; //困难货币
+        this.diamon3 = 0; //炼狱货币
+        this.curLevel = 501;
+        this.curLevel2 = 1; //困难
+        this.curLevel3 = 1; //炼狱
+        this.process = 10; //宝箱进度(0-100)
+        //配置信息
+        this.bgmOn = true;
+        this.soundOn = true;
     }
     Object.defineProperty(PlayerData, "Instance", {
         get: function () {
@@ -39,8 +47,35 @@ var PlayerData = (function () {
         this.diamon = gameInfo.diamon;
         this.curLevel = gameInfo.curLevel;
     };
+    PlayerData.prototype.SetSettingInfo = function (setInfo) {
+    };
     //保存进度
     PlayerData.prototype.Save = function () {
+    };
+    PlayerData.prototype.GetCurLevel = function (gameType) {
+        var level = 1;
+        if (gameType == GameType.Normal) {
+            level = this.curLevel;
+        }
+        else if (gameType == GameType.Difficult) {
+            level = this.curLevel2;
+        }
+        else if (gameType == GameType.Purgatory) {
+            level = this.curLevel3;
+        }
+        return level;
+    };
+    PlayerData.prototype.CurLevelAdd = function (gameType) {
+        if (gameType == GameType.Normal) {
+            this.curLevel = this.curLevel + 1;
+        }
+        else if (gameType == GameType.Difficult) {
+            this.curLevel2 = this.curLevel2 + 1;
+        }
+        else if (gameType == GameType.Purgatory) {
+            this.curLevel3 = this.curLevel3 + 1;
+        }
+        this.Save();
     };
     return PlayerData;
 }());

@@ -44,6 +44,20 @@ var TubeScript = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    TubeScript.prototype.TestFlow = function (flow) {
+        if (this.waterUIScripts == null || this.waterUIScripts.length == 0) {
+            return;
+        }
+        var len = this.waterUIScripts.length;
+        for (var i = 0; i < len; i++) {
+            if (flow) {
+                this.waterUIScripts[i].SetFlow();
+            }
+            else {
+                this.waterUIScripts[i].SetFull();
+            }
+        }
+    };
     Object.defineProperty(TubeScript.prototype, "PullAngles", {
         //每个水对应的倾倒角度
         get: function () {
@@ -342,7 +356,7 @@ var TubeScript = (function (_super) {
         var offsetX = anchorOffsetX - old_anchorOffsetX;
         this.anchorOffsetX += offsetX;
         this.x += offsetX;
-        var startPos = new Vector2(this.x, this.y);
+        var startPos = new Vector2(this.x, this.y); //anchorOffsetX后的位置
         var startNum = this.CurTotalWaterNum;
         var canPullNum = otherTube.MaxWaterNum - otherTube.CurTotalWaterNum; //另外试管能容下多少水
         var topWaterNum = this.TopWaterData.num; //当前试管顶部有多少水
@@ -401,9 +415,6 @@ var TubeScript = (function (_super) {
             function PullingFunc() {
                 var curRotation = this.rotation;
                 this.PullRotate(curRotation, sourceWater);
-                if (Math.abs(this._endPullAngle - curRotation) < 4) {
-                    console.log("aaaaaa", sourceWater); //测试断点
-                }
             }
             _this.pullTweener = egret.Tween.get(_this, { loop: false, onChange: PullingFunc, onChangeObj: _this });
             _this.pullTweener.to({ "rotation": _this._endPullAngle }, pulltime * 1000);
@@ -416,8 +427,7 @@ var TubeScript = (function (_super) {
                     sourceWater.SetFull();
                 }
                 _this.waterFlow.alpha = 0;
-                var _startPos = targetPullPos;
-                var _endPos = new Vector2(startPos.x, startPos.y - _this.selectHeight);
+                var _endPos = new Vector2(startPos.x, startPos.y + _this.selectHeight);
                 function PullEndFunc() {
                     var curRotation = this.rotation;
                     this.PullRotate(curRotation);
@@ -485,16 +495,17 @@ var TubeScript = (function (_super) {
         waterUnit.RefreshUI();
     };
     TubeScript.prototype.SetFlowHeight = function (otherTube) {
-        var h = this.waterFlow.height;
-        var waterNum = otherTube.CurTotalWaterNum;
-        var totalWaterHeight = waterNum * otherTube.waterHeight;
-        var _h = otherTube.flowLength - totalWaterHeight;
-        h = _h;
-        if (waterNum > 0) {
-            h += 5;
+        var myY = this.y;
+        var otherBottomY = otherTube.y + otherTube.tubeHeight;
+        var otherWaterNum = otherTube.CurTotalWaterNum;
+        var otherWaterTotalHeight = otherWaterNum * otherTube.waterHeight;
+        var otherY = otherBottomY - otherWaterTotalHeight;
+        var h = Math.abs(otherY - myY);
+        if (otherWaterNum == 0) {
+            h -= 10;
         }
         else {
-            h -= 5;
+            h += 10;
         }
         this.waterFlow.height = h;
     };

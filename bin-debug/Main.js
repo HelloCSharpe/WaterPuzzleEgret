@@ -167,7 +167,9 @@ var Main = (function (_super) {
         this.addEventListener(egret.Event.ENTER_FRAME, this.Update, this);
         SceneManager.Instance.RegisterScene("StartScene", new StartScene());
         SceneManager.Instance.RegisterScene("GameScene", new GameScene());
-        SceneManager.Instance.changeScene("StartScene");
+        SceneManager.Instance.RegisterScene("PauseScene", new PauseScene());
+        SceneManager.Instance.RegisterScene("ResultScene", new ResultScene());
+        SceneManager.Instance.changeScene("ResultScene", 0, 501);
         this.Test();
     };
     Main.prototype.Test = function () {

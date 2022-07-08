@@ -37,17 +37,33 @@ class Utility {
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
      */
-    public static createBitmapByName(name: string): egret.Bitmap {
+    public static createBitmapByName(name: string,w?:number,h?:number,isPivotCenter?:boolean): egret.Bitmap {
         let result = new egret.Bitmap();
         let texture: egret.Texture = RES.getRes(name);
         result.texture = texture;
+        if(w!=null){
+            result.width=w;
+        }
+        if(h!=null){
+            result.height=h;
+        }
+        if(isPivotCenter!=null){
+            if(isPivotCenter){
+                result.anchorOffsetX=result.width/2;
+                result.anchorOffsetY=result.height/2;
+            }
+        }
         return result;
     }
 
-    public static createButton(resName: string,width:number,height:number):egret.DisplayObjectContainer{
+    public static createButton(resName: string,width:number,height:number,isPivotCenter:boolean):egret.DisplayObjectContainer{
         let btn = new egret.DisplayObjectContainer();
         btn.width=width;
         btn.height=height;
+        if(isPivotCenter){
+            btn.anchorOffsetX=btn.width/2;
+            btn.anchorOffsetY=btn.height/2;
+        }
         let btnBg=Utility.createBitmapByName(resName);
         btnBg.fillMode = egret.BitmapFillMode.SCALE;
         btnBg.name="btnBg";
@@ -132,6 +148,28 @@ class Utility {
         tw.to({ "alpha": 1, "y": end_y }, 500);
         tw.wait(1000);
         tw.to({ "alpha": 0, "y": start_y }, 500);
+    }
+    static _empty: egret.DisplayObjectContainer = null;
+    static get EmptyGo(): egret.DisplayObjectContainer {
+        if (Utility._empty == null) {
+            Utility._empty = new egret.DisplayObjectContainer();
+            Utility._empty.width = 50;
+            Utility._empty.height = 50;
+            Utility._empty.x = 0;
+            Utility._empty.y = 0;
+        }
+        return Utility._empty;
+    }
+
+    public static Float(startNum:number,endNum:number,duration:number,func:Function,thisObj:any):void{
+        let emptyGo = Utility.EmptyGo;
+        emptyGo.x=startNum;
+        let onChanged = ()=>{
+            let curX=emptyGo.x;
+            func.bind(thisObj)(curX);
+        };
+        let tw = egret.Tween.get(emptyGo,{loop:false,onChange:onChanged,onChangeObj:thisObj});
+        tw.to({"x":endNum},duration);
     }
 
     private static btnScaleFuns:Dictionary = new Dictionary();
