@@ -5,15 +5,15 @@
 			"name": "preload"
 		},
 		{
-			"keys": "bg_1_png,bg_10_png,bg_11_png,bg_12_png,bg_13_png,bg_14_png,bg_15_png,bg_16_png,bg_17_png,bg_18_png,bg_2_png,bg_3_png,bg_4_png,bg_5_png,bg_6_png,bg_7_png,bg_8_png,bg_9_png",
+			"keys": "bg_1_png,bg_10_png,bg_11_png,bg_12_png,bg_13_png,bg_14_png,bg_15_png,bg_16_png,bg_17_png,bg_18_png,bg_2_png,bg_3_png,bg_4_png,bg_5_png,bg_6_png,bg_7_png,bg_8_png,bg_9_png,bgskin_1_png",
 			"name": "theme"
 		},
 		{
-			"keys": "pz_di_bt_1_1_png,pz_di_bt_1_2_png,pz_di_bt_1_3_png,pz_di_bt_2_1_png,pz_di_bt_2_2_png,pz_di_bt_2_3_png,pz_di_bt_3_1_png,pz_di_bt_3_2_png,pz_di_bt_3_3_png,pz_di_bt_4_1_png,pz_di_bt_4_2_png,pz_di_bt_4_3_png,pz_di_bt_5_1_png,pz_di_bt_5_2_png,pz_di_bt_5_3_png,pz_di_bt_6_1_png,pz_di_bt_6_2_png,pz_di_bt_6_3_png,pz_di_bt_7_1_png,pz_di_bt_7_2_png,pz_di_bt_7_3_png,pz_di_bt_8_1_png,pz_di_bt_8_2_png,pz_di_bt_8_3_png,pz_di_bt_9_1_png,pz_di_bt_9_2_png,pz_di_bt_9_3_png",
+			"keys": "pz_di_bt_1_1_png,pz_di_bt_1_2_png,pz_di_bt_1_3_png,pz_di_bt_2_1_png,pz_di_bt_2_2_png,pz_di_bt_2_3_png,pz_di_bt_3_1_png,pz_di_bt_3_2_png,pz_di_bt_3_3_png,pz_di_bt_4_1_png,pz_di_bt_4_2_png,pz_di_bt_4_3_png,pz_di_bt_5_1_png,pz_di_bt_5_2_png,pz_di_bt_5_3_png,pz_di_bt_6_1_png,pz_di_bt_6_2_png,pz_di_bt_6_3_png,pz_di_bt_7_1_png,pz_di_bt_7_2_png,pz_di_bt_7_3_png,pz_di_bt_8_1_png,pz_di_bt_8_2_png,pz_di_bt_8_3_png,pz_di_bt_9_1_png,pz_di_bt_9_2_png,pz_di_bt_9_3_png,gy_sp_1_png,gy_sp_2_png,gy_sp_3_png,gy_sp_4_png,gy_sp_5_png,gy_sp_6_png,gy_sp_7_png,gy_sp_8_png,gy_sp_9_png",
 			"name": "tube"
 		},
 		{
-			"keys": "bgm_off_png,bgm_on_png,btn1_png,btn2_png,btn3_png,di_png,di2_png,di3_png,home_png,icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,lock_png,menu_png,moon_png,pause_icon1_png,pause_icon2_png,rank_png,share_png,shop_png,sound_off_png,sound_on_png,start_btn_png,sun_png,tag1_png,tag2_png,tag3_png,tog1_png,tog2_png,tog3_png,tog_icon1_png,tog_icon2_png,tog_icon3_png,water_flow_json,water_flow_png,white_jpg,zt_anniu_png,menu2_png,close_png,mask_png,help_png,zhuanpan_png,zhizhen_png,chest_png,process1_png,process2_png,js_ad_png,empty_png",
+			"keys": "bgm_off_png,bgm_on_png,btn1_png,btn2_png,btn3_png,di_png,di2_png,di3_png,home_png,icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,lock_png,menu_png,moon_png,pause_icon1_png,pause_icon2_png,rank_png,share_png,shop_png,sound_off_png,sound_on_png,start_btn_png,sun_png,tag1_png,tag2_png,tag3_png,tog1_png,tog2_png,tog3_png,tog_icon1_png,tog_icon2_png,tog_icon3_png,water_flow_json,water_flow_png,white_jpg,zt_anniu_png,menu2_png,close_png,mask_png,help_png,zhuanpan_png,zhizhen_png,chest_png,process1_png,process2_png,js_ad_png,empty_png,di4_png,tog4_png,close2_png,shop_dj1_png,shop_dj2_png",
 			"name": "ui"
 		},
 		{
@@ -836,6 +836,83 @@
 			"url": "assets/UI/empty.png",
 			"type": "image",
 			"name": "empty_png"
+		},
+		{
+			"url": "assets/UI/di4.png",
+			"type": "image",
+			"name": "di4_png",
+			"scale9grid": "13,12,76,71"
+		},
+		{
+			"url": "assets/UI/tog4.png",
+			"type": "image",
+			"name": "tog4_png",
+			"scale9grid": "21,24,264,65"
+		},
+		{
+			"url": "assets/UI/close2.png",
+			"type": "image",
+			"name": "close2_png"
+		},
+		{
+			"url": "assets/UI/shop_dj1.png",
+			"type": "image",
+			"name": "shop_dj1_png"
+		},
+		{
+			"url": "assets/UI/shop_dj2.png",
+			"type": "image",
+			"name": "shop_dj2_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_1.png",
+			"type": "image",
+			"name": "gy_sp_1_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_2.png",
+			"type": "image",
+			"name": "gy_sp_2_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_3.png",
+			"type": "image",
+			"name": "gy_sp_3_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_4.png",
+			"type": "image",
+			"name": "gy_sp_4_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_5.png",
+			"type": "image",
+			"name": "gy_sp_5_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_6.png",
+			"type": "image",
+			"name": "gy_sp_6_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_7.png",
+			"type": "image",
+			"name": "gy_sp_7_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_8.png",
+			"type": "image",
+			"name": "gy_sp_8_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_9.png",
+			"type": "image",
+			"name": "gy_sp_9_png"
+		},
+		{
+			"url": "assets/themes/bgskin_1.png",
+			"type": "image",
+			"name": "bgskin_1_png"
 		}
 	]
 }

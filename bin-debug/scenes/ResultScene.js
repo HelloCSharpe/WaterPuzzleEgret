@@ -92,6 +92,7 @@ var ResultScene = (function (_super) {
     };
     ResultScene.prototype.ProcessChanged = function (value) {
         value = Math.ceil(value);
+        value = Math.min(100, value);
         this.processTxt.text = value + "%";
         this.processTr.width = Math.max(60, this.processContainer.width / 100 * value);
     };
@@ -173,7 +174,7 @@ var ResultScene = (function (_super) {
             adsIcon.x = offsetX;
             adsIcon.y = this.adsBtn.height / 2 - offsetY;
             this.adsBtn.addChild(adsIcon);
-            var diamonIcon = this.createBitmapByName("icon1_png", 90, 75, true);
+            var diamonIcon = this.createBitmapByName("icon1_png", 90, 90, true);
             diamonIcon.x = this.adsBtn.width - offsetX;
             diamonIcon.y = this.adsBtn.height / 2 - offsetY;
             this.adsBtn.addChild(diamonIcon);
@@ -250,16 +251,24 @@ var ResultScene = (function (_super) {
         this.DoZhuanPanRotate();
     };
     ResultScene.prototype.addListener = function () {
+        this.bg.touchEnabled = true;
+        this.bg.addEventListener(egret.TouchEvent.TOUCH_TAP, this.bgClick, this);
+        Utility.ButtonActive(this.nextBtn, true);
         Utility.ButtonActive(this.adsBtn, true);
         this.adsBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.adsBtnClick, this);
         Utility.ButtonActive(this.nextBtn, true);
         this.nextBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.nextBtnClick, this);
     };
     ResultScene.prototype.removeListener = function () {
+        this.bg.touchEnabled = false;
+        this.bg.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.bgClick, this);
         Utility.ButtonActive(this.adsBtn, false);
         this.adsBtn.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.adsBtnClick, this);
         Utility.ButtonActive(this.nextBtn, false);
         this.nextBtn.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.nextBtnClick, this);
+    };
+    ResultScene.prototype.bgClick = function () {
+        this.nextBtnClick();
     };
     ResultScene.prototype.adsBtnClick = function () {
         if (this.isPlayAnim) {

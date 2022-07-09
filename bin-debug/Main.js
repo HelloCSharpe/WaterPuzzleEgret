@@ -169,7 +169,8 @@ var Main = (function (_super) {
         SceneManager.Instance.RegisterScene("GameScene", new GameScene());
         SceneManager.Instance.RegisterScene("PauseScene", new PauseScene());
         SceneManager.Instance.RegisterScene("ResultScene", new ResultScene());
-        SceneManager.Instance.changeScene("ResultScene", 0, 501);
+        SceneManager.Instance.RegisterScene("ShopScene", new ShopScene());
+        SceneManager.Instance.changeScene("ShopScene", 0);
         this.Test();
     };
     Main.prototype.Test = function () {

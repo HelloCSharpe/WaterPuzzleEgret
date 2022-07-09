@@ -114,7 +114,7 @@ class GameScene extends Scene {
             let diamonIcon = this.createBitmapByName(diamonResName);
             diamonIcon.name="diamonIcon";
             diamonIcon.width = 90;
-            diamonIcon.height = 75;
+            diamonIcon.height = 90;
             diamonIcon.anchorOffsetX = diamonIcon.width/2;
             diamonIcon.anchorOffsetY = diamonIcon.height/2;
             diamonIcon.x=diamonIcon.width/2;
@@ -139,7 +139,6 @@ class GameScene extends Scene {
             let diamonIcon:egret.Bitmap = this.diamonLayout.getChildByName("diamonIcon") as egret.Bitmap;
             diamonIcon.texture = RES.getRes(diamonResName);
         }
-
     }
 
     private InitLevelTxt():void{

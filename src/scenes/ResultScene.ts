@@ -182,7 +182,7 @@ class ResultScene extends Scene {
             adsIcon.y=this.adsBtn.height/2-offsetY;
             this.adsBtn.addChild(adsIcon);
 
-            let diamonIcon=this.createBitmapByName("icon1_png",90,75,true);
+            let diamonIcon=this.createBitmapByName("icon1_png",90,90,true);
             diamonIcon.x=this.adsBtn.width-offsetX;
             diamonIcon.y=this.adsBtn.height/2-offsetY;
             this.adsBtn.addChild(diamonIcon);

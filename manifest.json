@@ -36,7 +36,6 @@
 		"bin-debug/scenes/ResultScene.js",
 		"bin-debug/scenes/SelectLevelScene.js",
 		"bin-debug/scenes/ShopScene.js",
-		"bin-debug/scenes/StartScene.js",
-		"bin-debug/scenes/TestScene.js"
+		"bin-debug/scenes/StartScene.js"
 	]
 }
