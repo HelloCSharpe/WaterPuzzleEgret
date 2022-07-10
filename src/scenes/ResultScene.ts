@@ -238,6 +238,7 @@ class ResultScene extends Scene {
     }
 
     private PlayTween(){
+        this.PlayLihua();
         this.isClickAds=false;
         this.isPlayAnim=true;
         // this.DoProcess();
@@ -255,6 +256,30 @@ class ResultScene extends Scene {
             this.isPlayAnim=false;
         },this);
 
+    }
+
+    private lihua1:egret.MovieClip;
+    private lihua2:egret.MovieClip;
+
+    private PlayLihua(){
+        if(this.lihua1==null){
+            this.lihua1 = this.createGif("lihua2_json","lihua2_png");
+            this.lihua1.x=0;
+            this.lihua1.y=0;
+            this.lihua1.frameRate=24;
+            this.addChild(this.lihua1);
+        }
+        this.lihua1.gotoAndPlay(0,1);
+        if(this.lihua2==null){
+            this.lihua2 = this.createGif("lihua2_json","lihua2_png");
+            this.lihua2.x=SceneManager.ScreenWidth;
+            this.lihua2.y=0;
+            this.lihua2.scaleX=-1;
+            this.lihua2.frameRate=24;
+            this.addChild(this.lihua2);
+        }
+        this.lihua2.gotoAndPlay(0,1);
+        AudioManager.Instance.PlaySound("lihua2_mp3",1600);
     }
     
 
@@ -280,7 +305,6 @@ class ResultScene extends Scene {
     }
 
     private bgClick(){
-        this.nextBtnClick();
     }
 
     private adsBtnClick(){
@@ -297,8 +321,8 @@ class ResultScene extends Scene {
         }
         
         if(this.newProcess>=100){
-            let level = PlayerData.Instance.GetCurLevel(this.gameType);
-            SceneManager.Instance.pushScene("DrawScene",this.gameType,level);
+            // let level = PlayerData.Instance.GetCurLevel(this.gameType);
+            // SceneManager.Instance.pushScene("DrawScene",this.gameType,level);
         }else{
             SceneManager.Instance.popScene();
             let level = PlayerData.Instance.GetCurLevel(this.gameType);

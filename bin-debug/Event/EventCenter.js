@@ -43,9 +43,11 @@ var EventCenter = (function () {
         var len = EventCenter.entityList.length;
         for (var i = len - 1; i >= 0; i--) {
             var entity = EventCenter.entityList[i];
-            if (entity.eventName == eventName) {
-                var func = entity.func;
-                func.bind(entity.thisObj).apply(void 0, args);
+            if (entity != null) {
+                if (entity.eventName == eventName) {
+                    var func = entity.func;
+                    func.bind(entity.thisObj).apply(void 0, args);
+                }
             }
         }
     };

@@ -238,6 +238,7 @@ var PauseScene = (function (_super) {
     PauseScene.prototype.bgmOnBtnClick = function () {
         var bgmIsOn = false;
         PlayerData.Instance.bgmOn = bgmIsOn;
+        AudioManager.Instance.BMGVolume = 0;
         if (bgmIsOn) {
             if (this.getChildByName("bgmOffBtn") != null) {
                 this.panel.removeChild(this.bgmOffBtn);
@@ -258,6 +259,7 @@ var PauseScene = (function (_super) {
     PauseScene.prototype.bgmOffBtnClick = function () {
         var bgmIsOn = true;
         PlayerData.Instance.bgmOn = bgmIsOn;
+        AudioManager.Instance.BMGVolume = 1;
         if (bgmIsOn) {
             if (this.getChildByName("bgmOffBtn") != null) {
                 this.panel.removeChild(this.bgmOffBtn);

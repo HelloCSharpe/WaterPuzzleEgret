@@ -42,8 +42,36 @@ var LzyScrollView = (function (_super) {
         background.texture = texture;
         background.width = this.width;
         background.height = this.height;
+        background.touchEnabled = true;
+        // background.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onBeginTouch, this);
+        // background.addEventListener(egret.TouchEvent.TOUCH_END, this.onEndTouch, this);
         this.addChild(background);
     };
+    // private _touchStatus: boolean = false;              //当前触摸状态，按下时，值为true
+    // private _distance: egret.Point = new egret.Point() // 定义一个空的定位
+    // private onBeginTouch(evt: egret.TouchEvent){
+    // 	this._touchStatus = true;
+    // 	this._distance.x = evt.stageX;
+    // 	this._distance.y = evt.stageY;
+    // 	this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Draging, this);
+    // }
+    // private onEndTouch(evt: egret.TouchEvent){
+    // 	this._touchStatus = false;
+    // 	this.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Draging, this);
+    // }
+    // private Draging(evt: egret.TouchEvent){
+    // 	if (this._touchStatus) {
+    // 		let x = evt.stageX - this._distance.x;
+    // 		let y = evt.stageY - this._distance.y;
+    //         if(this.isVertical){
+    //             this.myscrollView.scrollTop-=y;
+    //         }else{
+    //             this.myscrollView.scrollLeft-=x;
+    //         }
+    //         this._distance.x = evt.stageX;
+    //         this._distance.y = evt.stageY;
+    // 	}
+    // }
     LzyScrollView.prototype.onAddToStage = function () {
         this.AddBg();
         //创建ScrollView
@@ -76,7 +104,7 @@ var LzyScrollView = (function (_super) {
         // console.log("on Change",event.currentTarget.scrollTop,event.currentTarget.scrollLeft);
         var scrollValue = this.isVertical ? event.currentTarget.scrollTop : event.currentTarget.scrollLeft;
         var curRangeMin = 0 + scrollValue;
-        var curRangeMax = this.height;
+        var curRangeMax = this.height + scrollValue;
         //先做加载
         if (this.prevIndex > 0) {
             if (this.prevValue >= curRangeMin) {
@@ -98,13 +126,13 @@ var LzyScrollView = (function (_super) {
                 var _nextIndex = this.nextIndex + this.linePerCount; //加载完的前一个Index
                 var childW = this.creater.width();
                 var childH = this.creater.height();
-                for (var i = this.prevIndex; i < _nextIndex; i++) {
+                for (var i = this.nextIndex; i < _nextIndex; i++) {
                     if (i >= dataLen) {
-                        break;
+                        continue;
                     }
                     var data = this.datas[i];
                     if (data == null) {
-                        break;
+                        continue;
                     }
                     var pos_2 = this.CalTargetXY(i);
                     this.ShowGrid(pos_2.x, pos_2.y, i, data);
@@ -133,8 +161,7 @@ var LzyScrollView = (function (_super) {
                 this.HideGrid(i);
             }
             this.prevIndex = _minIndex - 1;
-            var gridOffset = this.isVertical ? this.creater.height() + this.spacingY : this.creater.width() + this.spacingX;
-            this.prevValue = curMinValue + gridOffset;
+            this.prevValue = curMinValue;
         }
         if (curMaxValue > curRangeMax) {
             var _maxIndex = curMaxIndex - this.linePerCount;
@@ -142,8 +169,7 @@ var LzyScrollView = (function (_super) {
                 this.HideGrid(i);
             }
             this.nextIndex = _maxIndex + 1;
-            var gridOffset = this.isVertical ? this.creater.height() + this.spacingY : this.creater.width() + this.spacingX;
-            this.nextValue = curMaxValue - gridOffset;
+            this.nextValue = curMaxValue;
         }
     };
     LzyScrollView.prototype.SetContent = function (spacingX, spacingY, datas, creater, paddingX, paddingY) {
@@ -153,17 +179,22 @@ var LzyScrollView = (function (_super) {
             console.error("creater is null");
             return;
         }
-        if (creater != null && creater != this.creater) {
+        if (this.creater != null && creater != this.creater) {
             console.error("creater is not equals");
             return;
         }
         this.creater = creater;
         this.datas = datas;
-        var content = this._content;
-        if (content == null) {
-            content = new egret.DisplayObjectContainer();
-            this.myscrollView.setContent(content);
-            this._content = content;
+        this.spacingX = spacingX;
+        this.spacingY = spacingY;
+        this.paddingX = paddingX;
+        this.paddingY = paddingY;
+        if (this._content == null) {
+            this._content = new egret.DisplayObjectContainer();
+            var contentBG_1 = Utility.createBitmapByName("empty_png", 0, 0);
+            contentBG_1.name = "contentBG";
+            this._content.addChild(contentBG_1);
+            this.myscrollView.setContent(this._content);
         }
         //回收所有显示的item
         var len = this.usedItems.length;
@@ -177,11 +208,11 @@ var LzyScrollView = (function (_super) {
         }
         if (this.isVertical) {
             this.myscrollView.scrollTop = 0;
-            content.width = this.width;
+            this._content.width = this.width;
             //计算一行能放下几个
             var childW = creater.width();
             var childH = creater.height();
-            var linePerCount = (this.width - paddingX) / (childW + spacingX);
+            var linePerCount = (this.width - paddingX + spacingX) / (childW + spacingX);
             linePerCount = Math.floor(linePerCount);
             if (linePerCount == 0) {
                 linePerCount = 1;
@@ -192,7 +223,7 @@ var LzyScrollView = (function (_super) {
             var lineCount = dataCount / linePerCount;
             lineCount = Math.ceil(lineCount);
             var cHeight = paddingY + (childH + spacingY) * lineCount;
-            content.height = cHeight;
+            this._content.height = cHeight;
             //实例化数据
             this.prevIndex = -1;
             this.nextIndex = -1;
@@ -210,12 +241,12 @@ var LzyScrollView = (function (_super) {
             }
         }
         else {
-            content.height = this.height;
+            this._content.height = this.height;
             this.myscrollView.scrollLeft = 0;
             //计算一列能放下几个
             var childW = creater.width();
             var childH = creater.height();
-            var rowPerCount = (this.height - paddingY) / (childH + spacingY);
+            var rowPerCount = (this.height - paddingY + spacingY) / (childH + spacingY);
             rowPerCount = Math.floor(rowPerCount);
             if (rowPerCount == 0) {
                 rowPerCount = 1;
@@ -226,7 +257,7 @@ var LzyScrollView = (function (_super) {
             var rowCount = dataCount / rowPerCount;
             rowCount = Math.ceil(rowCount);
             var cWidth = paddingX + (childW + spacingX) * rowCount;
-            content.width = cWidth;
+            this._content.width = cWidth;
             //实例化数据
             this.prevIndex = -1;
             this.nextIndex = -1;
@@ -243,6 +274,9 @@ var LzyScrollView = (function (_super) {
                 this.ShowGrid(targetX, targetY, i, data);
             }
         }
+        var contentBG = this._content.getChildByName("contentBG");
+        contentBG.width = this._content.width;
+        contentBG.height = this._content.height;
     };
     LzyScrollView.prototype.CalTargetXY = function (i) {
         var _index_x = i % this.linePerCount; //求余，计算当前索引的数据是在一行中的哪个位置(index_x)
@@ -254,6 +288,7 @@ var LzyScrollView = (function (_super) {
         return new Vector2(targetX, targetY);
     };
     LzyScrollView.prototype.HideGrid = function (index) {
+        console.log("HideGrid", index);
         var grid = this._content.getChildByName(String(index));
         if (grid != null) {
             var idx = this.usedItems.indexOf(grid);
@@ -265,6 +300,7 @@ var LzyScrollView = (function (_super) {
         }
     };
     LzyScrollView.prototype.ShowGrid = function (x, y, index, data) {
+        console.log("ShowGrid", index);
         var grid = this.GetGridInPool();
         grid.name = String(index);
         grid.x = x;

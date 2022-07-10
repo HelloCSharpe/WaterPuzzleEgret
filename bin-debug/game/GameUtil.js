@@ -32,6 +32,65 @@ var GameUtil = (function () {
         }
         return datas;
     };
+    GameUtil.createDiamonLayout = function (iconRes, iconNum) {
+        var diamonLayout = new egret.DisplayObjectContainer();
+        diamonLayout.width = 180;
+        diamonLayout.height = 40;
+        // diamonLayout.x=30;
+        // diamonLayout.y=30;
+        var diamonBG = Utility.createBitmapByName("di_png");
+        diamonBG.fillMode = egret.BitmapFillMode.SCALE;
+        diamonBG.width = diamonLayout.width;
+        diamonBG.height = diamonLayout.height;
+        diamonLayout.addChild(diamonBG);
+        var offsetX = 20; //图标距离左边多长
+        var diamonIcon = Utility.createBitmapByName(iconRes);
+        diamonIcon.name = "diamonIcon";
+        diamonIcon.width = 64;
+        diamonIcon.height = 64;
+        diamonIcon.anchorOffsetX = diamonIcon.width / 2;
+        diamonIcon.anchorOffsetY = diamonIcon.height / 2;
+        diamonIcon.x = offsetX;
+        diamonIcon.y = diamonLayout.height / 2;
+        diamonLayout.addChild(diamonIcon);
+        var diamonTxt = new egret.TextField();
+        diamonTxt.name = "diamonTxt";
+        diamonTxt.text = String(iconNum);
+        diamonTxt.fontFamily = "myFirstFont";
+        diamonTxt.textColor = 0xFFFFFF;
+        diamonTxt.textAlign = egret.HorizontalAlign.LEFT; //水平右对齐，相对于 textField 控件自身的 width 与 height
+        diamonTxt.verticalAlign = egret.VerticalAlign.MIDDLE;
+        diamonTxt.width = diamonLayout.width - diamonIcon.width;
+        diamonTxt.height = diamonLayout.height;
+        diamonTxt.x = diamonIcon.width / 2 + offsetX;
+        diamonTxt.y = 0;
+        diamonTxt.size = 36;
+        diamonTxt = diamonTxt;
+        var textWidth = diamonTxt.textWidth;
+        diamonTxt.width = textWidth;
+        diamonLayout.width = diamonIcon.width / 2 + offsetX + diamonTxt.width;
+        diamonLayout.addChild(diamonTxt); //文本长度
+        return diamonLayout;
+    };
+    GameUtil.changeDiamonIconAndNum = function (diamonLayout, iconRes, iconNum) {
+        var diamonIcon = diamonLayout.getChildByName("diamonIcon");
+        if (diamonIcon != null) {
+            diamonIcon.texture = RES.getRes(iconRes);
+        }
+        var diamonTxt = diamonLayout.getChildByName("diamonTxt");
+        if (diamonTxt != null) {
+            diamonTxt.text = String(iconNum);
+            var textWidth = diamonTxt.textWidth;
+            diamonTxt.width = textWidth;
+            var offsetX = 20; //图标距离左边多长
+            diamonLayout.width = diamonIcon.width / 2 + offsetX + diamonTxt.width;
+        }
+    };
+    GameUtil.diamonFly = function (iconRes, x, y) {
+    };
+    GameUtil.ShowNotibox = function (str) {
+        Utility.showNotiBox(str); //TODO:之后改成微信接口
+    };
     return GameUtil;
 }());
 __reflect(GameUtil.prototype, "GameUtil");

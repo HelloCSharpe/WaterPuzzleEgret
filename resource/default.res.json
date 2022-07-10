@@ -5,15 +5,15 @@
 			"name": "preload"
 		},
 		{
-			"keys": "bg_1_png,bg_10_png,bg_11_png,bg_12_png,bg_13_png,bg_14_png,bg_15_png,bg_16_png,bg_17_png,bg_18_png,bg_2_png,bg_3_png,bg_4_png,bg_5_png,bg_6_png,bg_7_png,bg_8_png,bg_9_png,bgskin_1_png",
+			"keys": "bg_1_png,bg_10_png,bg_11_png,bg_12_png,bg_13_png,bg_14_png,bg_15_png,bg_16_png,bg_17_png,bg_18_png,bg_2_png,bg_3_png,bg_4_png,bg_5_png,bg_6_png,bg_7_png,bg_8_png,bg_9_png,bgskin_1_png,bgskin_10_png,bgskin_11_png,bgskin_12_png,bgskin_13_png,bgskin_15_png,bgskin_14_png,bgskin_16_png,bgskin_18_png,bgskin_17_png,bgskin_2_png,bgskin_3_png,bgskin_4_png,bgskin_5_png,bgskin_6_png,bgskin_7_png,bgskin_8_png,bgskin_9_png",
 			"name": "theme"
 		},
 		{
-			"keys": "pz_di_bt_1_1_png,pz_di_bt_1_2_png,pz_di_bt_1_3_png,pz_di_bt_2_1_png,pz_di_bt_2_2_png,pz_di_bt_2_3_png,pz_di_bt_3_1_png,pz_di_bt_3_2_png,pz_di_bt_3_3_png,pz_di_bt_4_1_png,pz_di_bt_4_2_png,pz_di_bt_4_3_png,pz_di_bt_5_1_png,pz_di_bt_5_2_png,pz_di_bt_5_3_png,pz_di_bt_6_1_png,pz_di_bt_6_2_png,pz_di_bt_6_3_png,pz_di_bt_7_1_png,pz_di_bt_7_2_png,pz_di_bt_7_3_png,pz_di_bt_8_1_png,pz_di_bt_8_2_png,pz_di_bt_8_3_png,pz_di_bt_9_1_png,pz_di_bt_9_2_png,pz_di_bt_9_3_png,gy_sp_1_png,gy_sp_2_png,gy_sp_3_png,gy_sp_4_png,gy_sp_5_png,gy_sp_6_png,gy_sp_7_png,gy_sp_8_png,gy_sp_9_png",
+			"keys": "pz_di_bt_1_1_png,pz_di_bt_1_2_png,pz_di_bt_1_3_png,pz_di_bt_2_1_png,pz_di_bt_2_2_png,pz_di_bt_2_3_png,pz_di_bt_3_1_png,pz_di_bt_3_2_png,pz_di_bt_3_3_png,pz_di_bt_4_1_png,pz_di_bt_4_2_png,pz_di_bt_4_3_png,pz_di_bt_5_1_png,pz_di_bt_5_2_png,pz_di_bt_5_3_png,pz_di_bt_6_1_png,pz_di_bt_6_2_png,pz_di_bt_6_3_png,pz_di_bt_7_1_png,pz_di_bt_7_2_png,pz_di_bt_7_3_png,pz_di_bt_8_1_png,pz_di_bt_8_2_png,pz_di_bt_8_3_png,pz_di_bt_9_1_png,pz_di_bt_9_2_png,pz_di_bt_9_3_png,gy_sp_1_png,gy_sp_2_png,gy_sp_3_png,gy_sp_4_png,gy_sp_5_png,gy_sp_6_png,gy_sp_7_png,gy_sp_8_png,gy_sp_9_png,gy_sp_0_png,pz_di_bt_0_1_png,pz_di_bt_0_2_png,pz_di_bt_0_3_png",
 			"name": "tube"
 		},
 		{
-			"keys": "bgm_off_png,bgm_on_png,btn1_png,btn2_png,btn3_png,di_png,di2_png,di3_png,home_png,icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,lock_png,menu_png,moon_png,pause_icon1_png,pause_icon2_png,rank_png,share_png,shop_png,sound_off_png,sound_on_png,start_btn_png,sun_png,tag1_png,tag2_png,tag3_png,tog1_png,tog2_png,tog3_png,tog_icon1_png,tog_icon2_png,tog_icon3_png,water_flow_json,water_flow_png,white_jpg,zt_anniu_png,menu2_png,close_png,mask_png,help_png,zhuanpan_png,zhizhen_png,chest_png,process1_png,process2_png,js_ad_png,empty_png,di4_png,tog4_png,close2_png,shop_dj1_png,shop_dj2_png",
+			"keys": "bgm_off_png,bgm_on_png,btn1_png,btn2_png,btn3_png,di_png,di2_png,di3_png,home_png,icon_png,icon1_png,icon2_png,icon3_png,icon4_png,icon5_png,icon6_png,icon7_png,icon8_png,icon9_png,lock_png,menu_png,moon_png,pause_icon1_png,pause_icon2_png,rank_png,share_png,shop_png,sound_off_png,sound_on_png,start_btn_png,sun_png,tag1_png,tag2_png,tag3_png,tog1_png,tog2_png,tog3_png,tog_icon1_png,tog_icon2_png,tog_icon3_png,water_flow_json,water_flow_png,white_jpg,zt_anniu_png,menu2_png,close_png,mask_png,help_png,zhuanpan_png,zhizhen_png,chest_png,process1_png,process2_png,js_ad_png,empty_png,di4_png,tog4_png,close2_png,shop_dj1_png,shop_dj2_png,check_png,icon10_png,btn4_png,left_png,right_png",
 			"name": "ui"
 		},
 		{
@@ -23,6 +23,14 @@
 		{
 			"keys": "description_json,level_json,purchaser_json,settings_json,theme_json,tube_json,water_json",
 			"name": "cfg"
+		},
+		{
+			"keys": "BGM_wav,btnback_wav,mainBtn_wav,pourWater_wav,ding_mp3,lihua1_mp3,lihua2_mp3,click_mp3,complete_mp3",
+			"name": "music"
+		},
+		{
+			"keys": "lihua_json,lihua_png,lihua2_json,lihua2_png",
+			"name": "gif"
 		}
 	],
 	"resources": [
@@ -672,7 +680,7 @@
 			"url": "assets/UI/di.png",
 			"type": "image",
 			"name": "di_png",
-			"scale9grid": "27,24,10,5"
+			"scale9grid": "20,20,8,0"
 		},
 		{
 			"url": "assets/UI/di2.png",
@@ -913,6 +921,201 @@
 			"url": "assets/themes/bgskin_1.png",
 			"type": "image",
 			"name": "bgskin_1_png"
+		},
+		{
+			"url": "assets/themes/bgskin_10.png",
+			"type": "image",
+			"name": "bgskin_10_png"
+		},
+		{
+			"url": "assets/themes/bgskin_11.png",
+			"type": "image",
+			"name": "bgskin_11_png"
+		},
+		{
+			"url": "assets/themes/bgskin_12.png",
+			"type": "image",
+			"name": "bgskin_12_png"
+		},
+		{
+			"url": "assets/themes/bgskin_13.png",
+			"type": "image",
+			"name": "bgskin_13_png"
+		},
+		{
+			"url": "assets/themes/bgskin_15.png",
+			"type": "image",
+			"name": "bgskin_15_png"
+		},
+		{
+			"url": "assets/themes/bgskin_14.png",
+			"type": "image",
+			"name": "bgskin_14_png"
+		},
+		{
+			"url": "assets/themes/bgskin_16.png",
+			"type": "image",
+			"name": "bgskin_16_png"
+		},
+		{
+			"url": "assets/themes/bgskin_18.png",
+			"type": "image",
+			"name": "bgskin_18_png"
+		},
+		{
+			"url": "assets/themes/bgskin_17.png",
+			"type": "image",
+			"name": "bgskin_17_png"
+		},
+		{
+			"url": "assets/themes/bgskin_2.png",
+			"type": "image",
+			"name": "bgskin_2_png"
+		},
+		{
+			"url": "assets/themes/bgskin_3.png",
+			"type": "image",
+			"name": "bgskin_3_png"
+		},
+		{
+			"url": "assets/themes/bgskin_4.png",
+			"type": "image",
+			"name": "bgskin_4_png"
+		},
+		{
+			"url": "assets/themes/bgskin_5.png",
+			"type": "image",
+			"name": "bgskin_5_png"
+		},
+		{
+			"url": "assets/themes/bgskin_6.png",
+			"type": "image",
+			"name": "bgskin_6_png"
+		},
+		{
+			"url": "assets/themes/bgskin_7.png",
+			"type": "image",
+			"name": "bgskin_7_png"
+		},
+		{
+			"url": "assets/themes/bgskin_8.png",
+			"type": "image",
+			"name": "bgskin_8_png"
+		},
+		{
+			"url": "assets/themes/bgskin_9.png",
+			"type": "image",
+			"name": "bgskin_9_png"
+		},
+		{
+			"url": "assets/UI/check.png",
+			"type": "image",
+			"name": "check_png"
+		},
+		{
+			"url": "assets/tubes/gy_sp_0.png",
+			"type": "image",
+			"name": "gy_sp_0_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_0_1.png",
+			"type": "image",
+			"name": "pz_di_bt_0_1_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_0_2.png",
+			"type": "image",
+			"name": "pz_di_bt_0_2_png"
+		},
+		{
+			"url": "assets/tubes/pz_di_bt_0_3.png",
+			"type": "image",
+			"name": "pz_di_bt_0_3_png"
+		},
+		{
+			"url": "assets/UI/icon10.png",
+			"type": "image",
+			"name": "icon10_png"
+		},
+		{
+			"url": "assets/UI/btn4.png",
+			"type": "image",
+			"name": "btn4_png"
+		},
+		{
+			"url": "assets/UI/left.png",
+			"type": "image",
+			"name": "left_png"
+		},
+		{
+			"url": "assets/UI/right.png",
+			"type": "image",
+			"name": "right_png"
+		},
+		{
+			"url": "assets/music/BGM.wav",
+			"type": "sound",
+			"name": "BGM_wav"
+		},
+		{
+			"url": "assets/music/btnback.wav",
+			"type": "sound",
+			"name": "btnback_wav"
+		},
+		{
+			"url": "assets/music/mainBtn.wav",
+			"type": "sound",
+			"name": "mainBtn_wav"
+		},
+		{
+			"url": "assets/music/pourWater.wav",
+			"type": "sound",
+			"name": "pourWater_wav"
+		},
+		{
+			"url": "assets/music/ding.mp3",
+			"type": "sound",
+			"name": "ding_mp3"
+		},
+		{
+			"url": "assets/GIF/lihua.json",
+			"type": "json",
+			"name": "lihua_json"
+		},
+		{
+			"url": "assets/GIF/lihua.png",
+			"type": "image",
+			"name": "lihua_png"
+		},
+		{
+			"url": "assets/GIF/lihua2.json",
+			"type": "json",
+			"name": "lihua2_json"
+		},
+		{
+			"url": "assets/GIF/lihua2.png",
+			"type": "image",
+			"name": "lihua2_png"
+		},
+		{
+			"url": "assets/music/lihua1.mp3",
+			"type": "sound",
+			"name": "lihua1_mp3"
+		},
+		{
+			"url": "assets/music/lihua2.mp3",
+			"type": "sound",
+			"name": "lihua2_mp3"
+		},
+		{
+			"url": "assets/music/click.mp3",
+			"type": "sound",
+			"name": "click_mp3"
+		},
+		{
+			"url": "assets/music/complete.mp3",
+			"type": "sound",
+			"name": "complete_mp3"
 		}
 	]
 }

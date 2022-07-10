@@ -242,28 +242,30 @@ class PauseScene extends Scene {
         //TODO:
     }
     private bgmOnBtnClick(){
-        let bgmIsOn=false; 
+        let bgmIsOn=false;
         PlayerData.Instance.bgmOn=bgmIsOn;
-            if(bgmIsOn){
-                if(this.getChildByName("bgmOffBtn")!=null){
-                    this.panel.removeChild(this.bgmOffBtn);
-                }
-                if(this.getChildByName("bgmOnBtn")==null){
-                    this.panel.addChild(this.bgmOnBtn);
-                }
-            }else{
-                if(this.getChildByName("bgmOnBtn")!=null){
-                    this.panel.removeChild(this.bgmOnBtn);
-                }
-                if(this.getChildByName("bgmOffBtn")==null){
-                    this.panel.addChild(this.bgmOffBtn);
-                }
+        AudioManager.Instance.BMGVolume=0;
+        if(bgmIsOn){
+            if(this.getChildByName("bgmOffBtn")!=null){
+                this.panel.removeChild(this.bgmOffBtn);
             }
+            if(this.getChildByName("bgmOnBtn")==null){
+                this.panel.addChild(this.bgmOnBtn);
+            }
+        }else{
+            if(this.getChildByName("bgmOnBtn")!=null){
+                this.panel.removeChild(this.bgmOnBtn);
+            }
+            if(this.getChildByName("bgmOffBtn")==null){
+                this.panel.addChild(this.bgmOffBtn);
+            }
+        }
 
     }
     private bgmOffBtnClick(){
         let bgmIsOn=true; 
         PlayerData.Instance.bgmOn=bgmIsOn;
+        AudioManager.Instance.BMGVolume=1;
         if(bgmIsOn){
             if(this.getChildByName("bgmOffBtn")!=null){
                 this.panel.removeChild(this.bgmOffBtn);

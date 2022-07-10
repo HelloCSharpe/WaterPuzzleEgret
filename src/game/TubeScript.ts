@@ -398,7 +398,7 @@ class TubeScript extends egret.DisplayObjectContainer {
             }
             let pulltime:number = this.PullTimes[pullNum - 1];
             targetWater.DealPullIn(pulltime);
-            // AudioManager.Instance.PlaySound("pourWater", pulltime);
+            AudioManager.Instance.PlaySound("pourWater_wav", pulltime*1000);
             //到达指定位置后，角度开始变大，开始倾倒（倒入阶段）
             if (this._pullDir == PullDir.Left)
             {
@@ -658,18 +658,33 @@ class TubeScript extends egret.DisplayObjectContainer {
         }
         return false;
     }
-    private effect:egret.MovieClip;
+    private effectGo:egret.DisplayObjectContainer;
     //播放特效
     public PlayOneWaterFullEffect():void
     {
-        this.effect = Utility.createGif("json","png");
-        this.effect.gotoAndPlay(0,1);
-        this.effect.addEventListener(egret.Event.COMPLETE, function (e:egret.Event):void {
-            this.removeChild(this.effect);
-            delete this.effect;
-            this.effect = null;
+        let w=200;
+        let h=200;
+        this.effectGo=new egret.DisplayObjectContainer();
+        this.effectGo.width=w;
+        this.effectGo.height=h;
+        this.effectGo.anchorOffsetX=w/2;
+        this.effectGo.anchorOffsetY=h;
+        this.effectGo.x=this.tubeWidth/2;
+        this.effectGo.y=100;
+        this.effectGo.scaleX=2;
+        this.effectGo.scaleY=2;
+        let effect = Utility.createGif("lihua_json","lihua_png");
+        effect.frameRate=12;
+        effect.gotoAndPlay(0,1);
+        effect.width=w;
+        effect.height=h;
+        this.effectGo.addChild(effect);
+        this.addChild(this.effectGo);
+        effect.addEventListener(egret.Event.COMPLETE, function (e:egret.Event):void {
+            this.removeChild(this.effectGo);
+            delete this.effectGo;
+            this.effectGo = null;
         }, this);
-        this.addChild(this.effect);
 
     }
 

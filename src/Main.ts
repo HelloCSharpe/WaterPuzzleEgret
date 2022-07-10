@@ -52,8 +52,10 @@ class Main extends eui.UILayer {
     private async runGame() {
         SceneManager.ScreenWidth = this.stage.stageWidth;
         SceneManager.ScreenHeight = this.stage.stageHeight;
+        this.checkUserClick();
         await this.loadResource();
         await DataConfig.Instance.Init();
+        this.CheckMusicCanPlay();
         // this.createGameScene();
         this.Init();
         // const result = await RES.getResAsync("description_json")
@@ -61,12 +63,28 @@ class Main extends eui.UILayer {
         await platform.login();
         const userInfo = await platform.getUserInfo();
         console.log(userInfo);
+    }
+    private isUserTouch = false;
+    private isResLoaded = false;
+    private checkUserClick(){
+        let touchFunc=()=>{
+            this.isUserTouch=true;
+            this.CheckMusicCanPlay();
+            this.removeEventListener(egret.TouchEvent.TOUCH_TAP,touchFunc,this);
+        };
+        touchFunc = touchFunc.bind(this);
+        this.addEventListener(egret.TouchEvent.TOUCH_TAP,touchFunc,this);
+    }
 
-
+    private CheckMusicCanPlay(){
+        if(this.isUserTouch && this.isResLoaded){
+            AudioManager.Instance.PlayBGM("BGM_wav");
+        }
     }
 
     private async loadResource() {
         try {
+            this.isResLoaded=false;
             await RES.loadConfig("resource/default.res.json", "resource/");
             await RES.loadGroup("loading", 1);
             const loadingView = new LoadingUI();
@@ -76,7 +94,10 @@ class Main extends eui.UILayer {
             await RES.loadGroup("theme", 0, loadingView);
             await RES.loadGroup("tube", 0, loadingView);
             await RES.loadGroup("ui", 0, loadingView);
+            await RES.loadGroup("gif", 0, loadingView);
+            await RES.loadGroup("music", 0, loadingView);
             this.stage.removeChild(loadingView);
+            this.isResLoaded=true;
         }
         catch (e) {
             console.error(e);
@@ -93,7 +114,9 @@ class Main extends eui.UILayer {
         SceneManager.Instance.RegisterScene("PauseScene", new PauseScene());
         SceneManager.Instance.RegisterScene("ResultScene", new ResultScene());
         SceneManager.Instance.RegisterScene("ShopScene", new ShopScene());
-        SceneManager.Instance.changeScene("ShopScene",0);
+        SceneManager.Instance.RegisterScene("SelectLevelScene", new SelectLevelScene());
+        SceneManager.Instance.RegisterScene("RankScene", new RankScene());
+        SceneManager.Instance.changeScene("StartScene");
         this.Test();
     }
 
@@ -149,6 +172,10 @@ class Main extends eui.UILayer {
     private Update(): void {
         if (SceneManager.Instance.GetCurScene() != null) {
             SceneManager.Instance.GetCurScene().Update();
+        }
+
+        if (SceneManager.Instance.GetPopScene() != null) {
+            SceneManager.Instance.GetPopScene().Update();
         }
     }
 

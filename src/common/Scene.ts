@@ -53,6 +53,7 @@ class SceneManager {
 
     private sceneDic;
     public RegisterScene(name: string, s: Scene) {
+        s.name=name;
         this.sceneDic[name] = s;
     }
 
@@ -65,6 +66,9 @@ class SceneManager {
 
     public GetCurScene(): Scene {
         return this.currentScene;
+    }
+    public GetPopScene():Scene{
+        return this.pop_scene;
     }
     //切换场景
     public changeScene(name: string,...args:any[]) {

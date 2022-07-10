@@ -63,10 +63,14 @@ var SceneManager = (function () {
         configurable: true
     });
     SceneManager.prototype.RegisterScene = function (name, s) {
+        s.name = name;
         this.sceneDic[name] = s;
     };
     SceneManager.prototype.GetCurScene = function () {
         return this.currentScene;
+    };
+    SceneManager.prototype.GetPopScene = function () {
+        return this.pop_scene;
     };
     //切换场景
     SceneManager.prototype.changeScene = function (name) {

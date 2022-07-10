@@ -43,10 +43,12 @@ class EventCenter{
         let len = EventCenter.entityList.length;
         for(let i=len-1;i>=0;i--){
             let entity:EventEntity=EventCenter.entityList[i];
-            if(entity.eventName==eventName){
-                let func:Function=entity.func;
-                func.bind(entity.thisObj)(...args);
-            }
+                if(entity!=null){
+                    if(entity.eventName==eventName){
+                        let func:Function=entity.func;
+                        func.bind(entity.thisObj)(...args);
+                    }
+                }
         }
     }
 }

@@ -230,6 +230,7 @@ var ResultScene = (function (_super) {
     };
     ResultScene.prototype.PlayTween = function () {
         var _this = this;
+        this.PlayLihua();
         this.isClickAds = false;
         this.isPlayAnim = true;
         // this.DoProcess();
@@ -246,6 +247,26 @@ var ResultScene = (function (_super) {
         this.SetScale(this.nextBtn, _wait += offset, time).call(function () {
             _this.isPlayAnim = false;
         }, this);
+    };
+    ResultScene.prototype.PlayLihua = function () {
+        if (this.lihua1 == null) {
+            this.lihua1 = this.createGif("lihua2_json", "lihua2_png");
+            this.lihua1.x = 0;
+            this.lihua1.y = 0;
+            this.lihua1.frameRate = 24;
+            this.addChild(this.lihua1);
+        }
+        this.lihua1.gotoAndPlay(0, 1);
+        if (this.lihua2 == null) {
+            this.lihua2 = this.createGif("lihua2_json", "lihua2_png");
+            this.lihua2.x = SceneManager.ScreenWidth;
+            this.lihua2.y = 0;
+            this.lihua2.scaleX = -1;
+            this.lihua2.frameRate = 24;
+            this.addChild(this.lihua2);
+        }
+        this.lihua2.gotoAndPlay(0, 1);
+        AudioManager.Instance.PlaySound("lihua2_mp3", 1600);
     };
     ResultScene.prototype.Update = function () {
         this.DoZhuanPanRotate();
@@ -268,7 +289,6 @@ var ResultScene = (function (_super) {
         this.nextBtn.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.nextBtnClick, this);
     };
     ResultScene.prototype.bgClick = function () {
-        this.nextBtnClick();
     };
     ResultScene.prototype.adsBtnClick = function () {
         if (this.isPlayAnim) {
@@ -283,8 +303,8 @@ var ResultScene = (function (_super) {
             return;
         }
         if (this.newProcess >= 100) {
-            var level = PlayerData.Instance.GetCurLevel(this.gameType);
-            SceneManager.Instance.pushScene("DrawScene", this.gameType, level);
+            // let level = PlayerData.Instance.GetCurLevel(this.gameType);
+            // SceneManager.Instance.pushScene("DrawScene",this.gameType,level);
         }
         else {
             SceneManager.Instance.popScene();

@@ -22,7 +22,6 @@ var GameType;
 (function (GameType) {
     GameType[GameType["Normal"] = 0] = "Normal";
     GameType[GameType["Difficult"] = 1] = "Difficult";
-    GameType[GameType["Purgatory"] = 2] = "Purgatory";
 })(GameType || (GameType = {}));
 var GameScene = (function (_super) {
     __extends(GameScene, _super);
@@ -63,9 +62,6 @@ var GameScene = (function (_super) {
             else if (args[0] == 1) {
                 this.gameType = GameType.Difficult;
             }
-            else if (args[0] == 2) {
-                this.gameType = GameType.Purgatory;
-            }
         }
         else {
             this.gameType = GameType.Normal;
@@ -89,7 +85,7 @@ var GameScene = (function (_super) {
             this.addChild(this.bg);
         }
         else {
-            var texture = RES.getRes(name);
+            var texture = RES.getRes(resName);
             this.bg.texture = texture;
         }
     };
@@ -99,50 +95,17 @@ var GameScene = (function (_super) {
             diamonResName = "icon1_png";
         }
         else if (this.gameType == GameType.Difficult) {
-            diamonResName = "icon1_png";
+            diamonResName = "icon10_png";
         }
-        else if (this.gameType == GameType.Purgatory) {
-            diamonResName = "icon1_png";
-        }
+        var num = PlayerData.Instance.GetDiamons(this.gameType);
         if (this.diamonLayout == null) {
-            this.diamonLayout = new egret.DisplayObjectContainer();
-            this.diamonLayout.width = 210;
-            this.diamonLayout.height = 60;
+            this.diamonLayout = GameUtil.createDiamonLayout(diamonResName, num);
             this.diamonLayout.x = 30;
             this.diamonLayout.y = 30;
             this.addChild(this.diamonLayout);
-            var diamonBG = this.createBitmapByName("di_png");
-            diamonBG.fillMode = egret.BitmapFillMode.SCALE;
-            diamonBG.width = this.diamonLayout.width;
-            diamonBG.height = this.diamonLayout.height;
-            this.diamonLayout.addChild(diamonBG);
-            var diamonIcon = this.createBitmapByName(diamonResName);
-            diamonIcon.name = "diamonIcon";
-            diamonIcon.width = 90;
-            diamonIcon.height = 90;
-            diamonIcon.anchorOffsetX = diamonIcon.width / 2;
-            diamonIcon.anchorOffsetY = diamonIcon.height / 2;
-            diamonIcon.x = diamonIcon.width / 2;
-            diamonIcon.y = this.diamonLayout.height / 2;
-            this.diamonLayout.addChild(diamonIcon);
-            var diamonTxt = new egret.TextField();
-            diamonTxt.text = String(PlayerData.Instance.diamon);
-            diamonTxt.fontFamily = "myFirstFont";
-            diamonTxt.textColor = 0xFFFFFF;
-            diamonTxt.textAlign = egret.HorizontalAlign.LEFT; //水平右对齐，相对于 textField 控件自身的 width 与 height
-            diamonTxt.verticalAlign = egret.VerticalAlign.MIDDLE;
-            diamonTxt.width = this.diamonLayout.width - diamonIcon.width;
-            diamonTxt.height = this.diamonLayout.height;
-            diamonTxt.x = diamonIcon.width;
-            diamonTxt.y = 0;
-            diamonTxt.size = 36;
-            this.diamonTxt = diamonTxt;
-            this.diamonLayout.addChild(diamonTxt);
         }
         else {
-            this.diamonTxt.text = String(PlayerData.Instance.diamon);
-            var diamonIcon = this.diamonLayout.getChildByName("diamonIcon");
-            diamonIcon.texture = RES.getRes(diamonResName);
+            GameUtil.changeDiamonIconAndNum(this.diamonLayout, diamonResName, num);
         }
     };
     GameScene.prototype.InitLevelTxt = function () {
@@ -336,6 +299,8 @@ var GameScene = (function (_super) {
         var levelDatas = GameUtil.ParseLevelCfg(levelCfg.Config);
         this.InitTubes(levelDatas);
         this.SetTubesPostion();
+        var s = "LEVEL " + String(this.levelId);
+        this.levelTxt.text = s;
     };
     GameScene.prototype.ClearTubes = function () {
         this.tubeContainer.removeChildren();
@@ -406,7 +371,7 @@ var GameScene = (function (_super) {
         if (tube.CheckOneWaterFull()) {
             // tube.Shack(0.7f, 4);
             tube.PlayOneWaterFullEffect(); //礼花特效
-            // AudioManager.Instance.PlaySound("Complete");
+            AudioManager.Instance.PlaySound("complete_mp3");
         }
         if (this.CheckLevelComplete()) {
             this.LevelComplete();
@@ -422,9 +387,11 @@ var GameScene = (function (_super) {
         return true;
     };
     GameScene.prototype.LevelComplete = function () {
+        var _this = this;
         this.SetMask(true);
-        egret.setInterval(function () {
-            SceneManager.Instance.changeScene("ResultScene");
+        this.intervalInt = egret.setInterval(function () {
+            SceneManager.Instance.pushScene("ResultScene", _this.gameType, _this.levelId);
+            egret.clearInterval(_this.intervalInt);
         }, this, 1000);
     };
     GameScene.prototype.OnTubeClick = function (index) {
@@ -528,6 +495,9 @@ var GameScene = (function (_super) {
             Utility.showNotiBox("看广告给5个回退道具");
             return;
         }
+        if (this.operateStack.length == 0) {
+            return;
+        }
         backNum -= 1;
         PlayerData.Instance.backNum = backNum;
         this.backTxt.text = String(backNum);
@@ -566,58 +536,10 @@ var GameScene = (function (_super) {
         }
         this.gameType = args[0];
         this.levelId = args[1];
+        this.InitDiamons();
         this.LoadLevel();
     };
     return GameScene;
 }(Scene));
 __reflect(GameScene.prototype, "GameScene");
-// class RoleGrid implements IScrollViewGrid<RoleData>{
-//     _width: number;
-//     _height: number;
-//     _s: GameScene;
-//     _data: RoleData;
-//     public constructor(w: number, h: number, s: GameScene) {
-//         this._width = w;
-//         this._height = h;
-//         this._s = s;
-//     }
-//     width(): number {
-//         return this._width;
-//     }
-//     height(): number {
-//         return this._height;
-//     }
-//     InitDataUI(container: egret.DisplayObjectContainer, data: RoleData): void {
-//         const bgName = data.isSelect ? "grid2_png" : "grid1_png";
-//         let bg = Utility.createBitmapByName(bgName);
-//         bg.width = this._width;
-//         bg.height = this._height;
-//         bg.touchEnabled = true;
-//         bg.addEventListener(egret.TouchEvent.TOUCH_TAP, function (evt: egret.TouchEvent): void {
-//             this.OnGridClick(data.ID);
-//         }, this._s);
-//         container.addChild(bg);
-//         let roleImg = Utility.createBitmapByName(data.roleCfg.idle);
-//         roleImg.width = data.roleCfg.width;
-//         roleImg.height = data.roleCfg.height;
-//         roleImg.anchorOffsetX = roleImg.width / 2;
-//         roleImg.anchorOffsetY = roleImg.height / 2;
-//         roleImg.x = bg.width / 2;
-//         roleImg.y = bg.height / 2;
-//         container.addChild(roleImg);
-//     }
-// }
-// class RoleData {
-//     public roleCfg;
-//     public locked: boolean;
-//     public isSelect: boolean;
-//     public get ID(): number {
-//         return this.roleCfg.id;
-//     }
-//     public constructor(cfg, lock: boolean, select: boolean) {
-//         this.roleCfg = cfg;
-//         this.locked = lock;
-//         this.isSelect = select;
-//     }
-// } 
 //# sourceMappingURL=GameScene.js.map

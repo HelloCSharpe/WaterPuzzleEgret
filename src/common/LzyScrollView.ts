@@ -51,8 +51,42 @@ class LzyScrollView extends egret.DisplayObjectContainer {
         background.texture = texture;
         background.width = this.width;
         background.height = this.height;
+        background.touchEnabled=true;
+        // background.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onBeginTouch, this);
+        // background.addEventListener(egret.TouchEvent.TOUCH_END, this.onEndTouch, this);
+
         this.addChild(background);
     }
+
+
+	// private _touchStatus: boolean = false;              //当前触摸状态，按下时，值为true
+	// private _distance: egret.Point = new egret.Point() // 定义一个空的定位
+
+    // private onBeginTouch(evt: egret.TouchEvent){
+	// 	this._touchStatus = true;
+	// 	this._distance.x = evt.stageX;
+	// 	this._distance.y = evt.stageY;
+	// 	this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Draging, this);
+    // }
+
+    // private onEndTouch(evt: egret.TouchEvent){
+	// 	this._touchStatus = false;
+	// 	this.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Draging, this);
+    // }
+
+    // private Draging(evt: egret.TouchEvent){
+	// 	if (this._touchStatus) {
+	// 		let x = evt.stageX - this._distance.x;
+	// 		let y = evt.stageY - this._distance.y;
+    //         if(this.isVertical){
+    //             this.myscrollView.scrollTop-=y;
+    //         }else{
+    //             this.myscrollView.scrollLeft-=x;
+    //         }
+    //         this._distance.x = evt.stageX;
+    //         this._distance.y = evt.stageY;
+	// 	}
+    // }
 
 
     private onAddToStage() {
@@ -72,6 +106,7 @@ class LzyScrollView extends egret.DisplayObjectContainer {
         this.addChild(this.myscrollView);
         this.myscrollView.addEventListener(egret.Event.COMPLETE, this.onComplete, this);
         this.myscrollView.addEventListener(egret.Event.CHANGE, this.onChange, this);
+
     }
 
     private onComplete(event: egret.Event) {
@@ -88,7 +123,7 @@ class LzyScrollView extends egret.DisplayObjectContainer {
         // console.log("on Change",event.currentTarget.scrollTop,event.currentTarget.scrollLeft);
         let scrollValue=this.isVertical?event.currentTarget.scrollTop:event.currentTarget.scrollLeft;
         let curRangeMin=0+scrollValue;
-        let curRangeMax=this.height;
+        let curRangeMax=this.height+scrollValue;
 
         //先做加载
         if(this.prevIndex>0){
@@ -112,13 +147,13 @@ class LzyScrollView extends egret.DisplayObjectContainer {
                 let _nextIndex=this.nextIndex+this.linePerCount;//加载完的前一个Index
                 let childW=this.creater.width();
                 let childH=this.creater.height();
-                for(let i=this.prevIndex;i<_nextIndex;i++){
+                for(let i=this.nextIndex;i<_nextIndex;i++){
                     if(i>=dataLen){
-                        break;
+                        continue;
                     }
                     let data=this.datas[i];
                     if(data==null){
-                        break;
+                        continue;
                     }
                     let pos=this.CalTargetXY(i);
                     this.ShowGrid(pos.x,pos.y,i,data);
@@ -148,8 +183,7 @@ class LzyScrollView extends egret.DisplayObjectContainer {
                 this.HideGrid(i);
             }
             this.prevIndex=_minIndex-1;
-            let gridOffset=this.isVertical?this.creater.height()+this.spacingY:this.creater.width()+this.spacingX;
-            this.prevValue=curMinValue+gridOffset;
+            this.prevValue=curMinValue;
         }
         if(curMaxValue>curRangeMax){
             let _maxIndex=curMaxIndex-this.linePerCount;
@@ -157,8 +191,7 @@ class LzyScrollView extends egret.DisplayObjectContainer {
                 this.HideGrid(i);
             }
             this.nextIndex=_maxIndex+1;
-            let gridOffset=this.isVertical?this.creater.height()+this.spacingY:this.creater.width()+this.spacingX;
-            this.nextValue=curMaxValue-gridOffset;
+            this.nextValue=curMaxValue;
         }
 
     }
@@ -168,17 +201,22 @@ class LzyScrollView extends egret.DisplayObjectContainer {
             console.error("creater is null");
             return;
         }
-        if(creater!=null&&creater!=this.creater){
+        if(this.creater!=null&&creater!=this.creater){
             console.error("creater is not equals");
             return;
         }
         this.creater=creater;
         this.datas=datas;
-        let content = this._content;
-        if(content==null){
-            content = new egret.DisplayObjectContainer();
-            this.myscrollView.setContent(content);
-            this._content = content;
+        this.spacingX=spacingX;
+        this.spacingY=spacingY;
+        this.paddingX=paddingX;
+        this.paddingY=paddingY;
+        if(this._content==null){
+            this._content = new egret.DisplayObjectContainer();
+            let contentBG=Utility.createBitmapByName("empty_png",0,0);
+            contentBG.name="contentBG";
+            this._content.addChild(contentBG);
+            this.myscrollView.setContent(this._content);
         }
         //回收所有显示的item
         let len=this.usedItems.length;
@@ -193,11 +231,11 @@ class LzyScrollView extends egret.DisplayObjectContainer {
         if (this.isVertical) {
             this.myscrollView.scrollTop=0;
             
-            content.width = this.width;
+            this._content.width = this.width;
             //计算一行能放下几个
             const childW: number = creater.width();
             const childH: number = creater.height();
-            let linePerCount: number = (this.width - paddingX) / (childW + spacingX);
+            let linePerCount: number = (this.width - paddingX+spacingX) / (childW + spacingX);
             linePerCount = Math.floor(linePerCount);
             if (linePerCount == 0) {
                 linePerCount = 1;
@@ -208,7 +246,7 @@ class LzyScrollView extends egret.DisplayObjectContainer {
             let lineCount = dataCount / linePerCount;
             lineCount = Math.ceil(lineCount);
             const cHeight: number = paddingY + (childH + spacingY) * lineCount;
-            content.height = cHeight;
+            this._content.height = cHeight;
             //实例化数据
             this.prevIndex=-1;
             this.nextIndex=-1;
@@ -225,12 +263,12 @@ class LzyScrollView extends egret.DisplayObjectContainer {
                 this.ShowGrid(targetX,targetY,i,data);
             }
         } else {
-            content.height = this.height;
+            this._content.height = this.height;
             this.myscrollView.scrollLeft=0;
             //计算一列能放下几个
             const childW: number = creater.width();
             const childH: number = creater.height();
-            let rowPerCount: number = (this.height - paddingY) / (childH + spacingY);
+            let rowPerCount: number = (this.height - paddingY + spacingY) / (childH + spacingY);
             rowPerCount = Math.floor(rowPerCount);
             if (rowPerCount == 0) {
                 rowPerCount = 1;
@@ -241,7 +279,7 @@ class LzyScrollView extends egret.DisplayObjectContainer {
             let rowCount = dataCount / rowPerCount;
             rowCount = Math.ceil(rowCount);
             const cWidth: number = paddingX + (childW + spacingX) * rowCount;
-            content.width = cWidth;
+            this._content.width = cWidth;
             //实例化数据
             this.prevIndex=-1;
             this.nextIndex=-1;
@@ -258,6 +296,9 @@ class LzyScrollView extends egret.DisplayObjectContainer {
                 this.ShowGrid(targetX,targetY,i,data);
             }
         }
+        let contentBG = this._content.getChildByName("contentBG");
+        contentBG.width=this._content.width;
+        contentBG.height=this._content.height;
 
     }
 
@@ -272,6 +313,7 @@ class LzyScrollView extends egret.DisplayObjectContainer {
     }
 
     private HideGrid(index:number){
+        console.log("HideGrid",index);
         let grid:egret.DisplayObjectContainer = this._content.getChildByName(String(index)) as egret.DisplayObjectContainer;
         if(grid!=null){
             let idx=this.usedItems.indexOf(grid);
@@ -284,6 +326,7 @@ class LzyScrollView extends egret.DisplayObjectContainer {
     }
 
     private ShowGrid(x:number,y:number,index:number,data:any){
+        console.log("ShowGrid",index);
         let grid = this.GetGridInPool();
         grid.name=String(index);
         grid.x = x;
