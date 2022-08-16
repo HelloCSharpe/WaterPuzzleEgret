@@ -303,7 +303,22 @@ class ShopScene extends Scene {
             this.scrollView2.SetContent<TubeThemeData>(sp,sp,this.datas3,this.tubeGrid);
         }
         this.SetScrollView(index);
+    }
 
+    private RefreshScrollView(){
+        this.InitDiamons();
+        this.InitDatas();
+        let index = this.togIndex;
+        let sp=this.TubeThemeSpacing;
+        //刷新数据
+        if(index==0){
+            this.scrollView.SetContent<DiamonData>(0,10,this.datas1,this.diamonGrid,0,0);
+        }else if(index==1){
+            this.scrollView2.SetContent<TubeThemeData>(sp,sp,this.datas2,this.tubeGrid);
+        }else if(index==2){
+            this.scrollView2.SetContent<TubeThemeData>(sp,sp,this.datas3,this.tubeGrid);
+        }
+        this.SetScrollView(index);
     }
 
     public addDiamonEventListener(btn:egret.DisplayObjectContainer){
@@ -351,27 +366,63 @@ class ShopScene extends Scene {
     }
 
     private DiamonClick(btn: egret.DisplayObjectContainer){
-        console.log(btn.parent.name);
-        let index:number=Number(btn.name);
-        let data=this.datas1[index];
-        let type=data.config.Type;//根据具体类型处理
-        if(type==0){//看广告
-            //TODO:需要去调用微信API
-        }else if(type==1){//去广告购买
-            //云开发购买
+        console.log("DiamonClick"+btn.parent.name);
+        // let index:number=Number(btn.parent.name);
+        // let data=this.datas1[index];
+        // let type=data.config.Type;//根据具体类型处理
+        // if(type==0){//看广告
+        //     //TODO:需要去调用微信API
 
-        }else if(type==2){//购买
-        }
+        // }else if(type==1){//去广告购买
+        //     //云开发购买
+
+        // }else if(type==2){//购买
+
+        // }
 
     }
 
     private TubeThemeClick(btn: egret.DisplayObjectContainer){
-        console.log(btn.name);
+        console.log("TubeThemeClick"+btn.name);
+        let index:number=Number(btn.name);
         if(this.togIndex==1){//tube
-            let index:number=Number(btn.name);
-
+            let data:TubeThemeData =  this.datas2[index];
+            if(PlayerData.Instance.isTubeContains(data.configId)){
+                PlayerData.Instance.curTubeID = data.configId;
+                EventCenter.Notify(EventID.TubeChanged);
+                PlayerData.Instance.Save();
+                this.RefreshScrollView();
+            }else{
+                let cost:number = data.config.Cost;
+                let costType:number=data.config.CostType;
+                let isBuy:boolean = PlayerData.Instance.BuyTube(data.configId,costType,cost);
+                if(isBuy){
+                    Utility.showNotiBox("购买成功");
+                    EventCenter.Notify(EventID.TubeChanged);
+                    this.RefreshScrollView();
+                }else{
+                    Utility.showNotiBox("购买条件不满足");
+                }
+            }
         }else{//theme
-
+            let data:TubeThemeData =  this.datas3[index];
+            if(PlayerData.Instance.isThemeContains(data.configId)){
+                PlayerData.Instance.curThemeID = data.configId;
+                EventCenter.Notify(EventID.ThemeChanged);
+                PlayerData.Instance.Save();
+                this.RefreshScrollView();
+            }else{
+                let cost:number = data.config.Cost;
+                let costType:number=data.config.CostType;
+                let isBuy:boolean = PlayerData.Instance.BuyTheme(data.configId,costType,cost);
+                if(isBuy){
+                    Utility.showNotiBox("购买成功");
+                    EventCenter.Notify(EventID.ThemeChanged);
+                    this.RefreshScrollView();
+                }else{
+                    Utility.showNotiBox("购买失败，条件不满足");
+                }
+            }
         }
     }
 
@@ -517,7 +568,7 @@ class TubeThemeGrid implements IScrollViewGrid<TubeThemeData> {
             container.addChild(itemBg);
             this.scene.addTubeClickListener(container);
         }
-        let isTube=data.isTube;
+        let isTube = data.isTube;
         let iconRes:string=data.isTube?data.config.eftSprite:data.config.ShowSprite;
         if(container.getChildByName("icon")==null){
             let w=this._width*0.6;
@@ -577,7 +628,7 @@ class TubeThemeGrid implements IScrollViewGrid<TubeThemeData> {
         }
         //消耗
         let CostType:number=data.config.CostType;
-        let iconResName:string=CostType==1?"icon1_png":"icon10_png";
+        let iconResName:string=CostType==2?"icon1_png":"icon10_png";
         let costStr=String(data.config.Cost);
         if(container.getChildByName("cost")==null){
             let w=this._width*0.5;

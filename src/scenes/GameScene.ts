@@ -401,7 +401,6 @@ class GameScene extends Scene {
     }
 
     private OnTubeClick(index:number):void{
-        console.log("index",index);
         let tube:TubeScript=this.tubes[index];
         if(this.curSelectTube==null){
             if(tube.canSelect()){
@@ -470,6 +469,7 @@ class GameScene extends Scene {
         this.addBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.addTubeClick, this);
 
         EventCenter.AddListener(EventID.RefreshLevel,this.OnRefreshLevel,this);
+        EventCenter.AddListener(EventID.ThemeChanged,this.OnThemeChanged,this);
     }
     public removeListener() {
         this.diamonLayout.touchEnabled=false;
@@ -486,6 +486,7 @@ class GameScene extends Scene {
         this.addBtn.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.addTubeClick, this);
 
         EventCenter.RemoveListener(EventID.RefreshLevel,this.OnRefreshLevel,this);
+        EventCenter.RemoveListener(EventID.ThemeChanged,this.OnThemeChanged,this);
     }
 
     private diamonClick():void{
@@ -507,11 +508,16 @@ class GameScene extends Scene {
     private restartClick():void{
         this.LoadLevel();
     }
-    private backClick():void{
+    private async backClick():Promise<void>{
         let backNum=PlayerData.Instance.backNum;
         if(backNum<=0){
-            //TODO:看广告+5个
-            Utility.showNotiBox("看广告给5个回退道具");
+            let result = await WXAdManager.Instance.ShowRewardAd();
+            if (result==true){
+                PlayerData.Instance.backNum=5;
+                PlayerData.Instance.Save();
+            }else{
+                Utility.showNotiBox("看广告可增加5个回退道具");
+            }
             return;
         }
         if(this.operateStack.length==0){
@@ -519,6 +525,7 @@ class GameScene extends Scene {
         }
         backNum-=1;
         PlayerData.Instance.backNum=backNum;
+        PlayerData.Instance.Save();
         this.backTxt.text=String(backNum);
         //执行具体内容
         let operate = this.operateStack.pop();
@@ -528,11 +535,16 @@ class GameScene extends Scene {
         this.tubes[targetIndex].RemoveWaterByBackOperate(operate.clr, operate.num);
         
     }
-    private addTubeClick():void{
+    private async addTubeClick():Promise<void>{
         let newTubeNum=PlayerData.Instance.newTubeNum;
         if(newTubeNum<=0){
-            //TODO:看广告+1个
-            Utility.showNotiBox("看广告给1个试管道具");
+            let result = await WXAdManager.Instance.ShowRewardAd();
+            if (result==true){
+                PlayerData.Instance.newTubeNum=1;
+                PlayerData.Instance.Save();
+            }else{
+                Utility.showNotiBox("看广告可增加1个试管道具");
+            }
             return;
         }
         if(this.hasAddNewTube){
@@ -541,9 +553,9 @@ class GameScene extends Scene {
         this.hasAddNewTube=true;
         newTubeNum-=1;
         PlayerData.Instance.newTubeNum=newTubeNum;
+        PlayerData.Instance.Save();
         this.addTxt.text=String(newTubeNum);
         //执行具体内容
-        let newTube:TubeScript=new TubeScript();
         let waterDatas:WaterData[]=[];
         let i=this.tubes.length;
         this.InitTube(waterDatas,i);
@@ -555,5 +567,8 @@ class GameScene extends Scene {
         this.levelId=args[1];
         this.InitDiamons();
         this.LoadLevel();
+    }
+    private OnThemeChanged(...args:any[]){
+        this.InitBG();
     }
 }

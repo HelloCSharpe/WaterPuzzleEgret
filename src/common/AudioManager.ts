@@ -44,14 +44,12 @@ class AudioManager{
             if(duration>0){
                 let point=this.PopPoint();//用于处理duration
                 egret.Tween.get(point).to({"x":1},duration).call(()=>{
-                    console.log("sound time Over");
                     channel.stop();
                     egret.Tween.removeTweens(point);
                     this.PushPoint(point);
                 },this);
             }
             channel.addEventListener(egret.Event.SOUND_COMPLETE,function(){
-                console.log("sound Complete");
             },this);
         }
     }

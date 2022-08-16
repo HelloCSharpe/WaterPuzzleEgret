@@ -611,9 +611,11 @@ class TubeScript extends egret.DisplayObjectContainer {
         let tubeData = DataConfig.Instance.GetDataByIndex("tube",tubeId);
         let themeData = DataConfig.Instance.GetDataByIndex("theme",themeId);
         if(tubeData==null||themeData==null){return;}
+        this.isSun=themeData.tubeFgIndex==0;
         if(themeData.tubeFgIndex==0){
             let texture: egret.Texture = RES.getRes(tubeData.fgSprite);
             this.tubeFG.texture=texture;
+
         }else{
             let texture: egret.Texture = RES.getRes(tubeData.fgSprite2);
             this.tubeFG.texture=texture;
@@ -773,19 +775,22 @@ class TubeScript extends egret.DisplayObjectContainer {
         this.waterMask=null;
         this.waterFlow=null;
         this.tubeFG=null;
-
     }
 
     private addListener():void{
         EventCenter.AddListener(EventID.ThemeBtnClicked,this.onThemeBtnClicked,this);
+        EventCenter.AddListener(EventID.TubeChanged,this.onTubeChanged,this);
     }
 
     private removeListener():void{
         EventCenter.RemoveListener(EventID.ThemeBtnClicked,this.onThemeBtnClicked,this);
+        EventCenter.RemoveListener(EventID.TubeChanged,this.onTubeChanged,this);
     }
 
+    private isSun:boolean=true;
     private onThemeBtnClicked(...args:any[]):void{
         let isSun=args[0];
+        this.isSun = isSun;
         let tubeId = PlayerData.Instance.curTubeID;
         let tubeData = DataConfig.Instance.GetDataByIndex("tube",tubeId);
         if(tubeData==null){return;}
@@ -796,6 +801,22 @@ class TubeScript extends egret.DisplayObjectContainer {
             let texture: egret.Texture = RES.getRes(tubeData.fgSprite2);
             this.tubeFG.texture=texture;
         }
+    }
+
+    private onTubeChanged(...args:any[]):void{
+        let tubeId = PlayerData.Instance.curTubeID;
+        let tubeData = DataConfig.Instance.GetDataByIndex("tube",tubeId);
+        if(tubeData==null){return;}
+        if(this.isSun){
+            let texture: egret.Texture = RES.getRes(tubeData.fgSprite);
+            this.tubeFG.texture=texture;
+        }else{
+            let texture: egret.Texture = RES.getRes(tubeData.fgSprite2);
+            this.tubeFG.texture=texture;
+        }
+        let texture: egret.Texture = RES.getRes(tubeData.bgSprite);
+        this.waterMask.texture=texture;
+        this.tubeMouthWidth = tubeData.width;
     }
 
 

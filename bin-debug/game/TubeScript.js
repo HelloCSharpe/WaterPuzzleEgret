@@ -32,6 +32,7 @@ var TubeScript = (function (_super) {
         _this.PullTimes = [0.72, 1.26, 1.92, 2.52]; //倾倒时间
         _this.PullEndTime = 0.4; //倾倒完成后到初始位置时间
         _this.selectHeight = 69;
+        _this.isSun = true;
         _this.InitParams();
         _this.InitUI();
         _this.RefreshTubeType();
@@ -577,6 +578,7 @@ var TubeScript = (function (_super) {
         if (tubeData == null || themeData == null) {
             return;
         }
+        this.isSun = themeData.tubeFgIndex == 0;
         if (themeData.tubeFgIndex == 0) {
             var texture_1 = RES.getRes(tubeData.fgSprite);
             this.tubeFG.texture = texture_1;
@@ -714,9 +716,11 @@ var TubeScript = (function (_super) {
     };
     TubeScript.prototype.addListener = function () {
         EventCenter.AddListener(EventID.ThemeBtnClicked, this.onThemeBtnClicked, this);
+        EventCenter.AddListener(EventID.TubeChanged, this.onTubeChanged, this);
     };
     TubeScript.prototype.removeListener = function () {
         EventCenter.RemoveListener(EventID.ThemeBtnClicked, this.onThemeBtnClicked, this);
+        EventCenter.RemoveListener(EventID.TubeChanged, this.onTubeChanged, this);
     };
     TubeScript.prototype.onThemeBtnClicked = function () {
         var args = [];
@@ -724,6 +728,7 @@ var TubeScript = (function (_super) {
             args[_i] = arguments[_i];
         }
         var isSun = args[0];
+        this.isSun = isSun;
         var tubeId = PlayerData.Instance.curTubeID;
         var tubeData = DataConfig.Instance.GetDataByIndex("tube", tubeId);
         if (tubeData == null) {
@@ -737,6 +742,28 @@ var TubeScript = (function (_super) {
             var texture = RES.getRes(tubeData.fgSprite2);
             this.tubeFG.texture = texture;
         }
+    };
+    TubeScript.prototype.onTubeChanged = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        var tubeId = PlayerData.Instance.curTubeID;
+        var tubeData = DataConfig.Instance.GetDataByIndex("tube", tubeId);
+        if (tubeData == null) {
+            return;
+        }
+        if (this.isSun) {
+            var texture_3 = RES.getRes(tubeData.fgSprite);
+            this.tubeFG.texture = texture_3;
+        }
+        else {
+            var texture_4 = RES.getRes(tubeData.fgSprite2);
+            this.tubeFG.texture = texture_4;
+        }
+        var texture = RES.getRes(tubeData.bgSprite);
+        this.waterMask.texture = texture;
+        this.tubeMouthWidth = tubeData.width;
     };
     TubeScript.selectTweener = null;
     return TubeScript;

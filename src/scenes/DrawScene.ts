@@ -5,7 +5,6 @@ class DrawScene extends Scene {
     private gameType:GameType;
     private completeLevel:number;
     protected onComplete(...args:any[]){
-
         this.InitBG();
     }
 

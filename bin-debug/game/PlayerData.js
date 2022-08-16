@@ -1,41 +1,6 @@
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 var PlayerData = (function () {
     function PlayerData() {
         this.noAds = false;
@@ -78,12 +43,31 @@ var PlayerData = (function () {
         this.tubes = gameInfo.tubes;
         this.themes = gameInfo.themes;
         this.diamon = gameInfo.diamon;
+        this.diamon2 = gameInfo.diamon2;
         this.curLevel = gameInfo.curLevel;
+        this.curLevel2 = gameInfo.curLevel2;
+        this.process = gameInfo.process;
     };
-    PlayerData.prototype.SetSettingInfo = function (setInfo) {
+    PlayerData.prototype.SetSettingInfo = function (settingInfo) {
+        this.bgmOn = settingInfo.bgmOn;
+        this.soundOn = settingInfo.soundOn;
     };
-    //保存进度
+    //保存
     PlayerData.prototype.Save = function () {
+        var data = Object();
+        data.noAds = this.noAds;
+        data.curTubeID = this.curTubeID;
+        data.curThemeID = this.curThemeID;
+        data.backNum = this.backNum;
+        data.newTubeNum = this.newTubeNum;
+        data.tubes = this.tubes;
+        data.themes = this.themes;
+        data.diamon = this.diamon;
+        data.diamon2 = this.diamon2;
+        data.curLevel = this.curLevel;
+        data.curLevel2 = this.curLevel2;
+        data.process = this.process;
+        WXUtil.Save(data);
     };
     PlayerData.prototype.GetCurLevel = function (gameType) {
         var level = 1;
@@ -146,14 +130,19 @@ var PlayerData = (function () {
     };
     PlayerData.prototype.DealEffect = function (effectType, num) {
         if (effectType == 1) {
+            this.noAds = true;
         }
         else if (effectType == 2) {
+            this.diamon += num;
         }
         else if (effectType == 3) {
+            this.backNum += num;
         }
         else if (effectType == 4) {
+            this.newTubeNum += num;
         }
         else if (effectType == 5) {
+            this.diamon2 += num;
         }
         else {
             console.error("unkown effectType");
@@ -161,70 +150,118 @@ var PlayerData = (function () {
     };
     //购买商品TODO：需要去请求服务器
     PlayerData.prototype.BuyItem = function (purchaseId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            var promise;
-            return __generator(this, function (_a) {
-                promise = new Promise(function (resolve, reject) {
-                    var cfg = DataConfig.Instance.GetDataByIndex("purchaser", purchaseId);
-                    if (cfg == null) {
-                        GameUtil.ShowNotibox("未知的购买配置");
-                        reject(false);
-                    }
-                    var costType = cfg.CostType;
-                    var cost = cfg.Cost;
-                    var effect = cfg.Effect;
-                    var effectNum = cfg.Num;
-                    if (cfg.CostType == 1) {
-                        resolve(true);
-                    }
-                    else if (cfg.CostType == 2) {
-                        //TODO：现在的处理方法，后面要给到服务器去处理
-                        if (_this.diamon >= cost) {
-                            _this.diamon -= cost;
-                            _this.DealEffect(effect, effectNum);
-                            resolve(true);
-                        }
-                        else {
-                            GameUtil.ShowNotibox("钻石不够，无法购买");
-                            reject(false);
-                        }
-                    }
-                    else if (cfg.CostType == 3) {
-                        if (_this.diamon2 >= cost) {
-                            _this.diamon2 -= cost;
-                            _this.DealEffect(effect, effectNum);
-                            resolve(true);
-                        }
-                        else {
-                            GameUtil.ShowNotibox("钻石不够，无法购买");
-                            reject(false);
-                        }
-                    }
-                    else {
-                        reject(false);
-                    }
-                    // http.get(url, res => {
-                    //     resolve(res);
-                    // });
-                });
-                return [2 /*return*/, promise];
-            });
+        var _this = this;
+        var promise = new Promise(function (resolve, reject) {
+            var cfg = DataConfig.Instance.GetDataByIndex("purchaser", purchaseId);
+            if (cfg == null) {
+                GameUtil.ShowNotibox("未知的购买配置");
+                resolve(false);
+                return;
+            }
+            var costType = cfg.CostType;
+            var cost = cfg.Cost;
+            var effect = cfg.Effect;
+            var effectNum = cfg.Num;
+            if (costType == 0) {
+                var succb = function () {
+                    _this.DealEffect(effect, effectNum);
+                    _this.Save();
+                    resolve(true);
+                };
+                var failcb = function () {
+                    resolve(false);
+                };
+                WXAdManager.Instance.ShowRewardAd2(succb, failcb);
+            }
+            else if (costType == 1) {
+                //目前暂不支持RMB购买，未接入
+                resolve(false);
+            }
+            else if (costType == 2) {
+                if (_this.diamon >= cost) {
+                    _this.diamon -= cost;
+                    _this.DealEffect(effect, effectNum);
+                    _this.Save();
+                    resolve(true);
+                }
+                else {
+                    GameUtil.ShowNotibox("钻石不够，无法购买");
+                    resolve(false);
+                }
+            }
+            else if (costType == 3) {
+                if (_this.diamon2 >= cost) {
+                    _this.diamon2 -= cost;
+                    _this.DealEffect(effect, effectNum);
+                    _this.Save();
+                    resolve(true);
+                }
+                else {
+                    GameUtil.ShowNotibox("点券不够，无法购买");
+                    resolve(false);
+                }
+            }
+            else {
+                GameUtil.ShowNotibox("未知的购买参数");
+                resolve(false);
+            }
+            // http.get(url, res => {
+            //     resolve(res);
+            // });
         });
+        return promise;
     };
-    PlayerData.prototype.BuyTube = function (tubeId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
+    PlayerData.prototype.BuyTube = function (tubeId, costType, costNum) {
+        if (this.isTubeContains(tubeId)) {
+            return false;
+        }
+        var diamonCount = 0; //type为1是RMB
+        if (costType == 2) {
+            diamonCount = this.diamon;
+        }
+        if (costType == 3) {
+            diamonCount = this.diamon2;
+        }
+        if (diamonCount < costNum) {
+            return false;
+        }
+        diamonCount -= costNum;
+        if (costType == 2) {
+            this.diamon = diamonCount;
+        }
+        if (costType == 3) {
+            this.diamon2 = diamonCount;
+        }
+        this.tubes.push(tubeId);
+        this.curTubeID = tubeId;
+        this.Save();
+        return true;
     };
-    PlayerData.prototype.BuyTheme = function (themeId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
+    PlayerData.prototype.BuyTheme = function (themeId, costType, costNum) {
+        if (this.isThemeContains(themeId)) {
+            return false;
+        }
+        var diamonCount = 0; //type为1是RMB
+        if (costType == 2) {
+            diamonCount = this.diamon;
+        }
+        if (costType == 3) {
+            diamonCount = this.diamon2;
+        }
+        if (diamonCount < costNum) {
+            return false;
+        }
+        diamonCount -= costNum;
+        if (costType == 2) {
+            this.diamon = diamonCount;
+        }
+        if (costType == 3) {
+            this.diamon2 = diamonCount;
+        }
+        this.themes.push(themeId);
+        this.curThemeID = themeId;
+        this.Save();
+        return true;
     };
     return PlayerData;
 }());

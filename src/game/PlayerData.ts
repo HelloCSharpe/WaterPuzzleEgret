@@ -41,15 +41,32 @@ class PlayerData{
         this.tubes = gameInfo.tubes;
         this.themes = gameInfo.themes;
         this.diamon = gameInfo.diamon;
+        this.diamon2 = gameInfo.diamon2;
         this.curLevel = gameInfo.curLevel;
+        this.curLevel2 = gameInfo.curLevel2;
+        this.process = gameInfo.process;
     }
 
-    public SetSettingInfo(setInfo):void{
-        
+    public SetSettingInfo(settingInfo):void{
+        this.bgmOn = settingInfo.bgmOn;
+        this.soundOn = settingInfo.soundOn;
     }
-    //保存进度
+    //保存
     public Save():void{
-
+        let data = Object();
+        data.noAds = this.noAds;
+        data.curTubeID = this.curTubeID;
+        data.curThemeID = this.curThemeID;
+        data.backNum = this.backNum;
+        data.newTubeNum = this.newTubeNum;
+        data.tubes = this.tubes;
+        data.themes = this.themes;
+        data.diamon = this.diamon;
+        data.diamon2 = this.diamon2;
+        data.curLevel = this.curLevel;
+        data.curLevel2 = this.curLevel2;
+        data.process = this.process;
+        WXUtil.Save(data);
     }
 
     public GetCurLevel(gameType:GameType){
@@ -105,75 +122,116 @@ class PlayerData{
     }
 
     private DealEffect(effectType:number,num:number){
-        if(effectType==1){
-
-        }else if(effectType==2){
-
-        }else if(effectType==3){
-
-        }else if(effectType==4){
-
-        }else if(effectType==5){
-
+        if(effectType==1){//无广告
+            this.noAds=true;
+        }else if(effectType==2){//添加砖石
+            this.diamon+=num;
+        }else if(effectType==3){//添加道具A
+            this.backNum+=num;
+        }else if(effectType==4){//添加道具B
+            this.newTubeNum+=num;
+        }else if(effectType==5){//添加钻石2
+            this.diamon2+=num;
         }else{
             console.error("unkown effectType");
         }
     }
 
     //购买商品TODO：需要去请求服务器
-    public async BuyItem(purchaseId:number):Promise<boolean>{
+    public BuyItem(purchaseId:number):Promise<boolean>{
         var promise = new Promise<boolean>((resolve,reject) => {
             let cfg = DataConfig.Instance.GetDataByIndex("purchaser",purchaseId);
             if(cfg==null){
                 GameUtil.ShowNotibox("未知的购买配置");
-                reject(false);
+                resolve(false);
+                return;
             }
             let costType:number=cfg.CostType;
             let cost:number=cfg.Cost;
             let effect:number=cfg.Effect;
             let effectNum:number=cfg.Num;
-            if(cfg.CostType==1){
-                resolve(true);
-            }else if(cfg.CostType==2){//使用普通钻石购买
-                //TODO：现在的处理方法，后面要给到服务器去处理
+            if(costType==0){//看广告
+                let succb =()=>{
+                    this.DealEffect(effect,effectNum);
+                    this.Save();
+                    resolve(true);
+                };
+                let failcb =()=>{
+                    resolve(false);
+                };
+                WXAdManager.Instance.ShowRewardAd2(succb,failcb);
+            }else if(costType==1){
+                //目前暂不支持RMB购买，未接入
+                resolve(false);
+            }else if(costType==2){//使用普通钻石购买
                 if(this.diamon >= cost){
                     this.diamon-=cost;
                     this.DealEffect(effect,effectNum);
+                    this.Save();
                     resolve(true);
                 }else{
                     GameUtil.ShowNotibox("钻石不够，无法购买");
-                    reject(false);
+                    resolve(false);
                 }
-            }else if(cfg.CostType==3){//使用困难钻石购买
+            }else if(costType==3){//使用困难钻石购买
                 if(this.diamon2 >= cost){
                     this.diamon2-=cost;
                     this.DealEffect(effect,effectNum);
+                    this.Save();
                     resolve(true);
                 }else{
                     GameUtil.ShowNotibox("点券不够，无法购买");
-                    reject(false);
+                    resolve(false);
                 }
             }else{
                 GameUtil.ShowNotibox("未知的购买参数");
-                reject(false);
+                resolve(false);
             }
             // http.get(url, res => {
             //     resolve(res);
             // });
+
         });
         return promise;
     }
 
-
-
-    public async BuyTube(tubeId:number){
-
+    public BuyTube(tubeId:number,costType:number,costNum:number):boolean{
+        if(this.isTubeContains(tubeId)){
+            return false;
+        }
+        let diamonCount:number=0;//type为1是RMB
+        if(costType==2){diamonCount=this.diamon;}
+        if(costType==3){diamonCount=this.diamon2;}
+        if(diamonCount<costNum){
+            return false;
+        }
+        diamonCount-=costNum;
+        if(costType==2){this.diamon=diamonCount;}
+        if(costType==3){this.diamon2=diamonCount;}
+        this.tubes.push(tubeId);
+        this.curTubeID=tubeId;
+        this.Save();
+        return true;
     }
 
-    public async BuyTheme(themeId:number){
-        
+    public BuyTheme(themeId:number,costType:number,costNum:number):boolean{
+        if(this.isThemeContains(themeId)){
+            return false;
+        }
+        let diamonCount:number=0;//type为1是RMB
+        if(costType==2){diamonCount=this.diamon;}
+        if(costType==3){diamonCount=this.diamon2;}
+        if(diamonCount<costNum){
+            return false;
+        }
+        diamonCount-=costNum;
+        if(costType==2){this.diamon=diamonCount;}
+        if(costType==3){this.diamon2=diamonCount;}
+        this.themes.push(themeId);
+        this.curThemeID=themeId;
+        this.Save();
+        return true;
     }
-
     
 
 

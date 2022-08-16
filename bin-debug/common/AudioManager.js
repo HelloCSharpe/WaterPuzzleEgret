@@ -48,14 +48,12 @@ var AudioManager = (function () {
             if (duration > 0) {
                 var point_1 = this.PopPoint(); //用于处理duration
                 egret.Tween.get(point_1).to({ "x": 1 }, duration).call(function () {
-                    console.log("sound time Over");
                     channel_1.stop();
                     egret.Tween.removeTweens(point_1);
                     _this.PushPoint(point_1);
                 }, this);
             }
             channel_1.addEventListener(egret.Event.SOUND_COMPLETE, function () {
-                console.log("sound Complete");
             }, this);
         }
     };
